@@ -39,18 +39,17 @@ namespace Lazarus.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(TaiKhoan model)
+        public async Task<IActionResult> Register(RegisterView model)
         {
             if (ModelState.IsValid)
             {
                 var tk = new ApplicationUser()
                 {
-                    Id = model.TaiKhoanId,
                     Email = model.Email,
                     EmailConfirmed = false
                 };
 
-                var result = await _userManager.CreateAsync(tk, model.MatKhau);
+                var result = await _userManager.CreateAsync(tk, model.Password);
                 if (result.Succeeded)
                 {
                     var m = new MailMessage(new MailAddress("lazarus@noreply.com", "Confimation"),
@@ -58,7 +57,7 @@ namespace Lazarus.Controllers
                     {
                         Subject = "Account Confirmation",
                         Body =
-                            $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new {id = tk.Id, code = tk.Email})}\">here</a> to complete the registration",
+                            $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { id = tk.Id, code = tk.Email })}\">here</a> to complete the registration",
                         IsBodyHtml = true
                     };
 
@@ -68,7 +67,7 @@ namespace Lazarus.Controllers
                         EnableSsl = true
                     };
                     smtp.Send(m);
-                    return RedirectToAction("Confirm", "Account", new {email = model.Email});
+                    return RedirectToAction("Confirm", "Account", new { email = model.Email });
                 }
             }
 
