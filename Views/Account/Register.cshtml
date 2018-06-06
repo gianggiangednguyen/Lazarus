@@ -1,0 +1,16 @@
+﻿@model TaiKhoan
+
+@{
+    ViewData["Title"] = "Register";
+    Layout = "~/Views/Shared/_ShopLayout.cshtml";
+}
+
+<form method="post">
+    <div class="box-authentication">
+        <h4>Register</h4>
+        <p>Create your very own account</p>
+        <label for="emmail_register">Email address<span class="required">*</span></label>
+        <input id="emmail_register" type="text" class="form-control">
+        <button class="button"><i class="fa fa-user"></i>&nbsp; <span>Register</span></button>
+    </div>
+</form>
