@@ -1,0 +1,282 @@
+﻿<!DOCTYPE html>
+
+<html>
+<head>
+    <meta name="viewport" content="width=device-width" />
+    <title>@ViewBag.Title</title>
+    
+    <link rel="shortcut icon" type="image/x-icon" href="~/Shop/favicon.ico">
+
+    <!-- Google Fonts -->
+    <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700' rel='stylesheet' type='text/css'>
+
+    <!-- CSS Style -->
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/bootstrap.min.css">
+
+    <!-- font-awesome & simple line icons CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/font-awesome.css" media="all">
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/simple-line-icons.css" media="all">
+
+    <!-- owl.carousel CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/owl.carousel.css">
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/owl.theme.css">
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/owl.transitions.css">
+
+    <!-- animate CSS  -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/animate.css" media="all">
+
+    <!-- flexslider CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/flexslider.css" >
+
+    <!-- jquery-ui.min CSS  -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/jquery-ui.css">
+
+    <!-- Mean Menu CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/meanmenu.min.css">
+
+    <!-- nivo-slider css -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/nivo-slider.css">
+
+    <!-- style CSS -->
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/style.css" media="all">
+</head>
+<body class="cms-index-index cms-home-page">
+<div id="page">
+    <!-- Header -->
+    <header>
+        <div class="header-container">
+            <div class="header-top">
+                <div class="container">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-5 col-xs-6">
+                            <!-- Default Welcome Message -->
+                            <span class="phone hidden-xs hidden-sm"><i class="fa fa-phone fa-lg"></i> +123.456.789</span>
+                            <div class="welcome-msg hidden-xs">Welcome to Modern! </div>
+                        </div>
+
+                        <!-- top links -->
+                        <div class="headerlinkmenu col-lg-6 col-md-6 col-sm-7 col-xs-6 text-right">
+                            <div class="links">
+                                <div class="jtv-user-info">
+                                    <div class="dropdown">
+                                        <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>My Account </span> <i class="fa fa-angle-down"></i></a>
+                                        <ul class="dropdown-menu" role="menu">
+                                            <li><a href="#">Account</a></li>
+                                            <li><a href="#">Wishlist</a></li>
+                                            <li><a href="#">Checkout</a></li>
+                                            <li class="divider"></li>
+                                            <li><a href="#">Log In</a></li>
+                                            <li><a href="#">Sign Up</a></li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div class="services hidden-xs"><a title="servicesg" href="#">Services</a></div>
+                                <div class="myaccount hidden-xs"><a title="My Account" href="#">My Support</a></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-3 col-md-3 col-xs-12">
+                        <!-- Header Logo -->
+                        <div class="logo"><a title="e-commerce" asp-controller="Home" asp-action="Index"><img alt="e-commerce" src="~/Shop/images/logo.png"></a> </div>
+                        <!-- End Header Logo -->
+                    </div>
+                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-6">
+                        <!-- Search -->
+
+                        <div class="top-search">
+                            <div id="search">
+                                <form>
+                                    <div class="input-group">
+                                        <select class="cate-dropdown hidden-xs hidden-sm" name="category_id">
+                                            <option>All Categories</option>
+                                            <option>women</option>
+                                            <option>&nbsp;&nbsp;&nbsp;Accessories </option>
+                                            <option>&nbsp;&nbsp;&nbsp;Dresses</option>
+                                            <option>&nbsp;&nbsp;&nbsp;Top</option>
+                                            <option>&nbsp;&nbsp;&nbsp;Handbags </option>
+                                            <option>&nbsp;&nbsp;&nbsp;Shoes </option>
+                                            <option>&nbsp;&nbsp;&nbsp;Clothing </option>
+                                            <option>Men</option>
+                                            <option>Electronics</option>
+                                            <option>&nbsp;&nbsp;&nbsp;Mobiles </option>
+                                            <option>&nbsp;&nbsp;&nbsp;Music &amp; Audio </option>
+                                        </select>
+                                        <input type="text" class="form-control" placeholder="Search" name="search">
+                                        <button class="btn-search" type="button"><i class="fa fa-search"></i></button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
+                        <!-- End Search -->
+                    </div>
+                    <div class="col-lg-3 col-sm-4 col-xs-12 top-cart">
+                        <div class="link-wishlist"> <a href="#"> <span class="wishlist-count">3</span> <i class="fa fa-heart fa-lg"></i> </a> </div>
+                        <div class="top-cart-contain">
+                            <div class="mini-cart">
+                                <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
+                                    <a href="#">
+                                        <div class="cart-icon"><i class="fa fa-shopping-cart"></i></div>
+                                        <div class="shoppingcart-inner"><span class="cart-title">Shopping Cart</span> <span class="cart-total">4 Item(s): $520.00</span></div>
+                                    </a>
+                                </div>
+                                <div>
+                                    <div class="top-cart-content">
+                                        <div class="block-subtitle hidden-xs">Recently added item(s)</div>
+                                        <ul id="cart-sidebar" class="mini-products-list"></ul>
+                                        <div class="top-subtotal">Subtotal: <span class="price">$520.00</span></div>
+                                        <div class="actions">
+                                            <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Checkout</span></button>
+                                            <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>View Cart</span></button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- end header -->
+    <!-- Start Menu Area -->
+    <div class="menu-area">
+        <div class="container">
+            <div class="row">
+                <div class="col-md-12 hidden-xs">
+                    <div class="main-menu">
+                        <nav>
+                            <ul>
+                                <li class="active custom-menu">
+                                    <a asp-controller="Home" asp-action="Index">Home</a>
+                                </li>
+                                <li class="megamenu">
+                                    <a href="#">Men</a>
+                                </li>
+                                <li class="megamenu">
+                                    <a href="#">Women</a>
+                                </li>
+                                <li class="megamenu">
+                                    <a href="#">Children</a>
+                                </li>
+                                <li class="megamenu">
+                                    <a href="#">Pages</a>
+                                </li>
+                                <li class="custom-menu">
+                                    <a href="#">Blog</a>
+                                </li>
+                                <li>
+                                    <a href="#">Contact</a>
+                                </li>
+                            </ul>
+                        </nav>
+                        <!-- Signup -->
+                        <p class="top-Signup"><a href="#" class="" role="button" data-toggle="modal" data-target="#login-modal">Login/Signup</a></p>
+                        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <img id="img_logo" src="images/logo.png" alt="logo">
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
+                                    </div>
+                                    <div id="div-forms">
+                                        <form id="login-form">
+                                            <div class="modal-body">
+                                                <div id="div-login-msg"> <span id="text-login-msg">Username or email address </span> </div>
+                                                <input id="login_username" class="form-control" type="text" placeholder="Username" required>
+                                                <input id="login_password" class="form-control" type="password" placeholder="Password" required>
+                                                <div class="checkbox">
+                                                    <label>
+                                                        <input type="checkbox">
+                                                        Remember me
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="modal-footer">
+                                                <div>
+                                                    <button type="submit" class="btn-login">Login</button>
+                                                </div>
+                                                <div>
+                                                    <button onclick="location.href = '#'" id="login_register_btn" type="button" class="btn btn-link">Register</button>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!-- END # MODAL LOGIN -->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- End Menu Area -->
+    
+    <!-- Content Body -->
+    <div class="main-container col2-left-layout">
+        <div class="container">
+            <div class="row">
+                @RenderBody()
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- JS --> 
+
+<!-- jquery js --> 
+<script type="text/javascript" src="~/Shop/js/jquery.min.js"></script> 
+
+<!-- bootstrap js --> 
+<script type="text/javascript" src="~/Shop/js/bootstrap.min.js"></script> 
+
+<!-- Mean Menu js --> 
+<script type="text/javascript" src="~/Shop/js/jquery.meanmenu.min.js"></script>
+
+<!-- owl.carousel.min js --> 
+<script type="text/javascript" src="~/Shop/js/owl.carousel.min.js"></script> 
+
+<!-- bxslider js --> 
+<script type="text/javascript" src="~/Shop/js/jquery.bxslider.js"></script> 
+
+<!--jquery-ui.min js --> 
+<script type="text/javascript" src="~/Shop/js/jquery-ui.js"></script> 
+
+<!-- countdown js --> 
+<script type="text/javascript" src="~/Shop/js/countdown.js"></script> 
+
+<!-- wow JS --> 
+<script type="text/javascript" src="~/Shop/js/wow.min.js"></script> 
+
+<!-- main js --> 
+<script type="text/javascript" src="~/Shop/js/main.js"></script> 
+
+<!-- nivo slider js --> 
+<script type="text/javascript" src="~/Shop/js/jquery.nivo.slider.js"></script> 
+
+<!-- flexslider js --> 
+<script type="text/javascript" src="~/Shop/js/jquery.flexslider.js"></script> 
+<!-- Hot Deals Timer 1--> 
+<script type="text/javascript">
+    var dthen1 = new Date("12/25/16 11:59:00 PM");
+    start = "08/04/15 03:02:11 AM";
+    start_date = Date.parse(start);
+    var dnow1 = new Date(start_date);
+    if(CountStepper>0)
+        ddiff= new Date((dnow1)-(dthen1));
+    else
+        ddiff = new Date((dthen1)-(dnow1));
+    gsecs1 = Math.floor(ddiff.valueOf()/1000);
+      
+    var iid1 = "countbox_1";
+    CountBack_slider(gsecs1,"countbox_1", 1);
+</script>
+</body>
+</html>
