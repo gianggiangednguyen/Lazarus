@@ -67,8 +67,8 @@
                                             <li><a href="#">Wishlist</a></li>
                                             <li><a href="#">Checkout</a></li>
                                             <li class="divider"></li>
-                                            <li><a href="#">Log In</a></li>
-                                            <li><a href="#">Sign Up</a></li>
+                                            <li><a asp-controller="Account" asp-action="Login">Log In</a></li>
+                                            <li><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
                                         </ul>
                                     </div>
                                 </div>
@@ -200,10 +200,10 @@
                                             </div>
                                             <div class="modal-footer">
                                                 <div>
-                                                    <button type="submit" class="btn-login">Login</button>
+                                                    <button asp-controller="Account" asp-action="Login" type="submit" class="btn-login">Login</button>
                                                 </div>
                                                 <div>
-                                                    <button onclick="location.href = '#'" id="login_register_btn" type="button" class="btn btn-link">Register</button>
+                                                    <button asp-controller="Account" asp-action="Register" id="login_register_btn" type="button" class="btn btn-link">Register</button>
                                                 </div>
                                             </div>
                                         </form>

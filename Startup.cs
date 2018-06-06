@@ -30,6 +30,10 @@ namespace Lazarus
             services.AddDbContext<LazarusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
+            services.AddIdentity<ApplicationUser, IdentityRole>()
+                .AddEntityFrameworkStores<LazarusDbContext>()
+                .AddDefaultTokenProviders();
+
             services.Configure<IdentityOptions>(options =>
             {
                 options.Password.RequiredLength = 8;
