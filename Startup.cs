@@ -30,24 +30,6 @@ namespace Lazarus
             services.AddDbContext<LazarusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
-            services.AddIdentity<ApplicationUser, IdentityRole>()
-                .AddEntityFrameworkStores<LazarusDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.Configure<IdentityOptions>(options =>
-            {
-                options.Password.RequiredLength = 8;
-                options.Password.RequireLowercase = true;
-                options.Password.RequireDigit = true;
-                options.Password.RequireUppercase = true;
-                options.Password.RequiredUniqueChars = 0;
-
-                options.Lockout.DefaultLockoutTimeSpan = TimeSpan.FromMinutes(5);
-                options.Lockout.MaxFailedAccessAttempts = 3;
-
-                options.User.RequireUniqueEmail = true;
-            });
-
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Expiration = TimeSpan.FromMinutes(10);
@@ -69,8 +51,6 @@ namespace Lazarus
             }
 
             app.UseStaticFiles();
-
-            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {

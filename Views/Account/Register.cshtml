@@ -1,12 +1,23 @@
-﻿@model RegisterView
+﻿@model TaiKhoan
 
 @{
     ViewData["Title"] = "Register";
     Layout = "~/Views/Shared/_ShopLayout.cshtml";
 }
 
-<form method="post" asp-controller="Account" asp-action="Register(model)">
+<form method="post">
     <div class="box-authentication">
+        @{
+            if (TempData["Error"] == "Unauthorize")
+            {
+                <div class="box-border table-bordered bg-warning">
+                    <h4 class="text-danger" style="padding-left:10px;">Mật khẩu phải có: </h4>
+                    <h6 class="text-danger" style="padding-left:15px;">Kí tự chữ</h6>
+                    <h6 class="text-danger" style="padding-left:15px;">Kí tự số</h6>
+                    <h6 class="text-danger" style="padding-left:15px;">Một chữ hoa</h6>
+                </div>
+            }
+        }
         <h4>Register</h4>
         <p>Create your very own account</p>
         <div class="row">
@@ -15,14 +26,14 @@
             <span asp-validation-for="Email" class="text-danger"></span>
         </div>
         <div class="row">
-            <label asp-for="Password">Mật khẩu<span class="required">*</span></label>
-            <input asp-for="Password" type="text" class="form-control">
-            <span asp-validation-for="Password" class="inline text-danger"></span>
+            <label asp-for="MatKhau">Mật khẩu<span class="required">*</span></label>
+            <input asp-for="MatKhau" type="text" class="form-control">
+            <span asp-validation-for="MatKhau" class="inline text-danger"></span>
         </div>
         <div class="row">
-            <label asp-for="ConfirmPassword">Nhập lại mật khẩu<span class="required">*</span></label>
-            <input asp-for="ConfirmPassword" type="text" class="form-control">
-            <span asp-validation-for="ConfirmPassword" class="inline text-danger"></span>
+            <label asp-for="NhapLaiMatKhau">Nhập lại mật khẩu<span class="required">*</span></label>
+            <input asp-for="NhapLaiMatKhau" type="text" class="form-control">
+            <span asp-validation-for="NhapLaiMatKhau" class="inline text-danger"></span>
         </div>
         <button type="submit" class="button"><i class="fa fa-user"></i>&nbsp; <span>Register</span></button>
     </div>

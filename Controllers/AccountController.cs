@@ -6,8 +6,8 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Lazarus.Models;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 
 namespace Lazarus.Controllers
 {
@@ -15,13 +15,12 @@ namespace Lazarus.Controllers
     [Route("[controller]/[action]")]
     public class AccountController : Controller
     {
-        private readonly UserManager<ApplicationUser> _userManager;
-        private readonly SignInManager<ApplicationUser> _signInManager;
+        private readonly LazarusDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager)
+        // Inject DbContext vao controller
+        public AccountController(LazarusDbContext context)
         {
-            _userManager = userManager;
-            _signInManager = signInManager;
+            _context = context;
         }
 
         [HttpPost]
@@ -39,25 +38,26 @@ namespace Lazarus.Controllers
         [HttpPost]
         [AllowAnonymous]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterView model)
+        public async Task<IActionResult> Register(TaiKhoan model)
         {
             if (ModelState.IsValid)
             {
-                var tk = new ApplicationUser()
+                var tk = new TaiKhoan()
                 {
+                    TaiKhoanId = "",
                     Email = model.Email,
-                    EmailConfirmed = false
+                    TrangThai = "Unathorize"
                 };
 
-                var result = await _userManager.CreateAsync(tk, model.Password);
-                if (result.Succeeded)
+                var result = await _context.AddAsync(model);
+                if (result.State == EntityState.Added)
                 {
                     var m = new MailMessage(new MailAddress("lazarus@noreply.com", "Confimation"),
                         new MailAddress(tk.Email))
                     {
                         Subject = "Account Confirmation",
                         Body =
-                            $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { id = tk.Id, code = tk.Email })}\">here</a> to complete the registration",
+                            $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { id = tk.TaiKhoanId, code = tk.Email })}\">here</a> to complete the registration",
                         IsBodyHtml = true
                     };
 
@@ -68,6 +68,10 @@ namespace Lazarus.Controllers
                     };
                     smtp.Send(m);
                     return RedirectToAction("Confirm", "Account", new { email = model.Email });
+                }
+                else
+                {
+                    TempData.Add("Error", "Unauthorize");
                 }
             }
 
@@ -90,13 +94,12 @@ namespace Lazarus.Controllers
                 RedirectToAction("Index", "Home");
             }
 
-            var tk = await _userManager.FindByIdAsync(id);
+            var tk = await _context.TaiKhoan.SingleOrDefaultAsync(i => i.TaiKhoanId == id);
             if (tk == null)
             {
-                throw new ApplicationException($"Không thể tìm thấy user với {id}");
+                return NotFound();
             }
 
-            var result = await _userManager.ConfirmEmailAsync(tk, code);
             return View(result.Succeeded ? "ConfirmEmail" : "Error");
         }
     }

@@ -13,8 +13,13 @@ namespace Lazarus.Models
         [StringLength(200)]
         public string Email { get; set; }
         [Required]
-        [StringLength(200)]
+        [StringLength(200, ErrorMessage = "Mật khẩu có ít nhất là 8 kí tự, tối đa là 200", MinimumLength = 8)]
+        [RegularExpression(@"^(?=.*\d)(?=.*[a-zA-Z])(?!.*[\W_\x7B-\xFF]).{8,200}$", ErrorMessage = "Mật khẩu phải có ít nhất 1 kí tự chữ hoa và thường, và 1 kí tự số")]
         public string MatKhau { get; set; }
+        [Required]
+        [StringLength(200)]
+        [Compare("MatKhau", ErrorMessage = "Mật khẩu không trùng")]
+        public string NhapLaiMatKhau { get; set; }
         [StringLength(200)]
         public string HinhAnh { get; set; }
         [Required]
