@@ -8,7 +8,7 @@
 <form method="post">
     <div class="box-authentication">
         @{
-            if (TempData["Error"] == "Unauthorize")
+            if (TempData["Error"] == "Password")
             {
                 <div class="box-border table-bordered bg-warning">
                     <h4 class="text-danger" style="padding-left:10px;">Mật khẩu phải có: </h4>
@@ -21,6 +21,16 @@
         <h4>Register</h4>
         <p>Create your very own account</p>
         <div class="row">
+            <label asp-for="Ho">Họ<span class="required">*</span></label>
+            <input asp-for="Ho" type="text" class="form-control">
+            <span asp-validation-for="Ho" class="text-danger"></span>
+        </div>
+        <div class="row">
+            <label asp-for="Ten">Tên<span class="required">*</span></label>
+            <input asp-for="Ten" type="text" class="form-control">
+            <span asp-validation-for="Ten" class="text-danger"></span>
+        </div>
+        <div class="row">
             <label asp-for="Email">Email<span class="required">*</span></label>
             <input asp-for="Email" type="text" class="form-control">
             <span asp-validation-for="Email" class="text-danger"></span>
@@ -28,12 +38,12 @@
         <div class="row">
             <label asp-for="MatKhau">Mật khẩu<span class="required">*</span></label>
             <input asp-for="MatKhau" type="text" class="form-control">
-            <span asp-validation-for="MatKhau" class="inline text-danger"></span>
+            <span asp-validation-for="MatKhau" class="text-danger"></span>
         </div>
         <div class="row">
             <label asp-for="NhapLaiMatKhau">Nhập lại mật khẩu<span class="required">*</span></label>
             <input asp-for="NhapLaiMatKhau" type="text" class="form-control">
-            <span asp-validation-for="NhapLaiMatKhau" class="inline text-danger"></span>
+            <span asp-validation-for="NhapLaiMatKhau" class="text-danger"></span>
         </div>
         <button type="submit" class="button"><i class="fa fa-user"></i>&nbsp; <span>Register</span></button>
     </div>

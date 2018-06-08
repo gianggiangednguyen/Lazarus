@@ -18,7 +18,6 @@ namespace Lazarus.Models
         [Required]
         [StringLength(200)]
         public string TenCuaHang { get; set; }
-        [Required]
         [StringLength(30)]
         public string TrangThai { get; set; }
 

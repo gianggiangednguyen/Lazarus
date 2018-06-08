@@ -7,7 +7,7 @@ namespace Lazarus.Data
 {
     public class RandomString
     {
-        public string CreateRandomString
+        public static string CreateRandomString
         {
             get
             {
@@ -15,7 +15,7 @@ namespace Lazarus.Data
             }
         }
 
-        private string GenerateRandomString()
+        private static string GenerateRandomString()
         {
             string result;
             const string randoms = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";

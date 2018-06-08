@@ -15,17 +15,14 @@ namespace Lazarus.Models
 
         [StringLength(10)]
         public string HoaDonId { get; set; }
-        [Required]
         [StringLength(10)]
         public string MaTaiKhoan { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
-        public decimal TongTien { get; set; }
+        public decimal? TongTien { get; set; }
         [Column(TypeName = "datetime")]
-        public DateTime NgayLap { get; set; }
-        [Required]
+        public DateTime? NgayLap { get; set; }
         [StringLength(200)]
         public string DiaChiGiao { get; set; }
-        [Required]
         [StringLength(30)]
         public string TrangThai { get; set; }
 

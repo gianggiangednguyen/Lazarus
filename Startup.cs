@@ -26,6 +26,8 @@ namespace Lazarus
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddMvc();
+            services.AddSession();
+            services.AddDistributedMemoryCache();
 
             services.AddDbContext<LazarusDbContext>(options =>
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
@@ -35,6 +37,19 @@ namespace Lazarus
                 options.Cookie.Expiration = TimeSpan.FromMinutes(10);
                 options.Cookie.HttpOnly = true;
             });
+
+            services.AddAuthentication("LazarusSchema")
+                .AddCookie("LazarusSchema", options =>
+                {
+                    options.AccessDeniedPath = "";
+                    options.Cookie = new CookieBuilder
+                    {
+                        HttpOnly = true,
+                        Name = "Lazarus.Security.Cookie",
+                        Path = "/"
+                    };
+                }
+                );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -51,6 +66,8 @@ namespace Lazarus
             }
 
             app.UseStaticFiles();
+
+            app.UseSession();
 
             app.UseMvc(routes =>
             {

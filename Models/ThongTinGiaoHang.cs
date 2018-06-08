@@ -11,12 +11,10 @@ namespace Lazarus.Models
         public string ThongTinId { get; set; }
         [StringLength(10)]
         public string MaHoaDon { get; set; }
-        [Required]
         [StringLength(200)]
         public string DiaChi { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
-        public decimal TongTien { get; set; }
-        [Required]
+        public decimal? TongTien { get; set; }
         [StringLength(30)]
         public string TrangThai { get; set; }
 

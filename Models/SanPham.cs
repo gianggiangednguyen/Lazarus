@@ -21,7 +21,6 @@ namespace Lazarus.Models
         [Required]
         [StringLength(10)]
         public string MaLoaiSanPham { get; set; }
-        [Required]
         [StringLength(10)]
         public string MaCuaHang { get; set; }
         [Required]
@@ -31,7 +30,6 @@ namespace Lazarus.Models
         public double? SoLuong { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? NgayThem { get; set; }
-        [Required]
         [StringLength(30)]
         public string TrangThai { get; set; }
 
