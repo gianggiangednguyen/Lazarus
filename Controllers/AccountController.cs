@@ -8,6 +8,7 @@ using System.Security.Claims;
 using Lazarus.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -29,9 +30,27 @@ namespace Lazarus.Controllers
             _context = context;
         }
 
-        [HttpPost]
         public IActionResult Login()
         {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Login(TaiKhoan model)
+        {
+            //TODO: Authentical
+
+            List<Claim> claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Email, model.Email)
+            };
+
+            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+
+            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
+
+            await HttpContext.SignInAsync(claimsPrincipal);
+
             return View();
         }
 
@@ -62,25 +81,26 @@ namespace Lazarus.Controllers
                     TrangThai = model.TrangThai
                 };
 
-                var m = new MailMessage(new MailAddress("lazarus@noreply.com", "Confimation"), new MailAddress(taiKhoan.Email))
+                var m = new MailMessage(new MailAddress("lazarus@noreply.com"), new MailAddress(taiKhoan.Email))
                 {
                     Subject = "Account Confirmation",
-                    Body = $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { id = model.TaiKhoanId, code = model.Email })}\">here</a> to complete the registration",
+                    Body = $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { model = taiKhoan })}\">here</a> to complete the registration",
                     IsBodyHtml = true
                 };
 
-                var smtp = new SmtpClient("smtp.lazarus.com")
+                var smtp = new SmtpClient("smtp.gmail.com")
                 {
-                    Credentials = new NetworkCredential("sender@lazarus.com", "12345"),
+                    UseDefaultCredentials = false,
+                    Credentials = new NetworkCredential("chibaoho2@gmail.com", "songlongbatbo366511"),
+                    Port = 25,
                     EnableSsl = true
                 };
-                smtp.Send(m);
+
+                await smtp.SendMailAsync(m);
                 return RedirectToAction("Confirm", "Account", new { email = model.Email });
-
-                //TempData.Add("Error", "Password");
-
             }
 
+            TempData.Add("Error", "Password");
             return View(model);
         }
 
@@ -93,19 +113,33 @@ namespace Lazarus.Controllers
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(string id, string code)
+        public async Task<IActionResult> ConfirmEmail(TaiKhoan model)
         {
-            if (id == null && code == null)
+            var checkingModel = await _context.TaiKhoan.FindAsync(model);
+
+            if (checkingModel != null)
             {
-                RedirectToAction("Index", "Home");
+                if (model.TrangThai == "Verified")
+                {
+                    return RedirectToAction("Error", "Account");
+                }
+                else
+                {
+                    await _context.TaiKhoan.AddAsync(model);
+                    _context.SaveChanges();
+                }
             }
 
-            var tk = await _context.TaiKhoan.SingleOrDefaultAsync(i => i.TaiKhoanId == id);
-            if (tk == null)
-            {
-                return NotFound();
-            }
+            return View();
+        }
 
+        public IActionResult Success()
+        {
+            return View();
+        }
+
+        public IActionResult Error()
+        {
             return View();
         }
     }

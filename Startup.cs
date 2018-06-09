@@ -6,7 +6,7 @@ using Lazarus.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -38,18 +38,24 @@ namespace Lazarus
                 options.Cookie.HttpOnly = true;
             });
 
-            services.AddAuthentication("LazarusSchema")
-                .AddCookie("LazarusSchema", options =>
-                {
-                    options.AccessDeniedPath = "";
-                    options.Cookie = new CookieBuilder
-                    {
-                        HttpOnly = true,
-                        Name = "Lazarus.Security.Cookie",
-                        Path = "/"
-                    };
-                }
-                );
+            services.Configure<CookiePolicyOptions>(options =>
+                options.MinimumSameSitePolicy = SameSiteMode.None);
+
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie();
+
+            //services.AddAuthentication("LazarusSchema")
+            //    .AddCookie("LazarusSchema", options =>
+            //    {
+            //        options.AccessDeniedPath = "";
+            //        options.Cookie = new CookieBuilder
+            //        {
+            //            HttpOnly = true,
+            //            Name = "Lazarus.Security.Cookie",
+            //            Path = "/"
+            //        };
+            //    }
+            //    );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -68,6 +74,8 @@ namespace Lazarus
             app.UseStaticFiles();
 
             app.UseSession();
+
+            app.UseAuthentication();
 
             app.UseMvc(routes =>
             {
