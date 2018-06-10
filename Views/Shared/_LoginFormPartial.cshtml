@@ -1,0 +1,24 @@
+﻿@model TaiKhoan
+
+<div id="div-forms">
+    <form id="login-form" method="post">
+        <div class="modal-body">
+            <input asp-for="Email" id="login_username" class="form-control" type="text" placeholder="Username" required>
+            <input asp-for="MatKhau" id="login_password" class="form-control" type="password" placeholder="Password" required>
+            <div class="checkbox">
+                <label>
+                    <input type="checkbox">
+                    Remember me
+                </label>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <div>
+                <button asp-action="Login" asp-controller="Account" type="submit" class="btn-login">Login</button>
+            </div>
+            <div>
+                <a asp-action="Register" asp-controller="Account" class="btn btn-link">Register</a>
+            </div>
+        </div>
+    </form>
+</div>

@@ -22,8 +22,6 @@ namespace Lazarus.Controllers
     {
         private readonly LazarusDbContext _context;
 
-        private TaiKhoan taiKhoan;
-
         // Inject DbContext vao controller
         public AccountController(LazarusDbContext context)
         {
@@ -51,6 +49,7 @@ namespace Lazarus.Controllers
                 //Tao ra 1 claim
                 List<Claim> claims = new List<Claim>
                 {
+                    new Claim(ClaimTypes.Sid, tk.TaiKhoanId),
                     new Claim(ClaimTypes.Email, tk.Email),
                     new Claim(ClaimTypes.Role, tk.MaLoaiTaiKhoanNavigation.LoaiTaiKhoanId)
                 };
@@ -86,37 +85,35 @@ namespace Lazarus.Controllers
         {
             if (ModelState.IsValid)
             {
-                model.TaiKhoanId = RandomString.CreateRandomString;
-                model.TrangThai = "Unverify";
-
-                taiKhoan = new TaiKhoan
+                try
                 {
-                    TaiKhoanId = model.TaiKhoanId,
-                    Ho = model.Ho,
-                    Ten = model.Ten,
-                    Email = model.Email,
-                    MatKhau = model.MatKhau,
-                    NhapLaiMatKhau = model.NhapLaiMatKhau,
-                    MaLoaiTaiKhoan = "NU", //Normal User
-                    TrangThai = model.TrangThai
-                };
+                    model.TaiKhoanId = RandomString.GenerateRandomString();
+                    model.TrangThai = "Unverified";
+                    await _context.AddAsync(model);
+                    await _context.SaveChangesAsync();
 
-                var m = new MailMessage(new MailAddress("lazarus@noreply.com"), new MailAddress(taiKhoan.Email))
+                    var m = new MailMessage(new MailAddress("lazarus@noreply.com"), new MailAddress(model.Email))
+                    {
+                        Subject = "Account Confirmation",
+                        Body = $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { id = model.TaiKhoanId }, Request.Scheme)}\">here</a> to complete the registration",
+                        IsBodyHtml = true
+                    };
+
+                    var smtp = new SmtpClient("smtp.gmail.com")
+                    {
+                        UseDefaultCredentials = false,
+                        Credentials = new NetworkCredential("chibaoho2@gmail.com", "songlongbatbo366511"),
+                        Port = 25,
+                        EnableSsl = true
+                    };
+
+                    await smtp.SendMailAsync(m);
+                }
+                catch (DbUpdateException)
                 {
-                    Subject = "Account Confirmation",
-                    Body = $"Click <a href=\"{Url.Action("ConfirmEmail", "Account", new { model = taiKhoan })}\">here</a> to complete the registration",
-                    IsBodyHtml = true
-                };
+                    ViewData["ex"] = "DB error LuL";
+                }
 
-                var smtp = new SmtpClient("smtp.gmail.com")
-                {
-                    UseDefaultCredentials = false,
-                    Credentials = new NetworkCredential("chibaoho2@gmail.com", "songlongbatbo366511"),
-                    Port = 25,
-                    EnableSsl = true
-                };
-
-                await smtp.SendMailAsync(m);
                 return RedirectToAction("Confirm", "Account", new { email = model.Email });
             }
 
@@ -127,32 +124,32 @@ namespace Lazarus.Controllers
         [AllowAnonymous]
         public IActionResult Confirm(string email)
         {
-            ViewBag["Email"] = email;
+            ViewData["Email"] = email;
             return View();
         }
 
         [HttpGet]
         [AllowAnonymous]
-        public async Task<IActionResult> ConfirmEmail(TaiKhoan model)
+        public async Task<IActionResult> ConfirmEmail(string id)
         {
-            var checkingModel = await _context.TaiKhoan.FindAsync(model);
+            var tk = await _context.TaiKhoan.FirstOrDefaultAsync(a => a.TaiKhoanId == id);
 
-            if (checkingModel != null)
+            if (tk != null)
             {
-                if (model.TrangThai == "Verified")
+                if (tk.TrangThai == "Verified")
                 {
                     return RedirectToAction("Error", "Account");
                 }
                 else
                 {
-                    model.TrangThai = "Verified";
-                    await _context.TaiKhoan.AddAsync(model);
-                    _context.SaveChanges();
+                    tk.TrangThai = "Verified";
+
+                    _context.Update(tk);
+                    await _context.SaveChangesAsync();
 
                     return RedirectToAction("Success", "Account");
                 }
             }
-
             return RedirectToAction("Error", "Account");
         }
 

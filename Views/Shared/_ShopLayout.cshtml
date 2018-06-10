@@ -1,4 +1,6 @@
-﻿<!DOCTYPE html>
+﻿@using System.Security.Claims;
+
+<!DOCTYPE html>
 
 <html>
 <head>
@@ -63,12 +65,25 @@
                                     <div class="dropdown">
                                         <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>My Account </span> <i class="fa fa-angle-down"></i></a>
                                         <ul class="dropdown-menu" role="menu">
-                                            <li><a href="#">Account</a></li>
-                                            <li><a href="#">Wishlist</a></li>
-                                            <li><a href="#">Checkout</a></li>
-                                            <li class="divider"></li>
-                                            <li><a asp-controller="Account" asp-action="Login">Log In</a></li>
-                                            <li><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
+                                            @{
+                                                if (!User.Identity.IsAuthenticated)
+                                                {
+                                                    <li><a asp-controller="Account" asp-action="Login">Log In</a></li>
+                                                    <li><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
+                                                }
+                                                else
+                                                {
+                                                    <li><a href="#">Account</a></li>
+                                                    <li><a href="#">Wishlist</a></li>
+                                                    <li><a href="#">Checkout</a></li>
+                                                    if (User.FindFirst(ClaimTypes.Role).Value == "NU")
+                                                    {
+                                                        <li><a asp-action="Subscription" asp-controller="Home">Subscription</a></li>
+                                                    }
+                                                    <li class="divider"></li>
+                                                    <li><a asp-controller="Account" asp-action="Logout">Log Out</a></li>
+                                                }
+                                            }
                                         </ul>
                                     </div>
                                 </div>
@@ -185,29 +200,7 @@
                                         <img id="img_logo" src="images/logo.png" alt="logo">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
                                     </div>
-                                    <div id="div-forms">
-                                        <form id="login-form">
-                                            <div class="modal-body">
-                                                <div id="div-login-msg"> <span id="text-login-msg">Username or email address </span> </div>
-                                                <input id="login_username" class="form-control" type="text" placeholder="Username" required>
-                                                <input id="login_password" class="form-control" type="password" placeholder="Password" required>
-                                                <div class="checkbox">
-                                                    <label>
-                                                        <input type="checkbox">
-                                                        Remember me
-                                                    </label>
-                                                </div>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <div>
-                                                    <button asp-controller="Account" asp-action="Login" type="submit" class="btn-login">Login</button>
-                                                </div>
-                                                <div>
-                                                    <button asp-controller="Account" asp-action="Register" id="login_register_btn" type="button" class="btn btn-link">Register</button>
-                                                </div>
-                                            </div>
-                                        </form>
-                                    </div>
+                                    @{ Html.RenderPartial("~/Views/Shared/_LoginFormPartial.cshtml"); }
                                 </div>
                             </div>
                         </div>

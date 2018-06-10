@@ -7,21 +7,12 @@ namespace Lazarus.Data
 {
     public class RandomString
     {
-        public static string CreateRandomString
+        public static string GenerateRandomString()
         {
-            get
-            {
-                return GenerateRandomString();
-            }
-        }
-
-        private static string GenerateRandomString()
-        {
-            string result;
-            const string randoms = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+            const string chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
             var ran = new Random();
-            var e = Enumerable.Repeat(randoms, 10).Select(s => s[ran.Next(0, s.Length)]);
-            result = e.ToString();
+            var e = Enumerable.Repeat(chars, 10).Select(s => s[ran.Next(0, s.Length)]).ToArray();
+            string result = new string(e);
             return result;
         }
     }

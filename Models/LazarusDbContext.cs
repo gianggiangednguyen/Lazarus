@@ -156,6 +156,9 @@ namespace Lazarus.Models
                     .WithMany(p => p.TaiKhoan)
                     .HasForeignKey(d => d.MaLoaiTaiKhoan)
                     .HasConstraintName("FK_TaiKhoan_LoaiTaiKhoan");
+
+                entity.HasIndex(e => e.Email)
+                    .IsUnique();
             });
 
             modelBuilder.Entity<TaiKhoanPremium>(entity =>

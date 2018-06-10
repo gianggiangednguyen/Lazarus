@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Lazarus.CustomValidations;
 
 namespace Lazarus.Models
 {
@@ -10,6 +11,7 @@ namespace Lazarus.Models
         [StringLength(10)]
         public string TaiKhoanId { get; set; }
         [Required]
+        [EmailCheckValidation]
         [StringLength(200)]
         public string Email { get; set; }
         [Required]

@@ -12,7 +12,7 @@
                 <form method="post">
                     <div class="box-authentication">
                         <h4>Login</h4>
-                        <p class="before-login-text">Đã có tài khoản?</p>
+                        <p class="before-login-text">@Html.ActionLink("Chưa có tài khoản?", "Register", "Account")</p>
                         <div class="panel-group">
                             <label asp-for="Email">Email address<span class="required">*</span></label>
                             <input asp-for="Email" id="emmail_login" type="text" class="form-control">
@@ -24,7 +24,7 @@
                         <p class="forgot-pass">
                             <a href="#">Lost your password?</a>
                         </p>
-                        <button class="button"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button>
+                        <button type="submit" class="button"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button>
                     </div>
                 </form>
             </div>
