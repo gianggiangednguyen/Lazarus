@@ -2,10 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Lazarus.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -33,16 +36,24 @@ namespace Lazarus
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.ConfigureApplicationCookie(options =>
-            {
-                options.Cookie.Expiration = TimeSpan.FromMinutes(10);
-                options.Cookie.HttpOnly = true;
-            });
+                {
+                    options.Cookie.Expiration = TimeSpan.FromMinutes(60);
+                });
 
             services.Configure<CookiePolicyOptions>(options =>
                 options.MinimumSameSitePolicy = SameSiteMode.None);
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie();
+
+            //Claim-based policy
+            services.AddAuthorization(options =>
+                {
+                    options.AddPolicy("Manager", policy => policy.RequireClaim(ClaimTypes.Role, "AD", "SM"));
+                    options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "AD"));
+                    options.AddPolicy("ShopManager", policy => policy.RequireClaim(ClaimTypes.Role, "SM"));
+                    options.AddPolicy("NormalUser", policy => policy.RequireClaim(ClaimTypes.Role, "NU"));
+                });
 
             //services.AddAuthentication("LazarusSchema")
             //    .AddCookie("LazarusSchema", options =>
@@ -76,6 +87,8 @@ namespace Lazarus
             app.UseSession();
 
             app.UseAuthentication();
+
+            app.UseCookiePolicy();
 
             app.UseMvc(routes =>
             {

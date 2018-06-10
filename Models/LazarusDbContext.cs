@@ -6,7 +6,7 @@ namespace Lazarus.Models
 {
     public partial class LazarusDbContext : DbContext
     {
-        public LazarusDbContext()
+        public LazarusDbContext() : base()
         {
         }
 
@@ -26,6 +26,11 @@ namespace Lazarus.Models
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
         public virtual DbSet<TaiKhoanPremium> TaiKhoanPremium { get; set; }
         public virtual DbSet<ThongTinGiaoHang> ThongTinGiaoHang { get; set; }
+
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            base.OnConfiguring(optionsBuilder);
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

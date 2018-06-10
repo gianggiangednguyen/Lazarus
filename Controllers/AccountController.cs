@@ -36,22 +36,41 @@ namespace Lazarus.Controllers
         }
 
         [HttpPost]
+        [AllowAnonymous]
+        [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(TaiKhoan model)
         {
-            //TODO: Authentical
+            var tk = await (from taiKhoan in _context.TaiKhoan.Include(a => a.MaLoaiTaiKhoanNavigation).Include(b => b.TaiKhoanPremium.MaTaiKhoanNavigation)
+                            where taiKhoan.Email == model.Email
+                                && taiKhoan.MatKhau == model.MatKhau
+                                && taiKhoan.TrangThai == "Verified"
+                            select taiKhoan).FirstOrDefaultAsync();
 
-            List<Claim> claims = new List<Claim>
+            if (tk != null)
             {
-                new Claim(ClaimTypes.Email, model.Email)
-            };
+                //Tao ra 1 claim
+                List<Claim> claims = new List<Claim>
+                {
+                    new Claim(ClaimTypes.Email, tk.Email),
+                    new Claim(ClaimTypes.Role, tk.MaLoaiTaiKhoanNavigation.LoaiTaiKhoanId)
+                };
 
-            var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme);
+                var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme); //gan claim vao cookie
+                var claimsPrincipal = new ClaimsPrincipal(claimsIdentity); //claimprincipal
+                await HttpContext.SignInAsync(claimsPrincipal);
 
-            var claimsPrincipal = new ClaimsPrincipal(claimsIdentity);
-
-            await HttpContext.SignInAsync(claimsPrincipal);
+                return RedirectToAction("Index", "Home");
+            }
 
             return View();
+        }
+
+        [AllowAnonymous]
+        public async Task<IActionResult> Logout()
+        {
+            await HttpContext.SignOutAsync();
+
+            return RedirectToAction("Index", "Home");
         }
 
         [AllowAnonymous]
@@ -78,6 +97,7 @@ namespace Lazarus.Controllers
                     Email = model.Email,
                     MatKhau = model.MatKhau,
                     NhapLaiMatKhau = model.NhapLaiMatKhau,
+                    MaLoaiTaiKhoan = "NU", //Normal User
                     TrangThai = model.TrangThai
                 };
 
@@ -125,12 +145,15 @@ namespace Lazarus.Controllers
                 }
                 else
                 {
+                    model.TrangThai = "Verified";
                     await _context.TaiKhoan.AddAsync(model);
                     _context.SaveChanges();
+
+                    return RedirectToAction("Success", "Account");
                 }
             }
 
-            return View();
+            return RedirectToAction("Error", "Account");
         }
 
         public IActionResult Success()
