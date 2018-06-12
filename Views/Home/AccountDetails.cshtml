@@ -10,6 +10,11 @@
     {
         ViewData["img"] = "/Shop/images/default-user.png";
     }
+    else
+    {
+        ViewData["img"] = "/AccountImages/" + Model.HinhAnh;
+
+    }
 }
 
 <form method="get">
@@ -24,18 +29,18 @@
                             <label class="form-control">@Html.DisplayFor(m=>m.Ho)</label>
                         </div>
                         <div class="panel-group">
-                            <label>Tên<span class="required">*</span></label>
+                            <label>Tên</label>
                             <label class="form-control">@Html.DisplayFor(m => m.Ten)</label>
                         </div>
                         <div class="panel-group">
-                            <label>Email<span class="required">*</span></label>
+                            <label>Email</label>
                             <label class="form-control">@Html.DisplayFor(m => m.Email)</label>
                         </div>
                         <button asp-action="AccountEdit" asp-controller="Home" asp-route-id="@Model.TaiKhoanId" class="button"><i class="fa fa-circle"></i>&nbsp; <span>Thay đổi</span></button>
                     </div>
                     <div class="box-authentication">
                         <div style="width:250px; height:250px; margin:auto">
-                            <img src="@ViewData["img"]" />
+                            <img src="@ViewData["img"]" style="max-height:100%; max-width:100%;" />
                         </div>
                     </div>
                 </div>

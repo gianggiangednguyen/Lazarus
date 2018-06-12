@@ -63,7 +63,7 @@
                             <div class="links">
                                 <div class="jtv-user-info">
                                     <div class="dropdown">
-                                        <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>My Account </span> <i class="fa fa-angle-down"></i></a>
+                                        <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>Tài khoản </span> <i class="fa fa-angle-down"></i></a>
                                         <ul class="dropdown-menu" role="menu">
                                             @{
                                                 if (!User.Identity.IsAuthenticated)
@@ -200,7 +200,7 @@
                                         <img id="img_logo" src="images/logo.png" alt="logo">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
                                     </div>
-                                    @{ Html.RenderPartial("~/Views/Shared/_LoginFormPartial.cshtml"); }
+                                    <partial name="~/Views/Shared/_LoginFormPartial.cshtml" />
                                 </div>
                             </div>
                         </div>

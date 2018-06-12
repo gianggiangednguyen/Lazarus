@@ -52,7 +52,7 @@ namespace Lazarus.Controllers
         {
             string str = Request.Query["value"].ToString();
             string val;
-            switch(str)
+            switch (str)
             {
                 case "100":
                     val = "100.000 VND";
@@ -80,7 +80,7 @@ namespace Lazarus.Controllers
 
             if (tk != null)
             {
-                if(tk.TaiKhoanPremium == null)
+                if (tk.TaiKhoanPremium == null)
                 {
                     TaiKhoanPremium newobj = new TaiKhoanPremium
                     {
@@ -106,7 +106,7 @@ namespace Lazarus.Controllers
                 }
                 else
                 {
-                    if(tk.TaiKhoanPremium.NgayKetThuc > DateTime.Now)
+                    if (tk.TaiKhoanPremium.NgayKetThuc > DateTime.Now)
                     {
                         ViewData["view"] = "Thời gian Premium còn thời hạn.";
 
@@ -155,7 +155,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).Include(t=>t.MaCongTyNavigation).FirstOrDefaultAsync();
+            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).Include(t => t.MaCongTyNavigation).FirstOrDefaultAsync();
 
             if (tk != null)
             {
@@ -167,7 +167,7 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> AccountEdit(string id)
         {
-            if(string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
             {
                 NotFound();
             }
@@ -195,31 +195,16 @@ namespace Lazarus.Controllers
 
                 var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/AccountImages/", $"{modelToUpdate.TaiKhoanId}{ext}");
 
+                modelToUpdate.HinhAnh = $"{modelToUpdate.TaiKhoanId}{ext}";
+
                 using (var stream = new FileStream(path, FileMode.Create))
                 {
                     await file.CopyToAsync(stream);
                 }
-
-                if (await TryUpdateModelAsync<TaiKhoan>(modelToUpdate, "", a => a.Ho, a => a.Ten, a => a.HinhAnh))
-                {
-                    await _context.SaveChangesAsync();
-                    return View(modelToUpdate);
-                }
-                else
-                {
-                    ViewData["error"] = "Lỗi xảy ra";
-                }
             }
-
-            if (await TryUpdateModelAsync<TaiKhoan>(modelToUpdate, "", a => a.Ten, a => a.Ho))
-            {
-                await _context.SaveChangesAsync();
-                return View(modelToUpdate);
-            }
-            else
-            {
-                ViewData["error"] = "Lỗi xảy ra";
-            }
+            //TryUpdateModel se check modelstate
+            await TryUpdateModelAsync(modelToUpdate, "", a => a.Ten, a => a.Ho);
+            await _context.SaveChangesAsync();
 
             return View(modelToUpdate);
         }

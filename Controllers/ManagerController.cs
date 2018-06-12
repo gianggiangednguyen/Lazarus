@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Security.Claims;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Lazarus.Models;
 
 namespace Lazarus.Controllers
@@ -19,9 +22,13 @@ namespace Lazarus.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index()
         {
-            return View();
+            var id = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+
+            var tk = await _context.TaiKhoan.Where(o => o.TaiKhoanId == id).Include(p => p.MaLoaiTaiKhoanNavigation).FirstOrDefaultAsync();
+
+            return View(tk);
         }
     }
 }
