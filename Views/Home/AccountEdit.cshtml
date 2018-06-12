@@ -1,0 +1,33 @@
+﻿@model TaiKhoan
+
+@{
+    ViewData["Title"] = "AccountEdit";
+    Layout = "~/Views/Shared/_ShopLayout.cshtml";
+}
+
+<form method="post" enctype="multipart/form-data">
+    <section class="main-container col1-layout">
+        <div class="main container">
+            <div class="page-content">
+                <div class="account-login">
+                    <div class="box-authentication">
+                        <h4>Thông tin tài khoản</h4>
+                        <div class="panel-group">
+                            <label>Họ</label>
+                            <input class="form-control" asp-for="Ho" value="@Model.Ho" />
+                        </div>
+                        <div class="panel-group">
+                            <label>Tên</label>
+                            <input class="form-control" asp-for="Ten" value="@Model.Ten" />
+                        </div>
+                        <button type="submit" class="button"><i class="fa fa-folder"></i>&nbsp; <span>Đồng ý</span></button>
+                    </div>
+                    <div class="box-authentication">
+                        <label>Hình ảnh</label>
+                        <input class="file-control" asp-for="HinhAnh" type="file" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>

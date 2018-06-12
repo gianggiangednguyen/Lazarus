@@ -89,6 +89,7 @@ namespace Lazarus.Controllers
                 {
                     model.TaiKhoanId = RandomString.GenerateRandomString();
                     model.TrangThai = "Unverified";
+                    model.MaLoaiTaiKhoan = "NU";
                     await _context.AddAsync(model);
                     await _context.SaveChangesAsync();
 

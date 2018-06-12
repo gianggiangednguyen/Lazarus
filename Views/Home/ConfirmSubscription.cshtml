@@ -1,0 +1,30 @@
+﻿
+@{
+    ViewData["Title"] = "ConfirmSubscription";
+    Layout = "~/Views/Shared/_ShopLayout.cshtml";
+}
+
+@{ 
+    <h2>@ViewData["view"]</h2>
+}
+
+<form method="post">
+    <div class="totals col-sm-4">
+        <h3>Shopping Cart Total</h3>
+        <div class="inner">
+            <table id="shopping-cart-totals-table" class="table shopping-cart-table-total">
+                <tbody>
+                    <tr>
+                        <td style="" class="a-left" colspan="1"> Giá </td>
+                        <td style="" class="a-right"><span class="price">@ViewData["price"]</span></td>
+                    </tr>
+                </tbody>
+            </table>
+            <ul class="checkout">
+                <li>
+                    <button type="submit" title="Proceed to Checkout" class="button btn-proceed-checkout"><span>Proceed to Checkout</span></button>
+                </li>
+            </ul>
+        </div>
+    </div>
+</form>

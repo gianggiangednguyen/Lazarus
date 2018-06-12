@@ -53,20 +53,8 @@ namespace Lazarus
                     options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "AD"));
                     options.AddPolicy("ShopManager", policy => policy.RequireClaim(ClaimTypes.Role, "SM"));
                     options.AddPolicy("NormalUser", policy => policy.RequireClaim(ClaimTypes.Role, "NU"));
+                    options.AddPolicy("AllUser", policy => policy.RequireClaim(ClaimTypes.Role, "AD", "SM", "NU"));
                 });
-
-            //services.AddAuthentication("LazarusSchema")
-            //    .AddCookie("LazarusSchema", options =>
-            //    {
-            //        options.AccessDeniedPath = "";
-            //        options.Cookie = new CookieBuilder
-            //        {
-            //            HttpOnly = true,
-            //            Name = "Lazarus.Security.Cookie",
-            //            Path = "/"
-            //        };
-            //    }
-            //    );
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

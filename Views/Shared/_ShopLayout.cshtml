@@ -68,12 +68,12 @@
                                             @{
                                                 if (!User.Identity.IsAuthenticated)
                                                 {
-                                                    <li><a asp-controller="Account" asp-action="Login">Log In</a></li>
-                                                    <li><a asp-controller="Account" asp-action="Register">Sign Up</a></li>
+                                                    <li><a asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
+                                                    <li><a asp-controller="Account" asp-action="Register">Đăng kí</a></li>
                                                 }
                                                 else
                                                 {
-                                                    <li><a href="#">Account</a></li>
+                                                    <li><a asp-action="AccountDetails" asp-controller="Home" asp-route-id="@User.FindFirst(ClaimTypes.Sid).Value">Thông tin tài khoản</a></li>
                                                     <li><a href="#">Wishlist</a></li>
                                                     <li><a href="#">Checkout</a></li>
                                                     if (User.FindFirst(ClaimTypes.Role).Value == "NU")
@@ -81,7 +81,7 @@
                                                         <li><a asp-action="Subscription" asp-controller="Home">Subscription</a></li>
                                                     }
                                                     <li class="divider"></li>
-                                                    <li><a asp-controller="Account" asp-action="Logout">Log Out</a></li>
+                                                    <li><a asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
                                                 }
                                             }
                                         </ul>
