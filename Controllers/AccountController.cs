@@ -41,7 +41,6 @@ namespace Lazarus.Controllers
             var tk = await (from taiKhoan in _context.TaiKhoan.Include(a => a.MaLoaiTaiKhoanNavigation).Include(b => b.TaiKhoanPremium.MaTaiKhoanNavigation)
                             where taiKhoan.Email == model.Email
                                 && taiKhoan.MatKhau == model.MatKhau
-                                && taiKhoan.TrangThai == "Verified"
                             select taiKhoan).FirstOrDefaultAsync();
 
             if (tk != null)
@@ -51,14 +50,34 @@ namespace Lazarus.Controllers
                 {
                     new Claim(ClaimTypes.Sid, tk.TaiKhoanId),
                     new Claim(ClaimTypes.Email, tk.Email),
-                    new Claim(ClaimTypes.Role, tk.MaLoaiTaiKhoanNavigation.LoaiTaiKhoanId)
+                    new Claim(ClaimTypes.Role, "UnverifiedUser")
                 };
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme); //gan claim vao cookie
+
+                if (tk.TrangThai == "Verified")
+                {
+                    if (tk.MaLoaiTaiKhoan == "AD")
+                    {
+                        claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
+                    }
+                    else if (tk.MaLoaiTaiKhoan == "SM" && tk.TaiKhoanPremium.NgayKetThuc < DateTime.Now)
+                    {
+                        claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
+                        claims.Add(new Claim(ClaimTypes.Role, "ShopManager"));
+                    }
+
+                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "NormalUser"));
+                }
+
+
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity); //claimprincipal
                 await HttpContext.SignInAsync(claimsPrincipal);
 
                 return RedirectToAction("Index", "Home");
+
             }
 
             return View();
