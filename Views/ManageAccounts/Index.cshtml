@@ -1,8 +1,93 @@
-﻿
+﻿@model Lazarus.Data.PagedList<TaiKhoan>
+
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
-<h2>Index</h2>
 
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+        <form asp-action="Index" method="get">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="product_name">Email</label>
+                    <input type="text" name="searchEmail" value="" placeholder="Email" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label" for="price">Họ tên</label>
+                    <input type="text" name="searchName" value="" placeholder="Họ tên" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label" for="status">Trạng thái</label>
+                    <select name="status" id="status" class="form-control">
+                        <option value="Verified" selected>Verified</option>
+                        <option value="Unverified">Unverified</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default" style="margin-top:24px;">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Email</a></th>
+                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Họ tên</a></th>
+                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Loại tài khoản</a></th>
+                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Trạng thái</a></th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{ foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>
+                                            @Html.DisplayFor(m => item.Email)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.HoTen)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.MaLoaiTaiKhoanNavigation.TenLoaiTaiKhoan)
+                                        </td>
+                                        <td>
+                                            @Html.DisplayFor(m => item.TrangThai)
+                                        </td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a asp-action="Details" asp-controller="ManageAccounts" asp-route-id="@item.TaiKhoanId" class="btn-white btn btn-xs">Chi tiết</a>
+                                                <a class="btn-white btn btn-xs">Chỉnh sửa</a>
+                                                <a class="btn-white btn btn-xs">Xóa</a>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                @{
+                    var nextPage = Model.HasNextPage ? "" : "disable";
+                    var previousPage = Model.HasPreviousPage ? "" : "disable";
+                }
+                <a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" class="btn btn-default @previousPage">Previous</a>
+                <a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" class="btn btn-default @nextPage">Next</a>
+            </div>
+        </div>
+    </div>
+</div>

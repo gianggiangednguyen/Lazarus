@@ -34,20 +34,20 @@ namespace Lazarus.Controllers
         }
 
 
-        [Authorize(Policy = "NormalUser")]
+        [Authorize(Policy = "NormalUserPolicy")]
         public IActionResult Subscription()
         {
             return View();
         }
 
-        [Authorize(Policy = "NormalUser")]
+        [Authorize(Policy = "NormalUserPolicy")]
         [HttpPost]
         public IActionResult Subscription(string value)
         {
             return RedirectToAction("ConfirmSubscription", "Home", new { id = HttpContext.User.FindFirst(ClaimTypes.Sid).Value, value });
         }
 
-        [Authorize(Policy = "NormalUser")]
+        [Authorize(Policy = "NormalUserPolicy")]
         public IActionResult ConfirmSubscription()
         {
             string str = Request.Query["value"].ToString();
@@ -72,7 +72,7 @@ namespace Lazarus.Controllers
             return View();
         }
 
-        [Authorize(Policy = "NormalUser")]
+        [Authorize(Policy = "NormalUserPolicy")]
         [HttpPost]
         public async Task<IActionResult> ConfirmSubscription(string id, string value)
         {
@@ -133,7 +133,9 @@ namespace Lazarus.Controllers
                             obj.NgayKetThuc = DateTime.Now.AddYears(1);
                         }
 
+                        tk.MaLoaiTaiKhoan = "SM";
                         _context.Update(obj);
+                        await TryUpdateModelAsync<TaiKhoan>(tk);
                         await _context.SaveChangesAsync();
                     }
                 }

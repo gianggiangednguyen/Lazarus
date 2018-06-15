@@ -57,6 +57,9 @@ namespace Lazarus.Controllers
 
                 if (tk.TrangThai == "Verified")
                 {
+                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
+                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "NormalUser"));
+
                     if (tk.MaLoaiTaiKhoan == "AD")
                     {
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
@@ -65,13 +68,9 @@ namespace Lazarus.Controllers
                     else if (tk.MaLoaiTaiKhoan == "SM" && tk.TaiKhoanPremium.NgayKetThuc < DateTime.Now)
                     {
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
-                        claims.Add(new Claim(ClaimTypes.Role, "ShopManager"));
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "ShopManager"));
                     }
-
-                    claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
-                    claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "NormalUser"));
                 }
-
 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity); //claimprincipal
                 await HttpContext.SignInAsync(claimsPrincipal);
@@ -80,6 +79,7 @@ namespace Lazarus.Controllers
 
             }
 
+            ViewData["error"] = "Tài khoản hoặc mật khẩu không đúng";
             return View();
         }
 

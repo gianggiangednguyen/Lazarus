@@ -50,5 +50,8 @@ namespace Lazarus.Models
         public LoaiTaiKhoan MaLoaiTaiKhoanNavigation { get; set; }
         [InverseProperty("MaTaiKhoanNavigation")]
         public TaiKhoanPremium TaiKhoanPremium { get; set; }
+
+        [NotMapped]
+        public string HoTen { get { return $"{Ho} {Ten}"; } }
     }
 }

@@ -49,12 +49,12 @@ namespace Lazarus
             //Claim-based policy
             services.AddAuthorization(options =>
                 {
-                    options.AddPolicy("Manager", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "ShopManager"));
-                    options.AddPolicy("Admin", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
-                    options.AddPolicy("ShopManager", policy => policy.RequireClaim(ClaimTypes.Role, "ShopManager"));
-                    options.AddPolicy("NormalUser", policy => policy.RequireClaim(ClaimTypes.Role, "NormalUser"));
-                    options.AddPolicy("AllUser", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "ShopManager", "NormalUser"));
-                    options.AddPolicy("UnverifiedUser", policy => policy.RequireClaim(ClaimTypes.Role, "UnverifiedUser"));
+                    options.AddPolicy("ManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Admin", "ShopManager" }));
+                    options.AddPolicy("AdminPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
+                    options.AddPolicy("ShopManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "ShopManager"));
+                    options.AddPolicy("NormalUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "NormalUser"));
+                    options.AddPolicy("AllUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "ShopManager", "NormalUser"));
+                    options.AddPolicy("UnverifiedUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "UnverifiedUser"));
                 });
         }
 

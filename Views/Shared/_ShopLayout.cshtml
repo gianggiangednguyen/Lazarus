@@ -200,7 +200,7 @@
                                         <img id="img_logo" src="images/logo.png" alt="logo">
                                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
                                     </div>
-                                    <partial name="~/Views/Shared/_LoginFormPartial.cshtml" />
+                                    @await Component.InvokeAsync("LoginForm")
                                 </div>
                             </div>
                         </div>

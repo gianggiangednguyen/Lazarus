@@ -11,6 +11,14 @@
             <div class="account-login">
                 <form method="post">
                     <div class="box-authentication">
+                        @{
+                            if (ViewData["error"] != null)
+                            {
+                                <div class="box-border table-bordered bg-warning">
+                                    <h5 class="text-danger" style="padding-left:10px;">@ViewData["error"]</h5>
+                                </div>
+                            }
+                        }
                         <h4>Login</h4>
                         <p class="before-login-text">@Html.ActionLink("Chưa có tài khoản?", "Register", "Account")</p>
                         <div class="panel-group">

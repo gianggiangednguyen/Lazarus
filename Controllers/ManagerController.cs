@@ -12,7 +12,7 @@ using Lazarus.Models;
 
 namespace Lazarus.Controllers
 {
-    [Authorize(Policy = "Manager")]
+    [Authorize(Policy = "ManagerPolicy")]
     public class ManagerController : Controller
     {
         private readonly LazarusDbContext _context;
