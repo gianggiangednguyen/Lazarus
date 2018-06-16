@@ -106,7 +106,7 @@ namespace Lazarus.Controllers
             {
                 try
                 {
-                    model.TaiKhoanId = RandomString.GenerateRandomString();
+                    model.TaiKhoanId = RandomString.GenerateRandomString(_context.TaiKhoan.Select(o => o.TaiKhoanId));
                     model.TrangThai = "Unverified";
                     model.MaLoaiTaiKhoan = "NU";
                     await _context.AddAsync(model);

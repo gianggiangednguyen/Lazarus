@@ -6,7 +6,7 @@ namespace Lazarus.Models
 {
     public partial class LazarusDbContext : DbContext
     {
-        public LazarusDbContext() : base()
+        public LazarusDbContext()
         {
         }
 
@@ -83,6 +83,8 @@ namespace Lazarus.Models
                 entity.Property(e => e.LoaiSanPhamId)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
+
+                entity.Property(e => e.TrangThai).IsUnicode(false);
             });
 
             modelBuilder.Entity<LoaiTaiKhoan>(entity =>
@@ -90,6 +92,8 @@ namespace Lazarus.Models
                 entity.Property(e => e.LoaiTaiKhoanId)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
+
+                entity.Property(e => e.TrangThai).IsUnicode(false);
             });
 
             modelBuilder.Entity<SanPham>(entity =>
@@ -156,9 +160,6 @@ namespace Lazarus.Models
                     .WithMany(p => p.TaiKhoan)
                     .HasForeignKey(d => d.MaLoaiTaiKhoan)
                     .HasConstraintName("FK_TaiKhoan_LoaiTaiKhoan");
-
-                entity.HasIndex(e => e.Email)
-                    .IsUnique();
             });
 
             modelBuilder.Entity<TaiKhoanPremium>(entity =>

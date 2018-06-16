@@ -1,0 +1,71 @@
+﻿@model TaiKhoan
+
+@{
+    ViewData["Title"] = "Create";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-title">
+                <h5>Thông tin tài khoản</h5>
+            </div>
+            <div class="ibox-content">
+                @{
+                    if (ViewBag.InsertError != null)
+                    {
+                        <h5 class="text-danger">@ViewBag.InsertError</h5>
+                    }
+                }
+                <form method="post" class="form-horizontal">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Họ</label>
+                        <div class="col-sm-4"><input type="text" asp-for="Ho" class="form-control" /></div>
+                        <div class="col-lg-6"><span asp-validation-for="Ho" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tên</label>
+                        <div class="col-sm-4"><input type="text" asp-for="Ten" class="form-control" /></div>
+                        <div class="col-lg-6"><span asp-validation-for="Ten" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Email</label>
+                        <div class="col-sm-4"><input type="text" asp-for="Email" class="form-control" /></div>
+                        <div class="col-lg-6"><span asp-validation-for="Email" class="text-danger"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Mật khẩu</label>
+                        <div class="col-sm-4"><input type="password" asp-for="MatKhau" class="form-control" /></div>
+                    </div>
+                    @*<div class="form-group">
+                            <label class="col-sm-2 control-label">Mật khẩu</label>
+                            <div class="col-sm-4"><input type="password" asp-for="NhapLaiMatKhau" class="form-control" /></div>
+                        </div>*@
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Loại tài khoản</label>
+                        <div class="col-sm-4"><select asp-for="MaLoaiTaiKhoan" asp-items="@ViewBag.LoaiTaiKhoanList" class="form-control"></select></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Trạng thái</label>
+                        <div class="col-sm-6">
+                            <select asp-for="TrangThai" class="form-control">
+                                <option value="Verified">Verified</option>
+                                <option value="Unverified">Unverified</option>
+                                <option value="Banned">Banned</option>
+                                <option value="Deleted">Deleted</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Index" asp-controller="ManageAccounts" class="btn btn-primary" type="submit">Hủy bỏ</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -36,6 +36,10 @@
                                     <i class="fa fa-user-circle"></i>
                                     <span class="nav-label">Quản lý tài khoản</span>
                                 </a>
+                                <a asp-action="Index" asp-controller="AccountType">
+                                    <i class="fa fa-address-book-o"></i>
+                                    <span class="nav-label">Quản lý loại tài khoản</span>
+                                </a>
                             </li>
                         }
                     }
@@ -51,11 +55,11 @@
                     </div>
                     <ul class="nav navbar-top-links navbar-right">
                         <li>
-                            <span class="m-r-sm text-muted welcome-message">Welcome to INSPINIA+ Admin Theme.</span>
+                            <span class="m-r-sm text-muted welcome-message">Chào mừng đến với trang quản lí</span>
                         </li>
                         <li>
                             <a asp-action="Logout" asp-controller="Account">
-                                <i class="fa fa-sign-out"></i> Log out
+                                <i class="fa fa-sign-out"></i> Đăng xuất
                             </a>
                         </li>
                         <li>

@@ -16,6 +16,8 @@ namespace Lazarus.Models
         public string LoaiTaiKhoanId { get; set; }
         [Required]
         public string TenLoaiTaiKhoan { get; set; }
+        [StringLength(30)]
+        public string TrangThai { get; set; }
 
         [InverseProperty("MaLoaiTaiKhoanNavigation")]
         public ICollection<TaiKhoan> TaiKhoan { get; set; }

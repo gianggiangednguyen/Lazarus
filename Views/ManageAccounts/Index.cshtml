@@ -11,19 +11,19 @@
         <form asp-action="Index" method="get">
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label class="control-label" for="product_name">Email</label>
+                    <label class="control-label">Email</label>
                     <input type="text" name="searchEmail" value="" placeholder="Email" class="form-control">
                 </div>
             </div>
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label class="control-label" for="price">Họ tên</label>
+                    <label class="control-label">Họ tên</label>
                     <input type="text" name="searchName" value="" placeholder="Họ tên" class="form-control">
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
-                    <label class="control-label" for="status">Trạng thái</label>
+                    <label class="control-label">Trạng thái</label>
                     <select name="status" id="status" class="form-control">
                         <option value="Verified" selected>Verified</option>
                         <option value="Unverified">Unverified</option>
@@ -45,11 +45,11 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Email</a></th>
-                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Họ tên</a></th>
-                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Loại tài khoản</a></th>
-                                <th><a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Trạng thái</a></th>
-                                <th></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Email</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Họ tên</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Loại tài khoản</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Trạng thái</a></th>
+                                <th><a asp-action="Create" asp-controller="ManageAccounts" class="btn-white btn btn-xs">Tạo mới</a></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -71,8 +71,8 @@
                                         <td>
                                             <div class="btn-group">
                                                 <a asp-action="Details" asp-controller="ManageAccounts" asp-route-id="@item.TaiKhoanId" class="btn-white btn btn-xs">Chi tiết</a>
-                                                <a class="btn-white btn btn-xs">Chỉnh sửa</a>
-                                                <a class="btn-white btn btn-xs">Xóa</a>
+                                                <a asp-action="Edit" asp-controller="ManageAccounts" asp-route-id="@item.TaiKhoanId" class="btn-white btn btn-xs">Chỉnh sửa</a>
+                                                <form method="post" class="btn-group"><button type="submit" asp-action="Delete" asp-controller="ManageAccounts" asp-route-id="@item.TaiKhoanId" asp-route-page="@Model.PageIndex" class="btn-white btn btn-xs" onclick="return confirm('Có chắc là muốn xóa?')">Xóa</button></form>                                                
                                             </div>
                                         </td>
                                     </tr>
@@ -85,8 +85,8 @@
                     var nextPage = Model.HasNextPage ? "" : "disable";
                     var previousPage = Model.HasPreviousPage ? "" : "disable";
                 }
-                <a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" class="btn btn-default @previousPage">Previous</a>
-                <a asp-action="Index" asp-controller="ManageAccounts" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" class="btn btn-default @nextPage">Next</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" asp-route-page="@Model.PageIndex - 1" class="btn btn-default @previousPage">Trước</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" asp-route-page="@Model.PageIndex + 1" class="btn btn-default @nextPage">Sau</a>
             </div>
         </div>
     </div>

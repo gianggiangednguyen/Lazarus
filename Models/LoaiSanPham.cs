@@ -17,6 +17,8 @@ namespace Lazarus.Models
         [Required]
         [StringLength(200)]
         public string TenLoaiSanPham { get; set; }
+        [StringLength(30)]
+        public string TrangThai { get; set; }
 
         [InverseProperty("MaLoaiSanPhamNavigation")]
         public ICollection<SanPham> SanPham { get; set; }

@@ -101,7 +101,9 @@ namespace Lazarus.Controllers
                         newobj.NgayKetThuc = DateTime.Now.AddYears(1);
                     }
 
+                    tk.MaLoaiTaiKhoan = "SM";
                     await _context.AddAsync(newobj);
+                    _context.TaiKhoan.Update(tk);
                     await _context.SaveChangesAsync();
                 }
                 else
@@ -134,8 +136,8 @@ namespace Lazarus.Controllers
                         }
 
                         tk.MaLoaiTaiKhoan = "SM";
-                        _context.Update(obj);
-                        await TryUpdateModelAsync<TaiKhoan>(tk);
+                        _context.TaiKhoanPremium.Update(obj);
+                        _context.TaiKhoan.Update(tk);
                         await _context.SaveChangesAsync();
                     }
                 }
