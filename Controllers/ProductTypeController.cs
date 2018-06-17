@@ -56,5 +56,104 @@ namespace Lazarus.Controllers
 
             return View(await PagedList<LoaiSanPham>.CreateAsync(lstLoaiSp, page ?? 1, 15));
         }
+
+        public async Task<IActionResult> Details(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var loaisp = await _context.LoaiSanPham.SingleOrDefaultAsync(o=>o.LoaiSanPhamId == id);
+
+            if (loaisp == null)
+            {
+                return NotFound();
+            }
+
+            return View(loaisp);
+        }
+
+        public IActionResult Create()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Create(LoaiSanPham model)
+        {
+            model.LoaiSanPhamId = RandomString.GenerateRandomString(_context.LoaiSanPham.Select(o => o.LoaiSanPhamId));
+
+            await _context.AddAsync(model);
+            await _context.SaveChangesAsync();
+
+            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham.AsNoTracking(), 1, 15));
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            if(id == null)
+            {
+                return NotFound();
+            }
+
+            var loaisp = await _context.LoaiSanPham.SingleOrDefaultAsync(a => a.LoaiSanPhamId == id);
+
+            if (loaisp == null)
+            {
+                return NotFound();
+            }
+
+            return View(loaisp);
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPost(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var loaispToUpdate = await _context.LoaiSanPham.SingleOrDefaultAsync(a => a.LoaiSanPhamId == id);
+
+            if (loaispToUpdate == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                await TryUpdateModelAsync(loaispToUpdate,
+                    "",
+                    a => a.TenLoaiSanPham, a => a.TrangThai);
+                await _context.SaveChangesAsync();
+            }
+
+            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham, 1, 15));
+        }
+
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var loaisp = await _context.LoaiSanPham.SingleOrDefaultAsync(a => a.LoaiSanPhamId == id);
+
+            if (loaisp == null)
+            {
+                return NotFound();
+            }
+            else
+            {
+                loaisp.TrangThai = "Deleted";
+                _context.LoaiSanPham.Update(loaisp);
+                await _context.SaveChangesAsync();
+            }
+
+            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham, 1, 15));
+        }
     }
 }

@@ -12,12 +12,12 @@ namespace Lazarus.Data
         {
             string result = "";
             again:
-            foreach(var item in sourceToCheck)
+            const string chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
+            var ran = new Random();
+            var e = Enumerable.Repeat(chars, 10).Select(s => s[ran.Next(0, s.Length)]).ToArray();
+            result = new string(e);
+            foreach (var item in sourceToCheck)
             {
-                const string chars = "ABCDEFGHJKLMNOPQRSTUVWXYZabcdefghijkmnopqrstuvwxyz0123456789";
-                var ran = new Random();
-                var e = Enumerable.Repeat(chars, 10).Select(s => s[ran.Next(0, s.Length)]).ToArray();
-                result = new string(e);
                 if (item == result)
                 {
                     goto again;

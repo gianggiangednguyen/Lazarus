@@ -1,7 +1,7 @@
-﻿@model LoaiTaiKhoan
+﻿@model LoaiSanPham
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Create";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -14,11 +14,11 @@
             <div class="ibox-content">
                 <form method="post" class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Họ</label>
-                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiTaiKhoan" value="@Model.TenLoaiTaiKhoan" class="form-control" /></div>
+                        <label class="col-sm-2 control-label">Tên loại tài khoản</label>
+                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiSanPham" class="form-control" /></div>
                     </div>
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Tên</label>
+                        <label class="col-sm-2 control-label">Trạng thái</label>
                         <div class="col-sm-6">
                             <select class="form-control" asp-for="TrangThai">
                                 <option value="Active">Active</option>
@@ -29,7 +29,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button asp-route-id="@Model.LoaiTaiKhoanId" class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Create" class="btn btn-white" type="submit">Đồng ý</button>
                             <button asp-action="Index" class="btn btn-primary" type="submit">Quay về</button>
                         </div>
                     </div>

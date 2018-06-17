@@ -1,4 +1,4 @@
-﻿@model LoaiTaiKhoan
+﻿@model LoaiSanPham
 
 @{
     ViewData["Title"] = "Edit";
@@ -15,7 +15,7 @@
                 <form method="post" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Họ</label>
-                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiTaiKhoan" value="@Model.TenLoaiTaiKhoan" class="form-control" /></div>
+                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiSanPham" value="@Model.TenLoaiSanPham" class="form-control" /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tên</label>
@@ -29,8 +29,8 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button asp-route-id="@Model.LoaiTaiKhoanId" class="btn btn-white" type="submit">Đồng ý</button>
-                            <button asp-action="Index" class="btn btn-primary" type="submit">Quay về</button>
+                            <button asp-route-id="@Model.LoaiSanPhamId" class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Index" asp-controller="AccountType" class="btn btn-primary" type="submit">Quay về</button>
                         </div>
                     </div>
                 </form>

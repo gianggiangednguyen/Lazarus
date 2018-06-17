@@ -27,44 +27,52 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> Index(int? page, string currentSort, string searchEmail, string searchName)
         {
-            ViewData["CurrentSort"] = currentSort;
-            ViewData["EmailSort"] = currentSort == "Email_Aces" ? "Email_Desc" : "Email_Aces";
-            ViewData["NameSort"] = currentSort == "Name_Aces" ? "Name_Desc" : "Name_Aces";
-            // TODO: search
+            ViewBag.CurrentSort = currentSort;
+            ViewBag.EmailSort = currentSort == "ByEmail" ? "ByEmail_desc" : "ByEmail";
+            ViewBag.NameSort = currentSort == "ByName" ? "ByName_desc" : "ByName";
+            ViewBag.TypeSort = currentSort == "ByType" ? "ByType_desc" : "ByType";
+            ViewBag.StatusSort = currentSort == "ByStatus" ? "ByStatus_desc" : "ByStatus";
+
             var lstTk = from taiKhoan in _context.TaiKhoan.Include(p => p.MaLoaiTaiKhoanNavigation)
                         select taiKhoan;
 
             if (!string.IsNullOrEmpty(searchEmail))
             {
-                lstTk = (from tk in lstTk
-                         where tk.Email.Contains(searchEmail)
-                         select tk);
+                ViewBag.SearchEmail = searchEmail;
+                lstTk = lstTk.Where(a => a.Email.Contains(searchEmail));
+            }
 
-                if (!string.IsNullOrEmpty(searchName))
-                {
-                    lstTk = (from tk in lstTk
-                             where tk.Email.Contains(searchName)
-                             select tk)
-                            .Union(
-                        from tk in lstTk
-                        where tk.HoTen.Contains(searchName)
-                        select tk);
-                }
+            if (!string.IsNullOrEmpty(searchName))
+            {
+                ViewBag.SearchName = searchName;
+                lstTk = lstTk.Where(a => a.HoTen.Contains(searchName));
             }
 
             switch (currentSort)
             {
-                case "Email_Aces":
+                case "ByEmail":
                     lstTk = lstTk.OrderBy(o => o.Email);
                     break;
-                case "Email_Desc":
+                case "ByEmail_desc":
                     lstTk = lstTk.OrderByDescending(o => o.Email);
                     break;
-                case "Name_Aces":
+                case "ByName":
                     lstTk = lstTk.OrderBy(o => o.HoTen);
                     break;
-                case "Name_Desc":
+                case "ByName_desc":
                     lstTk = lstTk.OrderByDescending(o => o.HoTen);
+                    break;
+                case "ByType":
+                    lstTk = lstTk.OrderBy(o => o.MaLoaiTaiKhoanNavigation.TenLoaiTaiKhoan);
+                    break;
+                case "ByType_desc":
+                    lstTk = lstTk.OrderByDescending(o => o.MaLoaiTaiKhoanNavigation.TenLoaiTaiKhoan);
+                    break;
+                case "ByStatus":
+                    lstTk = lstTk.OrderBy(o => o.TrangThai);
+                    break;
+                case "ByStatus_desc":
+                    lstTk = lstTk.OrderByDescending(o => o.TrangThai);
                     break;
                 default:
                     break;

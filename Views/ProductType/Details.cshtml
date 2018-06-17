@@ -1,7 +1,7 @@
-﻿@model LoaiTaiKhoan
+﻿@model LoaiSanPham
 
 @{
-    ViewData["Title"] = "Edit";
+    ViewData["Title"] = "Details";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
 }
 
@@ -12,24 +12,19 @@
                 <h5>Thông tin loại tài khoản</h5>
             </div>
             <div class="ibox-content">
-                <form method="post" class="form-horizontal">
+                <form method="get" class="form-horizontal">
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Họ</label>
-                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiTaiKhoan" value="@Model.TenLoaiTaiKhoan" class="form-control" /></div>
+                        <div class="col-sm-6"><span class="form-control">@Html.DisplayFor(m => Model.TenLoaiSanPham)</span></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Tên</label>
-                        <div class="col-sm-6">
-                            <select class="form-control" asp-for="TrangThai">
-                                <option value="Active">Active</option>
-                                <option value="Deleted">Deleted</option>
-                            </select>
-                        </div>
+                        <div class="col-sm-6"><span class="form-control">@Html.DisplayFor(m => Model.TrangThai)</span></div>
                     </div>
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button asp-route-id="@Model.LoaiTaiKhoanId" class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Edit" asp-route-id="@Model.LoaiSanPhamId" class="btn btn-white" type="submit">Chỉnh sửa</button>
                             <button asp-action="Index" class="btn btn-primary" type="submit">Quay về</button>
                         </div>
                     </div>

@@ -45,10 +45,10 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Email</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Họ tên</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Loại tài khoản</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]">Trạng thái</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.EmailSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Email</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.NameSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Họ tên</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.TypeSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Loại tài khoản</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.StatusSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Trạng thái</a></th>
                                 <th><a asp-action="Create" asp-controller="ManageAccounts" class="btn-white btn btn-xs">Tạo mới</a></th>
                             </tr>
                         </thead>
@@ -82,11 +82,11 @@
                     </table>
                 </div>
                 @{
-                    var nextPage = Model.HasNextPage ? "" : "disable";
-                    var previousPage = Model.HasPreviousPage ? "" : "disable";
+                    var nextPage = Model.HasNextPage ? "" : "disabled";
+                    var previousPage = Model.HasPreviousPage ? "" : "disabled";
                 }
-                <a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" asp-route-page="@Model.PageIndex - 1" class="btn btn-default @previousPage">Trước</a>
-                <a asp-action="Index" asp-route-currentSort="@ViewData["EmailSort"]" asp-route-searchEmail="@ViewData["SearchEmail"]" asp-route-searchName="@ViewData["SearchName"]" asp-route-page="@Model.PageIndex + 1" class="btn btn-default @nextPage">Sau</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex - 1)" class="btn btn-default @previousPage">Trước</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex + 1)" class="btn btn-default @nextPage">Sau</a>
             </div>
         </div>
     </div>
