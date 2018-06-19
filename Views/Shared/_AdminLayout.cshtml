@@ -46,6 +46,15 @@
                                 </a>
                             </li>
                         }
+                        if (User.FindFirst(ClaimTypes.Role).Value == "ShopManager")
+                        {
+                            <li>
+                                <a asp-action="Index" asp-controller="ShopManage">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span class="nav-label">Quản lý cửa hàng</span>
+                                </a>
+                            </li>
+                        }
                     }
                 </ul>
             </div>

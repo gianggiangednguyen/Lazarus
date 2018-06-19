@@ -1,0 +1,111 @@
+﻿@model IEnumerable<SanPham>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (ViewBag.Mes != null)
+{
+    <div class="row">
+        <div class="col-lg-6">
+            <div class="ibox float-e-margins">
+                <div class="ibox-title">
+                    <h5>Quản lý cửa hàng</h5>
+                </div>
+                <div class="ibox-content">
+                    <div class="text-center">
+                        <a class="btn btn-primary" asp-action="ShopCreate">@ViewBag.Mes</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox-content">
+                <form class="form-inline">
+                    <a asp-action="ProductCreate" class="btn btn-white">Thêm sản phẩm</a>
+                    <div class="form-group">
+                        <label class="sr-only">Tên sản phẩm</label>
+                        <input type="text" placeholder="Tên sản phẩm" class="form-control" />
+                    </div>
+                    <button class="btn btn-white" type="submit">Tìm kiếm</button>
+                    <button class="btn btn-white" type="submit" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</button>
+                    @if(ViewBag.ShopStatus == "Deactive")
+                    {
+                        <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-white">Mở cửa hàng</button>
+                    }
+                    <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-white">Đóng cửa hàng</button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    foreach (var item in Model)
+    {
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox product-detail">
+                    <div class="ibox-content">
+                        <div class="row">
+                            <div class="col-md-5">
+                                <div class="product-images">
+                                    <div>
+                                        <div class="image-imitation">
+                                            <img src="~/ProductImages/@item.HinhAnh" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-7">
+
+                                <h2 class="font-bold m-b-xs">
+                                    Desktop publishing software
+                                </h2>
+                                <div class="m-t-md">
+                                    <h2 class="product-main-price">@item.GiaBan VND</h2>
+                                </div>
+                                <hr>
+
+                                <h4>@item.MoTa</h4>
+
+                                <div class="small text-muted">
+
+                                </div>
+                                <dl class="small m-t-md">
+                                    <dt>Description lists</dt>
+                                    <dd>A description list is perfect for defining terms.</dd>
+                                    <dt>Euismod</dt>
+                                    <dd>Vestibulum id ligula porta felis euismod semper eget lacinia odio sem nec elit.</dd>
+                                    <dd>Donec id elit non mi porta gravida at eget metus.</dd>
+                                    <dt>Malesuada porta</dt>
+                                    <dd>Etiam porta sem malesuada magna mollis euismod.</dd>
+                                </dl>
+                                <hr>
+
+                                <div>
+                                    <div class="btn-group">
+                                        <form method="post">
+                                            <a asp-action="EditProduct" asp-route-id="@item.SanPhamId" class="btn btn-primary btn-sm">Chỉnh sửa</a>
+                                            <button asp-action="DeleteProduct" asp-route-id="@item.SanPhamId" class="btn btn-white btn-sm" type="submit">Xóa</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="ibox-footer">
+                        <span class="pull-right">
+                            Sản phẩm đăng ngày - <i class="fa fa-clock-o"></i> @item.NgayThem
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+}

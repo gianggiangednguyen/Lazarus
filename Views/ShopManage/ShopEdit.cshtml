@@ -1,0 +1,28 @@
+﻿@model CuaHang
+
+@{
+    ViewData["Title"] = "ShopEdit";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tên sản phẩm</label>
+                        <div class="col-sm-6"><input type="text" asp-for="TenCuaHang" value="@Model.TenCuaHang" class="form-control" /></div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Index" asp-controller="ShopManage" class="btn btn-primary" type="submit">Quay về</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

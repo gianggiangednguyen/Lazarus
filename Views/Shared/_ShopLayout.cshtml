@@ -6,14 +6,13 @@
 <head>
     <meta name="viewport" content="width=device-width" />
     <title>@ViewBag.Title</title>
-    
+
     <link rel="shortcut icon" type="image/x-icon" href="~/Shop/favicon.ico">
 
     <!-- Google Fonts -->
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,400italic,500,500italic,700' rel='stylesheet' type='text/css'>
 
     <!-- CSS Style -->
-
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" type="text/css" href="~/Shop/css/bootstrap.min.css">
 
@@ -30,7 +29,7 @@
     <link rel="stylesheet" type="text/css" href="~/Shop/css/animate.css" media="all">
 
     <!-- flexslider CSS -->
-    <link rel="stylesheet" type="text/css" href="~/Shop/css/flexslider.css" >
+    <link rel="stylesheet" type="text/css" href="~/Shop/css/flexslider.css">
 
     <!-- jquery-ui.min CSS  -->
     <link rel="stylesheet" type="text/css" href="~/Shop/css/jquery-ui.css">
@@ -45,113 +44,114 @@
     <link rel="stylesheet" type="text/css" href="~/Shop/css/style.css" media="all">
 </head>
 <body class="cms-index-index cms-home-page">
-<div id="page">
-    <!-- Header -->
-    <header>
-        <div class="header-container">
-            <div class="header-top">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-5 col-xs-6">
-                            <!-- Default Welcome Message -->
-                            <span class="phone hidden-xs hidden-sm"><i class="fa fa-phone fa-lg"></i> +123.456.789</span>
-                            <div class="welcome-msg hidden-xs">Welcome to Lazarus </div>
-                        </div>
+    <div id="page">
+        <!-- Header -->
+        <header>
+            <div class="header-container">
+                <div class="header-top">
+                    <div class="container">
+                        <div class="row">
+                            <div class="col-md-6 col-sm-5 col-xs-6">
+                                <!-- Default Welcome Message -->
+                                <span class="phone hidden-xs hidden-sm"><i class="fa fa-phone fa-lg"></i> +123.456.789</span>
+                                <div class="welcome-msg hidden-xs">Welcome to Lazarus </div>
+                            </div>
 
-                        <!-- top links -->
-                        <div class="headerlinkmenu col-lg-6 col-md-6 col-sm-7 col-xs-6 text-right">
-                            <div class="links">
-                                <div class="jtv-user-info">
-                                    <div class="dropdown">
-                                        <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>Tài khoản </span> <i class="fa fa-angle-down"></i></a>
-                                        <ul class="dropdown-menu" role="menu">
-                                            @{
-                                                if (!User.Identity.IsAuthenticated)
-                                                {
-                                                    <li><a asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
-                                                    <li><a asp-controller="Account" asp-action="Register">Đăng kí</a></li>
-                                                }
-                                                else
-                                                {
-                                                    if (User.FindFirst(ClaimTypes.Role).Value == "Admin")
+                            <!-- top links -->
+                            <div class="headerlinkmenu col-lg-6 col-md-6 col-sm-7 col-xs-6 text-right">
+                                <div class="links">
+                                    <div class="jtv-user-info">
+                                        <div class="dropdown">
+                                            <a class="current-open" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" href="#"><span>Tài khoản </span> <i class="fa fa-angle-down"></i></a>
+                                            <ul class="dropdown-menu" role="menu">
+                                                @{
+                                                    if (!User.Identity.IsAuthenticated)
                                                     {
-                                                        <li><a asp-action="Index" asp-controller="Manager">Quản lý</a></li>
+                                                        <li><a asp-controller="Account" asp-action="Login">Đăng nhập</a></li>
+                                                        <li><a asp-controller="Account" asp-action="Register">Đăng kí</a></li>
                                                     }
-                                                    <li><a asp-action="AccountDetails" asp-controller="Home" asp-route-id="@User.FindFirst(ClaimTypes.Sid).Value">Thông tin tài khoản</a></li>
-                                                    <li><a href="#">Checkout</a></li>
-                                                    if (User.FindFirst(ClaimTypes.Role).Value == "NormalUser")
+                                                    else
                                                     {
-                                                        <li><a asp-action="Subscription" asp-controller="Home">Subscription</a></li>
+                                                        if (User.FindFirst(ClaimTypes.Role).Value == "Admin" || User.FindFirst(ClaimTypes.Role).Value == "ShopManager")
+                                                        {
+                                                            <li><a asp-action="Index" asp-controller="Manager">Quản lý</a></li>
+                                                        }
+                                                        <li><a asp-action="AccountDetails" asp-controller="Home" asp-route-id="@User.FindFirst(ClaimTypes.Sid).Value">Thông tin tài khoản</a></li>
+                                                        <li><a href="#">Checkout</a></li>
+                                                        if (User.FindFirst(ClaimTypes.Role).Value == "NormalUser")
+                                                        {
+                                                            <li><a asp-action="Subscription" asp-controller="Home">Subscription</a></li>
+                                                        }
+                                                        <li class="divider"></li>
+                                                        <li><a asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
                                                     }
-                                                    <li class="divider"></li>
-                                                    <li><a asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
                                                 }
-                                            }
-                                        </ul>
+                                            </ul>
+                                        </div>
                                     </div>
+                                    <div class="services hidden-xs"><a title="servicesg" href="#">Services</a></div>
+                                    <div class="myaccount hidden-xs"><a title="My Account" href="#">My Support</a></div>
                                 </div>
-                                <div class="services hidden-xs"><a title="servicesg" href="#">Services</a></div>
-                                <div class="myaccount hidden-xs"><a title="My Account" href="#">My Support</a></div>
                             </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="container">
-                <div class="row">
-                    <div class="col-sm-3 col-md-3 col-xs-12">
-                        <!-- Header Logo -->
-                        <div class="logo"><a title="e-commerce" asp-controller="Home" asp-action="Index"><img alt="e-commerce" src="~/Shop/images/logo.png"></a> </div>
-                        <!-- End Header Logo -->
-                    </div>
-                    <div class="col-xs-12 col-sm-5 col-md-5 col-lg-6">
-                        <!-- Search -->
-
-                        <div class="top-search">
-                            <div id="search">
-                                <form>
-                                    <div class="input-group">
-                                        <select class="cate-dropdown hidden-xs hidden-sm" name="category_id">
-                                            <option>All Categories</option>
-                                            <option>women</option>
-                                            <option>&nbsp;&nbsp;&nbsp;Accessories </option>
-                                            <option>&nbsp;&nbsp;&nbsp;Dresses</option>
-                                            <option>&nbsp;&nbsp;&nbsp;Top</option>
-                                            <option>&nbsp;&nbsp;&nbsp;Handbags </option>
-                                            <option>&nbsp;&nbsp;&nbsp;Shoes </option>
-                                            <option>&nbsp;&nbsp;&nbsp;Clothing </option>
-                                            <option>Men</option>
-                                            <option>Electronics</option>
-                                            <option>&nbsp;&nbsp;&nbsp;Mobiles </option>
-                                            <option>&nbsp;&nbsp;&nbsp;Music &amp; Audio </option>
-                                        </select>
-                                        <input type="text" class="form-control" placeholder="Search" name="search">
-                                        <button class="btn-search" type="button"><i class="fa fa-search"></i></button>
-                                    </div>
-                                </form>
-                            </div>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-3 col-md-3 col-xs-12">
+                            <!-- Header Logo -->
+                            <div class="logo"><a title="e-commerce" asp-controller="Home" asp-action="Index"><img alt="e-commerce" src="~/Shop/images/logo.png"></a> </div>
+                            <!-- End Header Logo -->
                         </div>
+                        <div class="col-xs-12 col-sm-5 col-md-5 col-lg-6">
+                            <!-- Search -->
 
-                        <!-- End Search -->
-                    </div>
-                    <div class="col-lg-3 col-sm-4 col-xs-12 top-cart">
-                        <div class="link-wishlist"> <a href="#"> <span class="wishlist-count">3</span> <i class="fa fa-heart fa-lg"></i> </a> </div>
-                        <div class="top-cart-contain">
-                            <div class="mini-cart">
-                                <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
-                                    <a href="#">
-                                        <div class="cart-icon"><i class="fa fa-shopping-cart"></i></div>
-                                        <div class="shoppingcart-inner"><span class="cart-title">Shopping Cart</span> <span class="cart-total">4 Item(s): $520.00</span></div>
-                                    </a>
+                            <div class="top-search">
+                                <div id="search">
+                                    <form>
+                                        <div class="input-group">
+                                            <select class="cate-dropdown hidden-xs hidden-sm" name="category_id">
+                                                <option>All Categories</option>
+                                                <option>women</option>
+                                                <option>&nbsp;&nbsp;&nbsp;Accessories </option>
+                                                <option>&nbsp;&nbsp;&nbsp;Dresses</option>
+                                                <option>&nbsp;&nbsp;&nbsp;Top</option>
+                                                <option>&nbsp;&nbsp;&nbsp;Handbags </option>
+                                                <option>&nbsp;&nbsp;&nbsp;Shoes </option>
+                                                <option>&nbsp;&nbsp;&nbsp;Clothing </option>
+                                                <option>Men</option>
+                                                <option>Electronics</option>
+                                                <option>&nbsp;&nbsp;&nbsp;Mobiles </option>
+                                                <option>&nbsp;&nbsp;&nbsp;Music &amp; Audio </option>
+                                            </select>
+                                            <input type="text" class="form-control" placeholder="Search" name="search">
+                                            <button class="btn-search" type="button"><i class="fa fa-search"></i></button>
+                                        </div>
+                                    </form>
                                 </div>
-                                <div>
-                                    <div class="top-cart-content">
-                                        <div class="block-subtitle hidden-xs">Recently added item(s)</div>
-                                        <ul id="cart-sidebar" class="mini-products-list"></ul>
-                                        <div class="top-subtotal">Subtotal: <span class="price">$520.00</span></div>
-                                        <div class="actions">
-                                            <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Checkout</span></button>
-                                            <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>View Cart</span></button>
+                            </div>
+
+                            <!-- End Search -->
+                        </div>
+                        <div class="col-lg-3 col-sm-4 col-xs-12 top-cart">
+                            <div class="link-wishlist"> <a href="#"> <span class="wishlist-count">3</span> <i class="fa fa-heart fa-lg"></i> </a> </div>
+                            <div class="top-cart-contain">
+                                <div class="mini-cart">
+                                    <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
+                                        <a href="#">
+                                            <div class="cart-icon"><i class="fa fa-shopping-cart"></i></div>
+                                            <div class="shoppingcart-inner"><span class="cart-title">Shopping Cart</span> <span class="cart-total">4 Item(s): $520.00</span></div>
+                                        </a>
+                                    </div>
+                                    <div>
+                                        <div class="top-cart-content">
+                                            <div class="block-subtitle hidden-xs">Recently added item(s)</div>
+                                            <ul id="cart-sidebar" class="mini-products-list"></ul>
+                                            <div class="top-subtotal">Subtotal: <span class="price">$520.00</span></div>
+                                            <div class="actions">
+                                                <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Checkout</span></button>
+                                                <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>View Cart</span></button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
@@ -160,119 +160,116 @@
                     </div>
                 </div>
             </div>
-        </div>
-    </header>
-    <!-- end header -->
-    <!-- Start Menu Area -->
-    <div class="menu-area">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-12 hidden-xs">
-                    <div class="main-menu">
-                        <nav>
-                            <ul>
-                                <li class="active custom-menu">
-                                    <a asp-controller="Home" asp-action="Index">Home</a>
-                                </li>
-                                <li class="megamenu">
-                                    <a href="#">Men</a>
-                                </li>
-                                <li class="megamenu">
-                                    <a href="#">Women</a>
-                                </li>
-                                <li class="megamenu">
-                                    <a href="#">Children</a>
-                                </li>
-                                <li class="megamenu">
-                                    <a href="#">Pages</a>
-                                </li>
-                                <li class="custom-menu">
-                                    <a href="#">Blog</a>
-                                </li>
-                                <li>
-                                    <a href="#">Contact</a>
-                                </li>
-                            </ul>
-                        </nav>
-                        <!-- Signup -->
-                        <p class="top-Signup"><a href="#" class="" role="button" data-toggle="modal" data-target="#login-modal">Login/Signup</a></p>
-                        <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
-                            <div class="modal-dialog">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <img id="img_logo" src="images/logo.png" alt="logo">
-                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
+        </header>
+        <!-- end header -->
+        <!-- Start Menu Area -->
+        <div class="menu-area">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12 hidden-xs">
+                        <div class="main-menu">
+                            <nav>
+                                <ul>
+                                    <li class="active custom-menu">
+                                        <a asp-controller="Home" asp-action="Index">Home</a>
+                                    </li>
+                                    <li class="megamenu">
+                                        <a href="#">Men</a>
+                                    </li>
+                                    <li class="megamenu">
+                                        <a href="#">Women</a>
+                                    </li>
+                                    <li class="megamenu">
+                                        <a href="#">Children</a>
+                                    </li>
+                                    <li class="megamenu">
+                                        <a href="#">Pages</a>
+                                    </li>
+                                    <li class="custom-menu">
+                                        <a href="#">Blog</a>
+                                    </li>
+                                    <li>
+                                        <a href="#">Contact</a>
+                                    </li>
+                                </ul>
+                            </nav>
+                            <!-- Signup -->
+                            <p class="top-Signup"><a href="#" class="" role="button" data-toggle="modal" data-target="#login-modal">Login/Signup</a></p>
+                            <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
+                                <div class="modal-dialog">
+                                    <div class="modal-content">
+                                        <div class="modal-header">
+                                            <img id="img_logo" src="images/logo.png" alt="logo">
+                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close"> <span class="glyphicon glyphicon-remove" aria-hidden="true"></span> </button>
+                                        </div>
+                                        @await Component.InvokeAsync("LoginForm")
                                     </div>
-                                    @await Component.InvokeAsync("LoginForm")
                                 </div>
                             </div>
+                            <!-- END # MODAL LOGIN -->
                         </div>
-                        <!-- END # MODAL LOGIN -->
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-    <!-- End Menu Area -->
-    
-    <!-- Content Body -->
-    <div class="main-container col2-left-layout">
-        <div class="container">
-            <div class="row">
-                @RenderBody()
+        <!-- End Menu Area -->
+        <!-- Content Body -->
+        <div class="main-container col2-left-layout">
+            <div class="container">
+                <div class="row">
+                    @RenderBody()
+                </div>
             </div>
         </div>
     </div>
-</div>
 
-<!-- JS --> 
+    <!-- JS -->
+    <!-- jquery js -->
+    <script type="text/javascript" src="~/Shop/js/jquery.min.js"></script>
 
-<!-- jquery js --> 
-<script type="text/javascript" src="~/Shop/js/jquery.min.js"></script> 
+    <!-- bootstrap js -->
+    <script type="text/javascript" src="~/Shop/js/bootstrap.min.js"></script>
 
-<!-- bootstrap js --> 
-<script type="text/javascript" src="~/Shop/js/bootstrap.min.js"></script> 
+    <!-- Mean Menu js -->
+    <script type="text/javascript" src="~/Shop/js/jquery.meanmenu.min.js"></script>
 
-<!-- Mean Menu js --> 
-<script type="text/javascript" src="~/Shop/js/jquery.meanmenu.min.js"></script>
+    <!-- owl.carousel.min js -->
+    <script type="text/javascript" src="~/Shop/js/owl.carousel.min.js"></script>
 
-<!-- owl.carousel.min js --> 
-<script type="text/javascript" src="~/Shop/js/owl.carousel.min.js"></script> 
+    <!-- bxslider js -->
+    <script type="text/javascript" src="~/Shop/js/jquery.bxslider.js"></script>
 
-<!-- bxslider js --> 
-<script type="text/javascript" src="~/Shop/js/jquery.bxslider.js"></script> 
+    <!--jquery-ui.min js -->
+    <script type="text/javascript" src="~/Shop/js/jquery-ui.js"></script>
 
-<!--jquery-ui.min js --> 
-<script type="text/javascript" src="~/Shop/js/jquery-ui.js"></script> 
+    <!-- countdown js -->
+    <script type="text/javascript" src="~/Shop/js/countdown.js"></script>
 
-<!-- countdown js --> 
-<script type="text/javascript" src="~/Shop/js/countdown.js"></script> 
+    <!-- wow JS -->
+    <script type="text/javascript" src="~/Shop/js/wow.min.js"></script>
 
-<!-- wow JS --> 
-<script type="text/javascript" src="~/Shop/js/wow.min.js"></script> 
+    <!-- main js -->
+    <script type="text/javascript" src="~/Shop/js/main.js"></script>
 
-<!-- main js --> 
-<script type="text/javascript" src="~/Shop/js/main.js"></script> 
+    <!-- nivo slider js -->
+    <script type="text/javascript" src="~/Shop/js/jquery.nivo.slider.js"></script>
 
-<!-- nivo slider js --> 
-<script type="text/javascript" src="~/Shop/js/jquery.nivo.slider.js"></script> 
+    <!-- flexslider js -->
+    <script type="text/javascript" src="~/Shop/js/jquery.flexslider.js"></script>
+    <!-- Hot Deals Timer 1-->
+    <script type="text/javascript">
+        var dthen1 = new Date("12/25/16 11:59:00 PM");
+        start = "08/04/15 03:02:11 AM";
+        start_date = Date.parse(start);
+        var dnow1 = new Date(start_date);
+        if (CountStepper > 0)
+            ddiff = new Date((dnow1) - (dthen1));
+        else
+            ddiff = new Date((dthen1) - (dnow1));
+        gsecs1 = Math.floor(ddiff.valueOf() / 1000);
 
-<!-- flexslider js --> 
-<script type="text/javascript" src="~/Shop/js/jquery.flexslider.js"></script> 
-<!-- Hot Deals Timer 1--> 
-<script type="text/javascript">
-    var dthen1 = new Date("12/25/16 11:59:00 PM");
-    start = "08/04/15 03:02:11 AM";
-    start_date = Date.parse(start);
-    var dnow1 = new Date(start_date);
-    if(CountStepper>0)
-        ddiff= new Date((dnow1)-(dthen1));
-    else
-        ddiff = new Date((dthen1)-(dnow1));
-    gsecs1 = Math.floor(ddiff.valueOf()/1000);
-      
-    var iid1 = "countbox_1";
-    CountBack_slider(gsecs1,"countbox_1", 1);
-</script>
+        var iid1 = "countbox_1";
+        CountBack_slider(gsecs1, "countbox_1", 1);
+    </script>
 </body>
 </html>

@@ -65,7 +65,7 @@ namespace Lazarus.Controllers
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
                     }
-                    else if (tk.MaLoaiTaiKhoan == "SM" && tk.TaiKhoanPremium.NgayKetThuc < DateTime.Now)
+                    else if (tk.MaLoaiTaiKhoan == "SM" && tk.TaiKhoanPremium.NgayKetThuc > DateTime.Now)
                     {
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "ShopManager"));

@@ -1,0 +1,260 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Security.Claims;
+using System.IO;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authorization;
+using Lazarus.Models;
+using Lazarus.Data;
+
+namespace Lazarus.Controllers
+{
+    [Authorize(Policy = "ShopManagerPolicy")]
+    public class ShopManageController : Controller
+    {
+        private readonly LazarusDbContext _context;
+
+        public ShopManageController(LazarusDbContext context)
+        {
+            _context = context;
+        }
+
+        public async Task<IActionResult> Index()
+        {
+            var cuaHangChecking = _context.TaiKhoan.Any(o => o.MaCuaHang != null);
+
+            if (!cuaHangChecking)
+            {
+                ViewBag.Mes = "Click vào đây để tạo ra một shop mới!";
+                return View();
+            }
+
+            var userid = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+            var shopid = await _context.TaiKhoan.Where(a => a.TaiKhoanId == userid).Select(a => a.MaCuaHang).SingleOrDefaultAsync();
+            ViewBag.ShopId = shopid;
+            var shop = await _context.CuaHang.Where(a => a.CuaHangId == shopid).FirstOrDefaultAsync();
+            if (shop.TrangThai == "Deactive")
+            {
+                ViewBag.ShopStatus = "Deactive";
+            }
+            var products = await _context.SanPham.Where(a => a.MaCuaHang == shopid)
+                                .ToListAsync();
+
+            return View(products);
+        }
+
+        public IActionResult ShopCreate()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ShopCreate(CuaHang model)
+        {
+            model.CuaHangId = RandomString.GenerateRandomString(_context.CuaHang.Select(o => o.CuaHangId));
+            model.TrangThai = "Active";
+            var userid = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+            var user = await _context.TaiKhoan.Where(o => o.TaiKhoanId == userid).SingleOrDefaultAsync();
+            user.MaCuaHang = model.CuaHangId;
+
+            await _context.AddAsync(model);
+            _context.Update(user);
+            await _context.SaveChangesAsync();
+
+            return View("Index");
+        }
+
+        public async Task<IActionResult> ShopEdit(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var ch = await _context.CuaHang.Where(a => a.CuaHangId == id).SingleOrDefaultAsync();
+
+            if (ch == null)
+            {
+                return NotFound();
+            }
+
+            return View(ch);
+        }
+
+        [HttpPost]
+        [ActionName("ShopEdit")]
+        public async Task<IActionResult> ShopEditPost(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var chToUpdate = await _context.CuaHang.Where(a => a.CuaHangId == id).SingleOrDefaultAsync();
+
+            if (chToUpdate == null)
+            {
+                return NotFound();
+            }
+
+            await TryUpdateModelAsync(chToUpdate,
+                                    "",
+                                    a => a.TenCuaHang);
+            await _context.SaveChangesAsync();
+
+            return View(chToUpdate);
+        }
+
+        public async Task<IActionResult> ShopStatusChange(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+            var ch = await _context.CuaHang.Where(a => a.CuaHangId == id).SingleOrDefaultAsync();
+            if (ch.TrangThai == "Deactive")
+            {
+                ch.TrangThai = "Active";
+            }
+            else
+            {
+                ch.TrangThai = "Deactive";
+            }
+            _context.CuaHang.Update(ch);
+            await _context.SaveChangesAsync();
+
+            return View("Index");
+        }
+
+        public async Task<IActionResult> ProductCreate()
+        {
+            ViewBag.ItemList = await LoaiSanPham();
+
+            return View();
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> ProductCreate(SanPham model)
+        {
+            model.SanPhamId = RandomString.GenerateRandomString(_context.SanPham.Select(a => a.SanPhamId));
+            model.NgayThem = DateTime.Now;
+            model.TrangThai = "Active";
+            if (HttpContext.Request.Form.Files.Count > 0)
+            {
+                IFormFile img = HttpContext.Request.Form.Files.First();
+
+                if (!string.IsNullOrEmpty(img.FileName))
+                {
+                    var ext = Path.GetExtension(img.FileName);
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages/", $"{model.SanPhamId}{ext}");
+                    model.HinhAnh = $"{model.SanPhamId}{ext}";
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await img.CopyToAsync(stream);
+                    }
+                }
+            }
+
+            if (ModelState.IsValid)
+            {
+                await _context.AddAsync(model);
+                await _context.SaveChangesAsync();
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> EditProduct(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+
+            if (sp == null)
+            {
+                return NotFound();
+            }
+
+            ViewBag.ItemList = LoaiSanPham();
+            return View(sp);
+        }
+
+        [HttpPost]
+        [ActionName("EditProduct")]
+        public async Task<IActionResult> EditProductPost(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+
+            if (HttpContext.Request.Form.Files.Count > 0)
+            {
+                IFormFile img = HttpContext.Request.Form.Files.First();
+                var ext = Path.GetExtension(img.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages/", $"{sp.SanPhamId}{ext}");
+                sp.HinhAnh = $"{sp.SanPhamId}{ext}";
+                using (var steam = new FileStream(path, FileMode.Create))
+                {
+                    await img.CopyToAsync(steam);
+                }
+
+            }
+
+            if (sp == null)
+            {
+                return NotFound();
+            }
+
+            await TryUpdateModelAsync(sp,
+                                    "",
+                                    a => a.TenSanPham, a => a.GiaBan, a => a.MoTa, a => a.SoLuong, a => a.MaLoaiSanPham);
+            await _context.SaveChangesAsync();
+
+            return View(sp);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> DeleteProduct(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+            sp.TrangThai = "Deleted";
+            _context.SanPham.Update(sp);
+            await _context.SaveChangesAsync();
+
+            return View("Index");
+        }
+
+        public async Task<List<SelectListItem>> LoaiSanPham()
+        {
+            var list = new List<SelectListItem>();
+
+            var exceptitem = _context.LoaiSanPham.Where(a => a.TrangThai == "Deleted");
+            var items = await _context.LoaiSanPham.Except(exceptitem).ToListAsync();
+
+            foreach (var item in items)
+            {
+                list.Add(new SelectListItem(item.TenLoaiSanPham, item.LoaiSanPhamId));
+            }
+
+            return list;
+        }
+    }
+}

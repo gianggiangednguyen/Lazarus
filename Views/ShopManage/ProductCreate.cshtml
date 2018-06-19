@@ -1,0 +1,52 @@
+﻿@model SanPham
+
+@{
+    ViewData["Title"] = "ProductCreate";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="row">
+    <div class="col-lg-12">
+        <div class="ibox float-e-margins">
+            <div class="ibox-content">
+                <form method="post" class="form-horizontal" enctype="multipart/form-data">
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Tên sản phẩm</label>
+                        <div class="col-sm-5"><input type="text" asp-for="TenSanPham" class="form-control" /></div>
+                        <div class="col-sm-5"><span asp-validation-for="TenSanPham"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Mô tả</label>
+                        <div class="col-sm-5"><input type="text" asp-for="MoTa" class="form-control" /></div>
+                        <div class="col-sm-5"><span asp-validation-for="MoTa"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Loại sản phẩm</label>
+                        <div class="col-sm-5"><select asp-for="MaLoaiSanPham" asp-items="@ViewBag.ItemList" class="form-control"></select></div>
+                        <div class="col-sm-5"><span asp-validation-for="MaLoaiSanPham"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Giá bán</label>
+                        <div class="col-sm-5"><input type="number" asp-for="GiaBan" max="100000000" class="form-control" step="0" /></div>
+                        <div class="col-sm-5"><span asp-validation-for="GiaBan"></span></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Số lượng</label>
+                        <div class="col-sm-5"><input type="number" asp-for="SoLuong" class="form-control" step="0" /></div>
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-2 control-label">Hình ảnh</label>
+                        <div class="col-sm-5"><input type="file" asp-for="HinhAnh" class="file-control" /></div>
+                    </div>
+                    <div class="hr-line-dashed"></div>
+                    <div class="form-group">
+                        <div class="col-sm-4 col-sm-offset-2">
+                            <button class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-action="Index" asp-controller="ShopManage" class="btn btn-primary" type="submit">Quay về</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>

@@ -25,6 +25,8 @@ namespace Lazarus.Models
         public string MaCuaHang { get; set; }
         [Required]
         public string MoTa { get; set; }
+        [StringLength(200)]
+        public string HinhAnh { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
         public decimal GiaBan { get; set; }
         public double? SoLuong { get; set; }

@@ -31,14 +31,9 @@ namespace Lazarus.Models
         public string MaLoaiTaiKhoan { get; set; }
         [StringLength(10)]
         public string MaCuaHang { get; set; }
-        [StringLength(10)]
-        public string MaCongTy { get; set; }
         [StringLength(30)]
         public string TrangThai { get; set; }
 
-        [ForeignKey("MaCongTy")]
-        [InverseProperty("TaiKhoan")]
-        public CongTy MaCongTyNavigation { get; set; }
         [ForeignKey("MaCuaHang")]
         [InverseProperty("TaiKhoan")]
         public CuaHang MaCuaHangNavigation { get; set; }

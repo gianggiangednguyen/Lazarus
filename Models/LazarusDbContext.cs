@@ -16,7 +16,6 @@ namespace Lazarus.Models
         }
 
         public virtual DbSet<ChiTietHoaDon> ChiTietHoaDon { get; set; }
-        public virtual DbSet<CongTy> CongTy { get; set; }
         public virtual DbSet<CuaHang> CuaHang { get; set; }
         public virtual DbSet<HoaDon> HoaDon { get; set; }
         public virtual DbSet<LoaiSanPham> LoaiSanPham { get; set; }
@@ -53,13 +52,6 @@ namespace Lazarus.Models
                     .HasForeignKey(d => d.MaSanPham)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_ChiTietHoaDon_SanPham");
-            });
-
-            modelBuilder.Entity<CongTy>(entity =>
-            {
-                entity.Property(e => e.CongTyId)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
             });
 
             modelBuilder.Entity<CuaHang>(entity =>
@@ -140,16 +132,9 @@ namespace Lazarus.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
-                entity.Property(e => e.MaCongTy).IsUnicode(false);
-
                 entity.Property(e => e.MaCuaHang).IsUnicode(false);
 
                 entity.Property(e => e.MaLoaiTaiKhoan).IsUnicode(false);
-
-                entity.HasOne(d => d.MaCongTyNavigation)
-                    .WithMany(p => p.TaiKhoan)
-                    .HasForeignKey(d => d.MaCongTy)
-                    .HasConstraintName("FK_TaiKhoan_CongTy");
 
                 entity.HasOne(d => d.MaCuaHangNavigation)
                     .WithMany(p => p.TaiKhoan)

@@ -101,16 +101,6 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            var LoaiTaiKhoanList = new List<SelectListItem>();
-
-            var items = await (from loaitk in _context.LoaiTaiKhoan
-                               select loaitk).ToListAsync();
-
-            foreach (var item in items)
-            {
-                LoaiTaiKhoanList.Add(new SelectListItem(item.TenLoaiTaiKhoan, item.LoaiTaiKhoanId));
-            }
-
             if (id == null)
             {
                 return NotFound();
@@ -123,7 +113,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            ViewBag.LoaiTaiKhoanList = LoaiTaiKhoanList;
+            ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
 
             return View(tk);
         }
@@ -149,17 +139,7 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> Create()
         {
-            var LoaiTaiKhoanList = new List<SelectListItem>();
-
-            var items = await (from loaitk in _context.LoaiTaiKhoan
-                               select loaitk).ToListAsync();
-
-            foreach (var item in items)
-            {
-                LoaiTaiKhoanList.Add(new SelectListItem(item.TenLoaiTaiKhoan, item.LoaiTaiKhoanId));
-            }
-
-            ViewBag.LoaiTaiKhoanList = LoaiTaiKhoanList;
+            ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
 
             return View();
         }
@@ -210,6 +190,21 @@ namespace Lazarus.Controllers
             var lstTk = _context.TaiKhoan.Include(p => p.MaLoaiTaiKhoanNavigation);
 
             return View("Index", await PagedList<TaiKhoan>.CreateAsync(lstTk.AsNoTracking(), page ?? 1, 15));
+        }
+
+        public async Task<List<SelectListItem>> LoaiTaiKhoanList()
+        {
+            var list = new List<SelectListItem>();
+
+            var items = await(from loaitk in _context.LoaiTaiKhoan
+                              select loaitk).ToListAsync();
+
+            foreach (var item in items)
+            {
+                list.Add(new SelectListItem(item.TenLoaiTaiKhoan, item.LoaiTaiKhoanId));
+            }
+
+            return list;
         }
     }
 }

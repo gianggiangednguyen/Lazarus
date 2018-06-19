@@ -159,7 +159,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).Include(t => t.MaCongTyNavigation).FirstOrDefaultAsync();
+            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).FirstOrDefaultAsync();
 
             if (tk != null)
             {
@@ -176,7 +176,7 @@ namespace Lazarus.Controllers
                 NotFound();
             }
 
-            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).Include(t => t.MaCongTyNavigation).FirstOrDefaultAsync();
+            var tk = await _context.TaiKhoan.Where(m => m.TaiKhoanId == id).FirstOrDefaultAsync();
 
             if (tk != null)
             {
@@ -191,19 +191,22 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> AccountEditPost(string id)
         {
             var modelToUpdate = await _context.TaiKhoan.Where(o => o.TaiKhoanId == id).FirstOrDefaultAsync();
-            IFormFile file = HttpContext.Request.Form.Files.First();
-
-            if (!string.IsNullOrEmpty(file.FileName))
+            if(HttpContext.Request.Form.Files.Count > 0)
             {
-                var ext = Path.GetExtension(file.FileName);
+                IFormFile file = HttpContext.Request.Form.Files.First();
 
-                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/AccountImages/", $"{modelToUpdate.TaiKhoanId}{ext}");
-
-                modelToUpdate.HinhAnh = $"{modelToUpdate.TaiKhoanId}{ext}";
-
-                using (var stream = new FileStream(path, FileMode.Create))
+                if (!string.IsNullOrEmpty(file.FileName))
                 {
-                    await file.CopyToAsync(stream);
+                    var ext = Path.GetExtension(file.FileName);
+
+                    var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/AccountImages/", $"{modelToUpdate.TaiKhoanId}{ext}");
+
+                    modelToUpdate.HinhAnh = $"{modelToUpdate.TaiKhoanId}{ext}";
+
+                    using (var stream = new FileStream(path, FileMode.Create))
+                    {
+                        await file.CopyToAsync(stream);
+                    }
                 }
             }
             //TryUpdateModel se check modelstate
