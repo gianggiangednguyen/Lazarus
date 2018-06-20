@@ -148,16 +148,6 @@ namespace Lazarus.Controllers
         [ActionName("Create")]
         public async Task<IActionResult> CreatePost(TaiKhoan model)
         {
-            var LoaiTaiKhoanList = new List<SelectListItem>();
-
-            var items = await (from loaitk in _context.LoaiTaiKhoan
-                               select loaitk).ToListAsync();
-
-            foreach (var item in items)
-            {
-                LoaiTaiKhoanList.Add(new SelectListItem(item.TenLoaiTaiKhoan, item.LoaiTaiKhoanId));
-            }
-
             ModelState.Remove("NhapLaiMatKhau");
             ModelState.Remove("MatKhau");
             if (ModelState.IsValid)
@@ -173,7 +163,7 @@ namespace Lazarus.Controllers
             StringBuilder sb = new StringBuilder();
             sb.Append("Lỗi xảy ra");
 
-            ViewBag.LoaiTaiKhoanList = LoaiTaiKhoanList;
+            ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
             ViewBag.InsertError = sb.ToString();
 
             return View();

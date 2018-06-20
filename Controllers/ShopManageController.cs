@@ -200,7 +200,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            ViewBag.ItemList = LoaiSanPham();
+            ViewBag.ItemList = await LoaiSanPham();
             return View(sp);
         }
 
