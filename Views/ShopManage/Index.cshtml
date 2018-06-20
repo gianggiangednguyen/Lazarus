@@ -40,18 +40,16 @@ else
                             <input name="searchString" type="text" placeholder="Tên sản phẩm" class="form-control" />
                         </div>
                         <button asp-action="Index" asp-route-searchString="@ViewBag.SearchString" type="submit" class="btn btn-white">Tìm kiếm</button>
-                    </form>
 
-                    <form method="post">
                         <div class="pull-right">
-                            <button class="btn btn-white" type="submit" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</button>
+                            <a class="btn btn-white" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</a>
                             @if (ViewBag.ShopStatus == "Deactive")
                             {
-                                <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-primary">Mở cửa hàng</button>
+                                <a asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" class="btn btn-primary">Mở cửa hàng</a>
                             }
                             else
                             {
-                                <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-danger">Đóng cửa hàng</button>
+                                <a asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" class="btn btn-danger">Đóng cửa hàng</a>
                             }
                         </div>
                     </form>
