@@ -36,7 +36,7 @@ namespace Lazarus.Controllers
                 lstLoaiSp = lstLoaiSp.Where(a => a.LoaiSanPhamId.Contains(searchString));
             }
 
-            switch(searchString)
+            switch (searchString)
             {
                 case "ByName":
                     lstLoaiSp = lstLoaiSp.OrderBy(a => a.TenLoaiSanPham);
@@ -64,7 +64,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            var loaisp = await _context.LoaiSanPham.SingleOrDefaultAsync(o=>o.LoaiSanPhamId == id);
+            var loaisp = await _context.LoaiSanPham.SingleOrDefaultAsync(o => o.LoaiSanPhamId == id);
 
             if (loaisp == null)
             {
@@ -92,7 +92,7 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> Edit(string id)
         {
-            if(id == null)
+            if (id == null)
             {
                 return NotFound();
             }
