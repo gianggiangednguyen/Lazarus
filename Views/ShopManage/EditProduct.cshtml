@@ -16,7 +16,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Mô tả</label>
-                        <div class="col-sm-6"><input type="text" asp-for="MoTa" value="@Model.MoTa" class="form-control" /></div>
+                        <div class="col-sm-6"><textarea asp-for="MoTa" class="form-control" draggable="false" rows="10">@Model.MoTa</textarea></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Loại sản phẩm</label>
@@ -24,7 +24,7 @@
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Giá bán</label>
-                        <div class="col-sm-6"><input type="number" asp-for="GiaBan" value="@Model.GiaBan" max="100000000" class="form-control" step="0" /></div>
+                        <div class="col-sm-6"><input type="number" asp-for="GiaBan" value="@Model.GiaBan" max="100000000" class="form-control" step="1000" /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Số lượng</label>
