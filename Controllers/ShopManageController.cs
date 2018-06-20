@@ -157,6 +157,7 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> ProductCreate(SanPham model)
         {
             model.SanPhamId = RandomString.GenerateRandomString(_context.SanPham.Select(a => a.SanPhamId));
+            model.MaCuaHang = ShopId;
             model.NgayThem = DateTime.Now;
             model.TrangThai = "Active";
             if (HttpContext.Request.Form.Files.Count > 0)
