@@ -1,8 +1,13 @@
-﻿@model IEnumerable<SanPham>
+﻿@model Lazarus.Data.PagedList<SanPham>
 
 @{
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@{
+    var previousPage = Model.HasPreviousPage ? "" : "disabled";
+    var nextPage = Model.HasNextPage ? "" : "disabled";
 }
 
 @if (ViewBag.Mes != null)
@@ -27,19 +32,24 @@ else
     <div class="row">
         <div class="col-lg-12">
             <div class="ibox-content">
-                <form class="form-inline">
-                    <a asp-action="ProductCreate" class="btn btn-white">Thêm sản phẩm</a>
+                <form class="form-inline" method="post">
+                    <a asp-action="ProductCreate" class="btn btn-success">Thêm sản phẩm</a>
                     <div class="form-group">
                         <label class="sr-only">Tên sản phẩm</label>
-                        <input type="text" placeholder="Tên sản phẩm" class="form-control" />
+                        <input name="searchString" type="text" placeholder="Tên sản phẩm" class="form-control" />
                     </div>
-                    <button class="btn btn-white" type="submit">Tìm kiếm</button>
-                    <button class="btn btn-white" type="submit" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</button>
-                    @if(ViewBag.ShopStatus == "Deactive")
-                    {
-                        <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-white">Mở cửa hàng</button>
-                    }
-                    <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-white">Đóng cửa hàng</button>
+                    <a asp-action="Index" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white">Tìm kiếm</a>
+                    <div class="pull-right">
+                        <button class="btn btn-white" type="submit" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</button>
+                        @if (ViewBag.ShopStatus == "Deactive")
+                        {
+                            <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-primary">Mở cửa hàng</button>
+                        }
+                        else
+                        {
+                            <button asp-action="ShopStatusChange" asp-route-id="@ViewBag.ShopId" type="submit" class="btn btn-danger">Đóng cửa hàng</button>
+                        }
+                    </div>
                 </form>
             </div>
         </div>
@@ -108,4 +118,11 @@ else
             </div>
         </div>
     }
+
+    <div class="row">
+        <div class="col-lg-12">
+            <a asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @previousPage"></a>
+            <a asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @nextPage"></a>
+        </div>
+    </div>
 }

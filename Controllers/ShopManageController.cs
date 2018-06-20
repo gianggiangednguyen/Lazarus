@@ -25,28 +25,42 @@ namespace Lazarus.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public string ShopId
         {
-            var cuaHangChecking = _context.TaiKhoan.Any(o => o.MaCuaHang != null);
+            get
+            {
+                var userid = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+                var shopid = _context.TaiKhoan.Where(a => a.TaiKhoanId == userid).Select(a => a.MaCuaHang).SingleOrDefault();
+                return shopid;
+            }
+        }
 
-            if (!cuaHangChecking)
+        public async Task<IActionResult> Index(int? page, string searchString)
+        {
+            if (string.IsNullOrEmpty(ShopId))
             {
                 ViewBag.Mes = "Click vào đây để tạo ra một shop mới!";
                 return View();
             }
 
-            var userid = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
-            var shopid = await _context.TaiKhoan.Where(a => a.TaiKhoanId == userid).Select(a => a.MaCuaHang).SingleOrDefaultAsync();
-            ViewBag.ShopId = shopid;
-            var shop = await _context.CuaHang.Where(a => a.CuaHangId == shopid).FirstOrDefaultAsync();
+            var shop = await _context.CuaHang.Where(a => a.CuaHangId == ShopId).FirstOrDefaultAsync();
+            var products = _context.SanPham.Where(a => a.MaCuaHang == ShopId);
+
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                ViewBag.SearchString = searchString;
+                products = products.Where(a => a.TenSanPham.Contains(searchString));
+            }
+
+            ViewBag.ShopId = ShopId;
+
             if (shop.TrangThai == "Deactive")
             {
                 ViewBag.ShopStatus = "Deactive";
             }
-            var products = await _context.SanPham.Where(a => a.MaCuaHang == shopid)
-                                .ToListAsync();
 
-            return View(products);
+
+            return View(await PagedList<SanPham>.CreateAsync(products, page ?? 1, 10));
         }
 
         public IActionResult ShopCreate()
@@ -67,7 +81,7 @@ namespace Lazarus.Controllers
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-            return View("Index");
+            return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
         }
 
         public async Task<IActionResult> ShopEdit(string id)
@@ -129,7 +143,7 @@ namespace Lazarus.Controllers
             _context.CuaHang.Update(ch);
             await _context.SaveChangesAsync();
 
-            return View("Index");
+            return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
         }
 
         public async Task<IActionResult> ProductCreate()
@@ -239,7 +253,7 @@ namespace Lazarus.Controllers
             _context.SanPham.Update(sp);
             await _context.SaveChangesAsync();
 
-            return View("Index");
+            return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
         }
 
         public async Task<List<SelectListItem>> LoaiSanPham()
