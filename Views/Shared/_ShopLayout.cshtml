@@ -89,8 +89,6 @@
                                             </ul>
                                         </div>
                                     </div>
-                                    <div class="services hidden-xs"><a title="servicesg" href="#">Services</a></div>
-                                    <div class="myaccount hidden-xs"><a title="My Account" href="#">My Support</a></div>
                                 </div>
                             </div>
                         </div>
@@ -171,30 +169,19 @@
                             <nav>
                                 <ul>
                                     <li class="active custom-menu">
-                                        <a asp-controller="Home" asp-action="Index">Home</a>
-                                    </li>
-                                    <li class="megamenu">
-                                        <a href="#">Men</a>
-                                    </li>
-                                    <li class="megamenu">
-                                        <a href="#">Women</a>
-                                    </li>
-                                    <li class="megamenu">
-                                        <a href="#">Children</a>
-                                    </li>
-                                    <li class="megamenu">
-                                        <a href="#">Pages</a>
-                                    </li>
-                                    <li class="custom-menu">
-                                        <a href="#">Blog</a>
-                                    </li>
-                                    <li>
-                                        <a href="#">Contact</a>
+                                        <a asp-controller="Home" asp-action="Index">Trang chủ</a>
                                     </li>
                                 </ul>
                             </nav>
                             <!-- Signup -->
-                            <p class="top-Signup"><a href="#" class="" role="button" data-toggle="modal" data-target="#login-modal">Login/Signup</a></p>
+                            @if (User.Identity.IsAuthenticated)
+                            {
+                                <p class="top-Signup"><a asp-action="Logout" asp-controller="Account" class="">Đăng xuất</a></p>
+                            }
+                            else
+                            {
+                                <p class="top-Signup"><a href="#" class="" role="button" data-toggle="modal" data-target="#login-modal">Đăng nhập/Đăng kí</a></p>
+                            }
                             <div class="modal fade" id="login-modal" tabindex="-1" role="dialog" aria-hidden="true" style="display: none;">
                                 <div class="modal-dialog">
                                     <div class="modal-content">

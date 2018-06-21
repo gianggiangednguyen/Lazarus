@@ -3,3 +3,10 @@
     ViewData["Title"] = "Index";
     Layout = "~/Views/Shared/_ShopLayout.cshtml";
 }
+
+<div class="col-main col-sm-9 col-xs-12 col-sm-push-3">
+    @await Component.InvokeAsync("NewProducts")
+</div>
+<aside class="sidebar col-md-3 col-sm-4 col-xs-12 col-sm-pull-8 col-md-pull-9">
+    @await Component.InvokeAsync("HotProducts")
+</aside>

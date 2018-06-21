@@ -1,21 +1,21 @@
 ﻿@model TaiKhoan
 
 @{
+    string img;
     if (string.IsNullOrEmpty(Model.HinhAnh))
     {
-        ViewData["img"] = "/Shop/images/default-user.png";
+        img = "/AccountImages/default-user.png";
     }
     else
     {
-        ViewData["img"] = "/AccountImages/" + Model.HinhAnh;
-
+        img = "/AccountImages/" + Model.HinhAnh;
     }
 }
 
 <div class="dropdown profile-element">
     <div style="width:100px;height:100px;margin:auto;">
         <span>
-            <img alt="image" class="img-circle" src="@ViewData["img"]" style="max-height:100%;max-width:100%;" />
+            <img alt="image" class="img-circle" src="@img" style="max-height:100%;max-width:100%;" />
         </span>
     </div>
     <a data-toggle="dropdown" class="dropdown-toggle" href="#">

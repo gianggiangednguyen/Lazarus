@@ -34,7 +34,7 @@ namespace Lazarus.Controllers
                 return shopid;
             }
         }
-
+        //TODO: search stirng review
         public async Task<IActionResult> Index(int? page, string searchString)
         {
             if (string.IsNullOrEmpty(ShopId))
@@ -44,7 +44,7 @@ namespace Lazarus.Controllers
             }
 
             var shop = await _context.CuaHang.Where(a => a.CuaHangId == ShopId).FirstOrDefaultAsync();
-            var products = _context.SanPham.Where(a => a.MaCuaHang == ShopId);
+            var products = _context.SanPham.Include(a => a.MaLoaiSanPhamNavigation).Where(a => a.MaCuaHang == ShopId);
 
             if (!string.IsNullOrEmpty(searchString))
             {

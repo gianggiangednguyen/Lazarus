@@ -22,8 +22,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\AccountImages\" />
-    <Folder Include="wwwroot\ProductImages\" />
     <Folder Include="wwwroot\Shop\images\products\" />
     <Folder Include="wwwroot\Shop\images\slider\" />
   </ItemGroup>

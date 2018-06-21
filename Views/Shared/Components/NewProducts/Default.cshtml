@@ -1,0 +1,54 @@
+﻿@model IEnumerable<SanPham>
+
+<div class="shop-inner">
+    <div class="page-title">
+        <h2>Sẩn phẩm mới nhất</h2>
+    </div>
+    <div class="product-grid-area">
+        <ul class="products-grid">
+            @foreach (var item in Model)
+            {
+                string img;
+                if (string.IsNullOrEmpty(item.HinhAnh))
+                {
+                    img = "/ProductImages/default-product.png";
+                }
+                else
+                {
+                    img = "/ProductImages/" + item.HinhAnh;
+                }
+                <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                    <div class="product-item">
+                        <div class="item-inner">
+                            <div class="product-thumbnail">
+                                <div class="btn-quickview"><a><span>Chi tiết</span></a></div>
+                                <a class="product-item-photo"> <img class="product-image-photo" src="@img" alt=""></a>
+                            </div>
+                            <div class="pro-box-info">
+                                <div class="item-info">
+                                    <div class="info-inner">
+                                        <div class="item-title"> <a>@item.TenSanPham</a> </div>
+                                        <div class="item-content">
+                                            <div class="item-price">
+                                                <div class="price-box">
+                                                    <span class="regular-price"> <span class="price">@item.GiaBan.ToString("#,###") VNĐ</span> </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="box-hover">
+                                    <div class="product-item-actions">
+                                        <div class="pro-actions">
+                                            <button class="action add-to-cart" type="submit"> <span>Thêm vào giỏ hàng</span> </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+            }
+        </ul>
+    </div>
+</div>

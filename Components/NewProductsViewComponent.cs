@@ -8,21 +8,25 @@ using Microsoft.EntityFrameworkCore;
 using Lazarus.Models;
 using Microsoft.AspNetCore.Mvc;
 
-
 namespace Lazarus.Components
 {
-    public class LoginFormViewComponent : ViewComponent
+    public class NewProductsViewComponent : ViewComponent
     {
         private readonly LazarusDbContext _context;
 
-        public LoginFormViewComponent(LazarusDbContext context)
+        public NewProductsViewComponent(LazarusDbContext context)
         {
             _context = context;
         }
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            return await Task.FromResult<IViewComponentResult>(View());
+            var list = (from sp in _context.SanPham
+                       where sp.TrangThai != "Deleted"
+                       orderby sp.NgayThem descending
+                       select sp).Take(12);
+
+            return await Task.FromResult<IViewComponentResult>(View(list));
         }
     }
 }

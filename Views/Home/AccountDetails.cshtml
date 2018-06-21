@@ -6,13 +6,14 @@
 }
 
 @{ 
+    string img;
     if (string.IsNullOrEmpty(Model.HinhAnh))
     {
-        ViewData["img"] = "/Shop/images/default-user.png";
+        img = "/AccountImages/default-user.png";
     }
     else
     {
-        ViewData["img"] = "/AccountImages/" + Model.HinhAnh;
+        img = "/AccountImages/" + Model.HinhAnh;
     }
 }
 
@@ -39,7 +40,7 @@
                     </div>
                     <div class="box-authentication">
                         <div style="width:250px; height:250px; margin:auto">
-                            <img src="@ViewData["img"]" style="max-height:100%; max-width:100%;" />
+                            <img src="@img" style="max-height:100%; max-width:100%;" />
                         </div>
                     </div>
                 </div>
