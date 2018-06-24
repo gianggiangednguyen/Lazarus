@@ -87,7 +87,7 @@ namespace Lazarus.Controllers
             await _context.AddAsync(model);
             await _context.SaveChangesAsync();
 
-            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham.AsNoTracking(), 1, 15));
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Edit(string id)
@@ -130,7 +130,7 @@ namespace Lazarus.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham, 1, 15));
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> Delete(string id)
@@ -153,7 +153,7 @@ namespace Lazarus.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View("Index", await PagedList<LoaiSanPham>.CreateAsync(_context.LoaiSanPham, 1, 15));
+            return RedirectToAction("Index");
         }
     }
 }

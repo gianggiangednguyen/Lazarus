@@ -108,7 +108,7 @@ namespace Lazarus.Controllers
 
             await _context.SaveChangesAsync();
 
-            return View("Index", await PagedList<LoaiTaiKhoan>.CreateAsync(_context.LoaiTaiKhoan.AsNoTracking(), 1, 15));
+            return RedirectToAction("Index");
         }
 
         public IActionResult Create()
@@ -124,7 +124,7 @@ namespace Lazarus.Controllers
             await _context.AddAsync(model);
             await _context.SaveChangesAsync();
 
-            return View("Index", await PagedList<LoaiTaiKhoan>.CreateAsync(_context.LoaiTaiKhoan.AsNoTracking(), 1, 15));
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
@@ -151,7 +151,7 @@ namespace Lazarus.Controllers
                 }
             }
 
-            return View("Index", await PagedList<LoaiTaiKhoan>.CreateAsync(_context.LoaiTaiKhoan.AsNoTracking(), 1, 15));
+            return RedirectToAction("Index");
         }
     }
 }

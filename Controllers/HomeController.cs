@@ -7,10 +7,11 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Authentication.Cookies;
-using Lazarus.Models;
-using Microsoft.EntityFrameworkCore;
-using System.IO;
 using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Lazarus.Models;
+using Lazarus.Data;
+using System.IO;
 
 namespace Lazarus.Controllers
 {
@@ -25,7 +26,6 @@ namespace Lazarus.Controllers
 
         public IActionResult Index()
         {
-            //TODO: Copy this lul
             if (HttpContext.User.Identity.IsAuthenticated)
             {
                 var value = HttpContext.User.FindFirst(ClaimTypes.Role).Value;
@@ -191,7 +191,7 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> AccountEditPost(string id)
         {
             var modelToUpdate = await _context.TaiKhoan.Where(o => o.TaiKhoanId == id).FirstOrDefaultAsync();
-            if(HttpContext.Request.Form.Files.Count > 0)
+            if (HttpContext.Request.Form.Files.Count > 0)
             {
                 IFormFile file = HttpContext.Request.Form.Files.First();
 
@@ -214,6 +214,52 @@ namespace Lazarus.Controllers
             await _context.SaveChangesAsync();
 
             return View(modelToUpdate);
+        }
+
+        public async Task<IActionResult> ProductDetail(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+
+            if (sp == null)
+            {
+                return NotFound();
+            }
+
+            return View(sp);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddToCart(string id, double? qty)
+        {
+            List<ChiTietHoaDon> list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
+            if (list == null)
+            {
+                list = new List<ChiTietHoaDon>();
+            }
+
+            if (list.Exists(a => a.MaSanPham == id))
+            {
+                var sp = list.Find(a => a.MaSanPham == id);
+                var spnav = await _context.SanPham.SingleOrDefaultAsync(a => a.SanPhamId == id);
+                list.Remove(sp);
+                sp.SoLuong += qty ?? 0;
+                sp.TongTien = sp.DonGia * (decimal?)qty ?? 0;
+                list.Add(new ChiTietHoaDon { MaSanPham = sp.MaSanPham, DonGia = sp.DonGia, SoLuong = qty ?? 0, TongTien = sp.TongTien, MaSanPhamNavigation = spnav });
+            }
+            else
+            {
+                var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+                list.Add(new ChiTietHoaDon { MaSanPham = sp.SanPhamId, DonGia = sp.GiaBan, SoLuong = qty ?? 0, TongTien = (sp.GiaBan * (decimal?)qty ?? 0), MaSanPhamNavigation = sp });
+            }
+
+            HttpContext.Session.SetSessionObject("Cart", list);
+
+            return RedirectToAction("Index");
         }
     }
 }

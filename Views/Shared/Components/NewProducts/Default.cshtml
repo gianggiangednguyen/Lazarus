@@ -20,29 +20,31 @@
                 <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
                     <div class="product-item">
                         <div class="item-inner">
-                            <div class="product-thumbnail">
-                                <div class="btn-quickview"><a><span>Chi tiết</span></a></div>
-                                <a class="product-item-photo"> <img class="product-image-photo" src="@img" alt=""></a>
+                            <div class="product-thumbnail" style="height:350px; width:100%;">
+                                <div class="btn-quickview"><a asp-action="ProductDetail" asp-controller="Home" asp-route-id="@item.SanPhamId"><span>Chi tiết</span></a></div>
+                                <a class="product-item-photo"> <img class="product-image-photo" src="@img" style="max-height:100%;max-width:100%;"></a>
                             </div>
                             <div class="pro-box-info">
                                 <div class="item-info">
                                     <div class="info-inner">
-                                        <div class="item-title"> <a>@item.TenSanPham</a> </div>
+                                        <div class="item-title"> <a asp-action="ProductDetail" asp-controller="Home" asp-route-id="@item.SanPhamId">@item.TenSanPham</a> </div>
                                         <div class="item-content">
                                             <div class="item-price">
                                                 <div class="price-box">
-                                                    <span class="regular-price"> <span class="price">@item.GiaBan.ToString("#,###") VNĐ</span> </span>
+                                                    <span class="regular-price"> <span class="price">@item.GiaBan.ToString("#,##0") VNĐ</span> </span>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                                 <div class="box-hover">
-                                    <div class="product-item-actions">
-                                        <div class="pro-actions">
-                                            <button class="action add-to-cart" type="submit"> <span>Thêm vào giỏ hàng</span> </button>
+                                    <form method="post">
+                                        <div class="product-item-actions">
+                                            <div class="pro-actions">
+                                                <button asp-action="AddToCart" asp-controller="Home" asp-route-id="@item.SanPhamId" asp-route-qty="1" class="action add-to-cart" type="submit"> <span>Thêm vào giỏ hàng</span> </button>
+                                            </div>
                                         </div>
-                                    </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>

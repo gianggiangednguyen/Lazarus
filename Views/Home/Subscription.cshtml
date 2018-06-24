@@ -4,100 +4,105 @@
     Layout = "~/Views/Shared/_ShopLayout.cshtml";
 }
 
-
-<div class="product-grid-area">
-    <form method="post">
-        <ul class="products-grid">
-            <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                    <div class="item-inner">
-                        <div class="pro-box-info">
-                            <div class="item-info">
-                                <div class="info-inner">
-                                    <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
-                                        <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="" />
-                                    </div>
-                                    <div class="item-title"> 1 Tháng </div>
-                                    <div class="item-content">
-                                        <div class="item-price">
-                                            <div class="price-box">
-                                                <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 100.000 VND </span> </p>
+<div class="main-container col2-left-layout">
+    <div class="container">
+        <div class="row">
+            <div class="product-grid-area">
+                <form method="post">
+                    <ul class="products-grid">
+                        <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="item-inner">
+                                    <div class="pro-box-info">
+                                        <div class="item-info">
+                                            <div class="info-inner">
+                                                <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
+                                                    <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="" />
+                                                </div>
+                                                <div class="item-title"> 1 Tháng </div>
+                                                <div class="item-content">
+                                                    <div class="item-price">
+                                                        <div class="price-box">
+                                                            <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 100.000 VND </span> </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-hover">
+                                            <div class="product-item-actions">
+                                                <div class="pro-actions">
+                                                    <button asp-route-value="100" class="action add-to-cart" type="submit"> <span>Tiếp tục</span></button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="box-hover">
-                                <div class="product-item-actions">
-                                    <div class="pro-actions">
-                                        <button asp-route-value="100" class="action add-to-cart" type="submit"> <span>Tiếp tục</span></button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                    <div class="item-inner">
-                        <div class="pro-box-info">
-                            <div class="item-info">
-                                <div class="info-inner">
-                                    <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
-                                        <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="">
-                                    </div>
-                                    <div class="item-title"> 6 Tháng </div>
-                                    <div class="item-content">
-                                        <div class="item-price">
-                                            <div class="price-box">
-                                                <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 500.000 VND </span> </p>
+                        </li>
+                        <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="item-inner">
+                                    <div class="pro-box-info">
+                                        <div class="item-info">
+                                            <div class="info-inner">
+                                                <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
+                                                    <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="">
+                                                </div>
+                                                <div class="item-title"> 6 Tháng </div>
+                                                <div class="item-content">
+                                                    <div class="item-price">
+                                                        <div class="price-box">
+                                                            <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 500.000 VND </span> </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-hover">
+                                            <div class="product-item-actions">
+                                                <div class="pro-actions">
+                                                    <button asp-route-value="500" class="action add-to-cart" type="submit"> <span>Tiếp tục</span> </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="box-hover">
-                                <div class="product-item-actions">
-                                    <div class="pro-actions">
-                                        <button asp-route-value="500" class="action add-to-cart" type="submit"> <span>Tiếp tục</span> </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-            <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
-                <div class="product-item">
-                    <div class="item-inner">
-                        <div class="pro-box-info">
-                            <div class="item-info">
-                                <div class="info-inner">
-                                    <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
-                                        <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="">
-                                    </div>
-                                    <div class="item-title"> 1 Năm </div>
-                                    <div class="item-content">
-                                        <div class="item-price">
-                                            <div class="price-box">
-                                                <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 1.000.000 VND </span> </p>
+                        </li>
+                        <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                            <div class="product-item">
+                                <div class="item-inner">
+                                    <div class="pro-box-info">
+                                        <div class="item-info">
+                                            <div class="info-inner">
+                                                <div class="product-thumbnail" style="width:200px; height:200px; margin:auto;">
+                                                    <img class="product-image-photo" src="~/Shop/images/subscription.png" alt="">
+                                                </div>
+                                                <div class="item-title"> 1 Năm </div>
+                                                <div class="item-content">
+                                                    <div class="item-price">
+                                                        <div class="price-box">
+                                                            <p class="special-price"> <span class="price-label">Giá</span> <span class="price"> 1.000.000 VND </span> </p>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="box-hover">
+                                            <div class="product-item-actions">
+                                                <div class="pro-actions">
+                                                    <button asp-route-value="1000" class="action add-to-cart" type="submit"> <span>Tiếp tục</span> </button>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="box-hover">
-                                <div class="product-item-actions">
-                                    <div class="pro-actions">
-                                        <button asp-route-value="1000" class="action add-to-cart" type="submit"> <span>Tiếp tục</span> </button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </li>
-        </ul>
-    </form>
+                        </li>
+                    </ul>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>

@@ -1,0 +1,57 @@
+﻿@model IEnumerable<ChiTietHoaDon>
+
+@{ 
+    decimal tongtien = 0;
+    int slsp = 0;
+    if(Model != null)
+    {
+        foreach (var sp in Model)
+        {
+            slsp += 1;
+            tongtien += (sp.DonGia * Convert.ToDecimal(sp.SoLuong)) ?? 0;
+        }
+    }
+}
+
+<div class="top-cart-contain">
+    <div class="mini-cart">
+        <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
+            <a href="#">
+                <div class="cart-icon"><i class="fa fa-shopping-cart"></i></div>
+                <div class="shoppingcart-inner"><span class="cart-title">Giỏ hàng</span> <span class="cart-total">@slsp sản phẩm: @tongtien.ToString("#,##0") VNĐ</span></div>
+            </a>
+        </div>
+        <div>
+            <div class="top-cart-content">
+                <ul id="cart-sidebar" class="mini-products-list">
+                    @{
+                        if (Model != null)
+                        {
+                            foreach (var item in Model)
+                            {
+                                string hinhanh = "/ProductImages/default-product.png";
+                                if (!string.IsNullOrEmpty(item.MaSanPhamNavigation.HinhAnh))
+                                {
+                                    hinhanh = "/ProductImages/" + item.MaSanPhamNavigation.HinhAnh;
+                                }
+                                <li class="item odd">
+                                    <a class="product-image"><img src="@hinhanh" alt="Lorem ipsum dolor" width="65"></a>
+                                    <div class="product-details">
+                                        <a href="#" title="Xóa" class="remove-cart"><i class="icon-close"></i></a>
+                                        <p class="product-name"><a href="#">@item.MaSanPhamNavigation.TenSanPham</a> </p>
+                                        <strong>@item.SoLuong</strong> x <span class="price">@item.MaSanPhamNavigation.GiaBan.ToString("#,##0") đ</span>
+                                    </div>
+                                </li>
+                            }
+                        }
+                    }
+                </ul>
+                <div class="top-subtotal">Tổng tiền: <span class="price">@tongtien.ToString("#,##0") VNĐ</span></div>
+                <div class="actions">
+                    <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Thanh toán</span></button>
+                    <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>Xem giỏ hàng</span></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

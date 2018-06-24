@@ -132,28 +132,7 @@
                             <!-- End Search -->
                         </div>
                         <div class="col-lg-3 col-sm-4 col-xs-12 top-cart">
-                            <div class="link-wishlist"> <a href="#"> <span class="wishlist-count">3</span> <i class="fa fa-heart fa-lg"></i> </a> </div>
-                            <div class="top-cart-contain">
-                                <div class="mini-cart">
-                                    <div data-toggle="dropdown" data-hover="dropdown" class="basket dropdown-toggle">
-                                        <a href="#">
-                                            <div class="cart-icon"><i class="fa fa-shopping-cart"></i></div>
-                                            <div class="shoppingcart-inner"><span class="cart-title">Shopping Cart</span> <span class="cart-total">4 Item(s): $520.00</span></div>
-                                        </a>
-                                    </div>
-                                    <div>
-                                        <div class="top-cart-content">
-                                            <div class="block-subtitle hidden-xs">Recently added item(s)</div>
-                                            <ul id="cart-sidebar" class="mini-products-list"></ul>
-                                            <div class="top-subtotal">Subtotal: <span class="price">$520.00</span></div>
-                                            <div class="actions">
-                                                <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Checkout</span></button>
-                                                <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>View Cart</span></button>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
+                            @await Component.InvokeAsync("Cart")
                         </div>
                     </div>
                 </div>
@@ -201,13 +180,8 @@
         </div>
         <!-- End Menu Area -->
         <!-- Content Body -->
-        <div class="main-container col2-left-layout">
-            <div class="container">
-                <div class="row">
-                    @RenderBody()
-                </div>
-            </div>
-        </div>
+        @RenderBody()
+        <!-- End Content Body -->
     </div>
 
     <!-- JS -->

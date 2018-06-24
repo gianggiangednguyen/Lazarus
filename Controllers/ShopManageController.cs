@@ -81,7 +81,7 @@ namespace Lazarus.Controllers
             _context.Update(user);
             await _context.SaveChangesAsync();
 
-            return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ShopEdit(string id)
@@ -122,7 +122,7 @@ namespace Lazarus.Controllers
                                     a => a.TenCuaHang);
             await _context.SaveChangesAsync();
 
-            return View(chToUpdate);
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ShopStatusChange(string id)
@@ -143,7 +143,7 @@ namespace Lazarus.Controllers
             _context.CuaHang.Update(ch);
             await _context.SaveChangesAsync();
 
-            return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> ProductCreate()
@@ -183,7 +183,7 @@ namespace Lazarus.Controllers
                 await _context.SaveChangesAsync();
             }
 
-            return View();
+            return RedirectToAction("Index");
         }
 
         public async Task<IActionResult> EditProduct(string id)
@@ -238,7 +238,7 @@ namespace Lazarus.Controllers
                                     a => a.TenSanPham, a => a.GiaBan, a => a.MoTa, a => a.SoLuong, a => a.MaLoaiSanPham);
             await _context.SaveChangesAsync();
 
-            return View(sp);
+            return RedirectToAction("Index");
         }
 
         [HttpPost]
