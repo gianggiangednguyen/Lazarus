@@ -261,5 +261,20 @@ namespace Lazarus.Controllers
 
             return RedirectToAction("Index");
         }
+
+        public async Task<IActionResult> RemoveFromCart(string id)
+        {
+            var list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
+
+            if(list != null)
+            {
+                var item = list.Find(a => a.MaSanPham == id);
+                await Task.FromResult<bool>(list.Remove(item));
+
+                HttpContext.Session.SetSessionObject("Cart", list);
+            }
+
+            return RedirectToAction("Index");
+        }
     }
 }

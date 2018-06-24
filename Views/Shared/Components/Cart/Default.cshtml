@@ -1,9 +1,9 @@
 ﻿@model IEnumerable<ChiTietHoaDon>
 
-@{ 
+@{
     decimal tongtien = 0;
     int slsp = 0;
-    if(Model != null)
+    if (Model != null)
     {
         foreach (var sp in Model)
         {
@@ -37,7 +37,7 @@
                                 <li class="item odd">
                                     <a class="product-image"><img src="@hinhanh" alt="Lorem ipsum dolor" width="65"></a>
                                     <div class="product-details">
-                                        <a href="#" title="Xóa" class="remove-cart"><i class="icon-close"></i></a>
+                                        <a asp-action="RemoveFromCart" asp-controller="Home" asp-route-id="@item.MaSanPham" type="submit" class="remove-cart"><i class="icon-close"></i></a>
                                         <p class="product-name"><a href="#">@item.MaSanPhamNavigation.TenSanPham</a> </p>
                                         <strong>@item.SoLuong</strong> x <span class="price">@item.MaSanPhamNavigation.GiaBan.ToString("#,##0") đ</span>
                                     </div>
