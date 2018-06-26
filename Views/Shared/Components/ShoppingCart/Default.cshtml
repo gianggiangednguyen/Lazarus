@@ -1,0 +1,23 @@
+﻿@model IEnumerable<ChiTietHoaDon>
+
+@foreach (var item in Model)
+{
+    string hinhanh = "/ProductImages/default-product.png";
+    if (!string.IsNullOrEmpty(item.MaSanPhamNavigation.HinhAnh))
+    {
+        hinhanh = "/ProductImages/" + item.MaSanPhamNavigation.HinhAnh;
+    }
+    var max = item.MaSanPhamNavigation.SoLuong;
+    <tr>
+        <td><img style="width:200px;" src="@hinhanh" /></td>
+        <td><p>@item.MaSanPhamNavigation.MoTa</p></td>
+        <td><span class="label">@(item.MaSanPhamNavigation.SoLuong ?? 0)</span></td>
+        <td><input class="form-control input-sm" name="qty" min="1" max="@max" value="@item.SoLuong" /></td>
+        <td>@item.DonGia</td>
+        <td>@item.TongTien</td>
+        <td class="action">
+            <button asp-action="UpdateCartItem" asp-controller="Home" asp-route-id="@item.MaSanPham" class="btn btn-link"><i class="icon-refresh"></i></button>
+            <button asp-action="RemoveFromCart" asp-controller="Home" asp-route-id="@item.MaSanPham" class="btn btn-link"><i class="icon-close"></i></button>
+        </td>
+    </tr>
+}

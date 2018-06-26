@@ -266,7 +266,7 @@ namespace Lazarus.Controllers
         {
             var list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
 
-            if(list != null)
+            if (list != null)
             {
                 var item = list.Find(a => a.MaSanPham == id);
                 await Task.FromResult<bool>(list.Remove(item));
@@ -275,6 +275,75 @@ namespace Lazarus.Controllers
             }
 
             return RedirectToAction("Index");
+        }
+
+        public IActionResult Checkout()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ActionName("Checkout")]
+        public async Task<IActionResult> CheckoutPost(string address)
+        {
+            var list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
+            decimal? tt = 0;
+            if (list == null)
+            {
+                return RedirectToAction("Index");
+            }
+            foreach(var item in list)
+            {
+                tt += item.TongTien ?? 0;
+            }
+
+            var hoadon = new HoaDon
+            {
+                HoaDonId = RandomString.GenerateRandomString(_context.HoaDon.Select(a => a.HoaDonId)),
+                ChiTietHoaDon = list,
+                MaTaiKhoan = HttpContext.User.FindFirst(ClaimTypes.Sid).Value,
+                NgayLap = DateTime.Now,
+                DiaChiGiao = address,
+                TongTien = tt,
+                TrangThai = "Queue",
+            };
+            foreach(var item in list)
+            {
+                item.MaHoaDon = hoadon.HoaDonId;
+                item.MaSanPhamNavigation = null;
+            }
+
+            await _context.AddAsync(hoadon);
+            await _context.SaveChangesAsync();
+            HttpContext.Session.SetSessionObject("Cart", new List<ChiTietHoaDon>());
+
+            return RedirectToAction("Index");
+        }
+
+        public async Task<IActionResult> UpdateCartItem(string id, double? qty)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("Checkout");
+            }
+
+            List<ChiTietHoaDon> list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
+            if (list != null)
+            {
+                var sp = list.SingleOrDefault(a => a.MaSanPham == id);
+                var spnav = await _context.SanPham.SingleOrDefaultAsync(a => a.SanPhamId == id);
+                if (sp.SoLuong != (qty ?? 1))
+                {
+                    list.Remove(sp);
+                    sp.SoLuong = qty ?? 1;
+                    sp.TongTien = sp.DonGia * (decimal?)sp.SoLuong ?? 0;
+
+                    list.Add(new ChiTietHoaDon { MaSanPham = id, DonGia = spnav.GiaBan, SoLuong = sp.SoLuong, TongTien = sp.TongTien, MaSanPhamNavigation = spnav });
+                    HttpContext.Session.SetSessionObject("Cart", list);
+                }
+            }
+
+            return RedirectToAction("Checkout");
         }
     }
 }

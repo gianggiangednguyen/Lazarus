@@ -37,7 +37,7 @@
                                 <li class="item odd">
                                     <a class="product-image"><img src="@hinhanh" alt="Lorem ipsum dolor" width="65"></a>
                                     <div class="product-details">
-                                        <a asp-action="RemoveFromCart" asp-controller="Home" asp-route-id="@item.MaSanPham" type="submit" class="remove-cart"><i class="icon-close"></i></a>
+                                        <a asp-action="RemoveFromCart" asp-controller="Home" asp-route-id="@item.MaSanPham" class="remove-cart"><i class="icon-close"></i></a>
                                         <p class="product-name"><a href="#">@item.MaSanPhamNavigation.TenSanPham</a> </p>
                                         <strong>@item.SoLuong</strong> x <span class="price">@item.MaSanPhamNavigation.GiaBan.ToString("#,##0") đ</span>
                                     </div>
@@ -48,8 +48,10 @@
                 </ul>
                 <div class="top-subtotal">Tổng tiền: <span class="price">@tongtien.ToString("#,##0") VNĐ</span></div>
                 <div class="actions">
-                    <button onclick="location.href = '#'" class="btn-checkout" type="button"><i class="fa fa-check"></i><span>Thanh toán</span></button>
-                    <button onclick="location.href = '#'" class="view-cart" type="button"><i class="fa fa-shopping-cart"></i> <span>Xem giỏ hàng</span></button>
+                    <form method="post">
+                        <a asp-action="Checkout" asp-controller="Home" class="view-cart"><i class="fa fa-shopping-cart"></i> <span>Xem giỏ hàng</span></a>
+                        <button asp-action="Checkout" asp-controller="Home" type="submit" class="btn-checkout"><i class="fa fa-check"></i><span>Thanh toán</span></button>
+                    </form>
                 </div>
             </div>
         </div>
