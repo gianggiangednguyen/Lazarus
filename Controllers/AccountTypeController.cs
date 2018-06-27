@@ -145,7 +145,7 @@ namespace Lazarus.Controllers
             {
                 if(loaitk.TrangThai != "System")
                 {
-                    loaitk.TrangThai = "Deleted";
+                    loaitk.TrangThai = "Đã xóa";
                     _context.LoaiTaiKhoan.Update(loaitk);
                     await _context.SaveChangesAsync();
                 }

@@ -148,7 +148,7 @@ namespace Lazarus.Controllers
             }
             else
             {
-                loaisp.TrangThai = "Deleted";
+                loaisp.TrangThai = "Đã xóa";
                 _context.LoaiSanPham.Update(loaisp);
                 await _context.SaveChangesAsync();
             }

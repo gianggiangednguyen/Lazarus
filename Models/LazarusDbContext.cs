@@ -75,8 +75,6 @@ namespace Lazarus.Models
                 entity.Property(e => e.LoaiSanPhamId)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
-
-                entity.Property(e => e.TrangThai).IsUnicode(false);
             });
 
             modelBuilder.Entity<LoaiTaiKhoan>(entity =>
@@ -84,8 +82,6 @@ namespace Lazarus.Models
                 entity.Property(e => e.LoaiTaiKhoanId)
                     .IsUnicode(false)
                     .ValueGeneratedNever();
-
-                entity.Property(e => e.TrangThai).IsUnicode(false);
             });
 
             modelBuilder.Entity<SanPham>(entity =>

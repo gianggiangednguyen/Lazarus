@@ -12,6 +12,7 @@ using Microsoft.EntityFrameworkCore;
 using Lazarus.Models;
 using Lazarus.Data;
 using System.IO;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Lazarus.Controllers
 {
@@ -249,12 +250,12 @@ namespace Lazarus.Controllers
                 list.Remove(sp);
                 sp.SoLuong += qty ?? 0;
                 sp.TongTien = sp.DonGia * (decimal?)qty ?? 0;
-                list.Add(new ChiTietHoaDon { MaSanPham = sp.MaSanPham, DonGia = sp.DonGia, SoLuong = qty ?? 0, TongTien = sp.TongTien, MaSanPhamNavigation = spnav });
+                list.Add(new ChiTietHoaDon { MaSanPham = sp.MaSanPham, DonGia = sp.DonGia, SoLuong = qty ?? 0, TongTien = sp.TongTien, TrangThai = "Đang chờ", MaSanPhamNavigation = spnav });
             }
             else
             {
                 var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
-                list.Add(new ChiTietHoaDon { MaSanPham = sp.SanPhamId, DonGia = sp.GiaBan, SoLuong = qty ?? 0, TongTien = (sp.GiaBan * (decimal?)qty ?? 0), MaSanPhamNavigation = sp });
+                list.Add(new ChiTietHoaDon { MaSanPham = sp.SanPhamId, DonGia = sp.GiaBan, SoLuong = qty ?? 0, TongTien = (sp.GiaBan * (decimal?)qty ?? 0), TrangThai = "Đang chờ", MaSanPhamNavigation = sp });
             }
 
             HttpContext.Session.SetSessionObject("Cart", list);
@@ -286,13 +287,18 @@ namespace Lazarus.Controllers
         [ActionName("Checkout")]
         public async Task<IActionResult> CheckoutPost(string address)
         {
+            if (!HttpContext.User.Identity.IsAuthenticated)
+            {
+                return RedirectToAction("Login", "Account");
+            }
+
             var list = HttpContext.Session.GetSessionObject<List<ChiTietHoaDon>>("Cart");
             decimal? tt = 0;
             if (list == null)
             {
                 return RedirectToAction("Index");
             }
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 tt += item.TongTien ?? 0;
             }
@@ -305,9 +311,9 @@ namespace Lazarus.Controllers
                 NgayLap = DateTime.Now,
                 DiaChiGiao = address,
                 TongTien = tt,
-                TrangThai = "Queue",
+                TrangThai = "Đang chờ",
             };
-            foreach(var item in list)
+            foreach (var item in list)
             {
                 item.MaHoaDon = hoadon.HoaDonId;
                 item.MaSanPhamNavigation = null;
@@ -344,6 +350,53 @@ namespace Lazarus.Controllers
             }
 
             return RedirectToAction("Checkout");
+        }
+
+        public async Task<IActionResult> OrderReview(string orderid)
+        {
+            ViewBag.OrderId = OrderId();
+            if (string.IsNullOrEmpty(orderid))
+            {
+                return View(new List<ChiTietHoaDon>());
+            }
+
+            var item = await _context.ChiTietHoaDon.Where(a => a.MaHoaDon == orderid)
+                                        .Include(a => a.MaHoaDonNavigation)
+                                        .Include(a => a.MaSanPhamNavigation)
+                                        .ToListAsync();
+
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancellingOrder(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return RedirectToAction("OrderReview");
+            }
+
+            var item = await _context.HoaDon.Include(a => a.ChiTietHoaDon).SingleOrDefaultAsync(a => a.HoaDonId == id);
+            item.TrangThai = "Đã xóa";
+            foreach (var i in item.ChiTietHoaDon)
+            {
+                i.TrangThai = "Đã xóa";
+            }
+
+            await TryUpdateModelAsync(item);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("OrderReview");
+        }
+
+        public List<SelectListItem> OrderId()
+        {
+            var list = new List<SelectListItem>();
+            foreach (var item in _context.HoaDon.AsEnumerable())
+            {
+                list.Add(new SelectListItem(item.HoaDonId, item.HoaDonId));
+            }
+            return list;
         }
     }
 }

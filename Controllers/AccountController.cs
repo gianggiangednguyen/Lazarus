@@ -55,7 +55,7 @@ namespace Lazarus.Controllers
 
                 var claimsIdentity = new ClaimsIdentity(claims, CookieAuthenticationDefaults.AuthenticationScheme); //gan claim vao cookie
 
-                if (tk.TrangThai == "Verified")
+                if (tk.TrangThai == "Đã xác minh")
                 {
                     claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                     claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "NormalUser"));
@@ -107,7 +107,7 @@ namespace Lazarus.Controllers
                 try
                 {
                     model.TaiKhoanId = RandomString.GenerateRandomString(_context.TaiKhoan.Select(o => o.TaiKhoanId));
-                    model.TrangThai = "Unverified";
+                    model.TrangThai = "Chưa xác minh";
                     model.MaLoaiTaiKhoan = "NU";
                     await _context.AddAsync(model);
                     await _context.SaveChangesAsync();
@@ -156,13 +156,13 @@ namespace Lazarus.Controllers
 
             if (tk != null)
             {
-                if (tk.TrangThai == "Verified")
+                if (tk.TrangThai == "Đã xác minh")
                 {
                     return RedirectToAction("Error", "Account");
                 }
                 else
                 {
-                    tk.TrangThai = "Verified";
+                    tk.TrangThai = "Đã xác minh";
 
                     _context.Update(tk);
                     await _context.SaveChangesAsync();

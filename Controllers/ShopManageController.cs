@@ -54,9 +54,9 @@ namespace Lazarus.Controllers
 
             ViewBag.ShopId = ShopId;
 
-            if (shop.TrangThai == "Deactive")
+            if (shop.TrangThai == "Ngưng họa động")
             {
-                ViewBag.ShopStatus = "Deactive";
+                ViewBag.ShopStatus = "Ngưng họa động";
             }
 
 
@@ -72,7 +72,7 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> ShopCreate(CuaHang model)
         {
             model.CuaHangId = RandomString.GenerateRandomString(_context.CuaHang.Select(o => o.CuaHangId));
-            model.TrangThai = "Active";
+            model.TrangThai = "Hoạt động";
             var userid = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
             var user = await _context.TaiKhoan.Where(o => o.TaiKhoanId == userid).SingleOrDefaultAsync();
             user.MaCuaHang = model.CuaHangId;
@@ -132,13 +132,13 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
             var ch = await _context.CuaHang.Where(a => a.CuaHangId == id).SingleOrDefaultAsync();
-            if (ch.TrangThai == "Deactive")
+            if (ch.TrangThai == "Ngưng hoạt động")
             {
-                ch.TrangThai = "Active";
+                ch.TrangThai = "Hoạt động";
             }
             else
             {
-                ch.TrangThai = "Deactive";
+                ch.TrangThai = "Ngưng họa động";
             }
             _context.CuaHang.Update(ch);
             await _context.SaveChangesAsync();
@@ -159,7 +159,7 @@ namespace Lazarus.Controllers
             model.SanPhamId = RandomString.GenerateRandomString(_context.SanPham.Select(a => a.SanPhamId));
             model.MaCuaHang = ShopId;
             model.NgayThem = DateTime.Now;
-            model.TrangThai = "Active";
+            model.TrangThai = "Hoạt động";
             if (HttpContext.Request.Form.Files.Count > 0)
             {
                 IFormFile img = HttpContext.Request.Form.Files.First();
@@ -250,7 +250,7 @@ namespace Lazarus.Controllers
             }
 
             var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
-            sp.TrangThai = "Deleted";
+            sp.TrangThai = "Đã xóa";
             _context.SanPham.Update(sp);
             await _context.SaveChangesAsync();
 
@@ -261,7 +261,7 @@ namespace Lazarus.Controllers
         {
             var list = new List<SelectListItem>();
 
-            var exceptitem = _context.LoaiSanPham.Where(a => a.TrangThai == "Deleted");
+            var exceptitem = _context.LoaiSanPham.Where(a => a.TrangThai == "Đã xóa");
             var items = await _context.LoaiSanPham.Except(exceptitem).ToListAsync();
 
             foreach (var item in items)

@@ -22,7 +22,7 @@ namespace Lazarus.Components
         public async Task<IViewComponentResult> InvokeAsync()
         {
             var list = (from sp in _context.SanPham
-                       where sp.TrangThai != "Deleted"
+                       where sp.TrangThai != "Đã xóa"
                        orderby sp.NgayThem descending
                        select sp).Take(12);
 

@@ -22,12 +22,8 @@ namespace Lazarus.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var check = _context.SanPham.Where(a => a.TrangThai == "Deleted").Select(a => a.SanPhamId);
-
-            //var ids = _context.ChiTietHoaDon.GroupBy(a => a.MaSanPham).Select(a => new { id = a.Key, soluong = a.Count() }).OrderBy(a => a.soluong).Take(4);
-
             var ids = (from sp in _context.ChiTietHoaDon.Include(t => t.MaSanPhamNavigation)
-                       where sp.MaSanPhamNavigation.TrangThai != "Deleted"
+                       where sp.MaSanPhamNavigation.TrangThai != "Đã xóa"
                        group sp by sp.MaSanPham into grp
                        let o = new { id = grp.Key, count = grp.Count() }
                        orderby o.count

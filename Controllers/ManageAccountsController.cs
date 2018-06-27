@@ -173,7 +173,7 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> Delete(string id, int? page)
         {
             var tkToDelete = await _context.TaiKhoan.SingleOrDefaultAsync(t => t.TaiKhoanId == id);
-            tkToDelete.TrangThai = "Deleted";
+            tkToDelete.TrangThai = "Đã xóa";
             _context.TaiKhoan.Update(tkToDelete);
             await _context.SaveChangesAsync();
 

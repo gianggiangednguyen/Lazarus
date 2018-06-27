@@ -16,6 +16,8 @@ namespace Lazarus.Models
         public decimal? DonGia { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
         public decimal? TongTien { get; set; }
+        [StringLength(30)]
+        public string TrangThai { get; set; }
 
         [ForeignKey("MaHoaDon")]
         [InverseProperty("ChiTietHoaDon")]
