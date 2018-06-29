@@ -14,11 +14,11 @@ using Lazarus.Models;
 namespace Lazarus.Controllers
 {
     [Authorize(Policy = "ShopManagerPolicy")]
-    public class OrderMangeController : Controller
+    public class OrderManageController : Controller
     {
         private readonly LazarusDbContext _context;
 
-        public OrderMangeController(LazarusDbContext context)
+        public OrderManageController(LazarusDbContext context)
         {
             _context = context;
         }
@@ -33,7 +33,7 @@ namespace Lazarus.Controllers
             }
         }
 
-        public async Task<IActionResult> Index(int? page, string currentSort, string searchString)
+        public async Task<IActionResult> Index(int? page, string currentSort, string searchString, string status)
         {
             if (string.IsNullOrEmpty(ShopId))
             {
@@ -52,6 +52,12 @@ namespace Lazarus.Controllers
             {
                 ViewBag.SearchString = searchString;
                 list = list.Where(a => a.HoaDonId.ToLower().Contains(searchString.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(status))
+            {
+                ViewBag.Status = status;
+                list = list.Where(a => a.TrangThai.ToLower().Contains(status.ToLower()));
             }
 
             switch (currentSort)
@@ -81,9 +87,50 @@ namespace Lazarus.Controllers
             return View(await PagedList<HoaDon>.CreateAsync(list, page ?? 1, 15));
         }
 
-        public async Task<IActionResult> Confirm()
+        public async Task<IActionResult> Confirm(string id)
         {
-            return View();
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var item = (from ord in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+                        where ord.HoaDonId == id
+                        && ord.ChiTietHoaDon.Any(a => a.MaSanPhamNavigation.MaCuaHang == ShopId)
+                        select ord);
+
+            return View(await item.SingleOrDefaultAsync());
+        }
+
+        [HttpPost]
+        [ActionName("Confirm")]
+        public async Task<IActionResult> ConfirmPost(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var items = await _context.ChiTietHoaDon.Where(a => a.MaHoaDon == id)
+                                        .Include(a => a.MaHoaDonNavigation)
+                                        .Include(a => a.MaSanPhamNavigation)
+                                        .Where(a => a.MaSanPhamNavigation.MaCuaHang == ShopId)
+                                        .ToListAsync();
+
+            foreach (var item in items)
+            {
+                item.TrangThai = "Đang chờ giao";
+            }
+
+            if (items.All(a => a.TrangThai == "Đang chờ giao"))
+            {
+                items.SingleOrDefault().MaHoaDonNavigation.TrangThai = "Đang chờ giao";
+            }
+
+            await TryUpdateModelAsync(items);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
     }
 }

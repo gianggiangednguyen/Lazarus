@@ -1,0 +1,50 @@
+﻿@model HoaDon
+
+@{
+    ViewData["Title"] = "Confirm";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+                                <th>Sản phẩm</th>
+                                <th>Số lượng</th>
+                                <th>Đơn giá</th>
+                                <th>Tổng tiền</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in Model.ChiTietHoaDon)
+                                {
+                                    var hinhanh = "/ProductImages/default-product.png";
+                                    if (!string.IsNullOrEmpty(item.MaSanPhamNavigation.HinhAnh))
+                                    {
+                                        hinhanh = "/ProductImages/" + item.MaSanPhamNavigation.HinhAnh;
+                                    }
+                                    <tr>
+                                        <td>
+                                            <div style="width:100px;height:100px"><img src="@hinhanh" style="max-height:100%;max-width:100%;" /></div>
+                                        </td>
+                                        <td>@Html.DisplayFor(a => item.SoLuong)</td>
+                                        <td>@Html.DisplayFor(a => item.DonGia)</td>
+                                        <td>@Html.DisplayFor(a => item.TongTien)</td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                </div>
+                <form method="post">
+                    <button asp-action="Confirm" asp-controller="OrderManager" asp-route-id="@Context.Request.Query["id"]" type="submit">Xác nhận</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
