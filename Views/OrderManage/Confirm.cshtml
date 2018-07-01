@@ -17,6 +17,8 @@
                                 <th>Số lượng</th>
                                 <th>Đơn giá</th>
                                 <th>Tổng tiền</th>
+                                <th>Trạng thái</th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -28,6 +30,8 @@
                                     {
                                         hinhanh = "/ProductImages/" + item.MaSanPhamNavigation.HinhAnh;
                                     }
+
+                                    string button = item.MaSanPhamNavigation.MaCuaHang == ViewBag.ShopId ? "" : "disabled";
                                     <tr>
                                         <td>
                                             <div style="width:100px;height:100px"><img src="@hinhanh" style="max-height:100%;max-width:100%;" /></div>
@@ -35,15 +39,14 @@
                                         <td>@Html.DisplayFor(a => item.SoLuong)</td>
                                         <td>@Html.DisplayFor(a => item.DonGia)</td>
                                         <td>@Html.DisplayFor(a => item.TongTien)</td>
+                                        <td>@Html.DisplayFor(a => item.TrangThai)</td>
+                                        <td><form method="post"><button asp-action="Confirm" asp-controller="OrderManage" asp-route-id="@item.MaHoaDon" asp-route-spid="@item.MaSanPham" class="btn-white btn btn-xs @button">Xác nhận</button></form></td>
                                     </tr>
                                 }
                             }
                         </tbody>
                     </table>
                 </div>
-                <form method="post">
-                    <button asp-action="Confirm" asp-controller="OrderManager" asp-route-id="@Context.Request.Query["id"]" type="submit">Xác nhận</button>
-                </form>
             </div>
         </div>
     </div>

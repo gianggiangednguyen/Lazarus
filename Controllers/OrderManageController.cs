@@ -40,7 +40,8 @@ namespace Lazarus.Controllers
                 return RedirectToAction("ShopCreate", "ShopManage");
             }
 
-            var list = from ord in _context.HoaDon
+            var list = from ord in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+                       where ord.ChiTietHoaDon.Any(a => a.MaSanPhamNavigation.MaCuaHang == ShopId)
                        select ord;
 
             ViewBag.CurrentSort = currentSort;
@@ -94,9 +95,10 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
+            ViewBag.ShopId = ShopId;
+
             var item = (from ord in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
                         where ord.HoaDonId == id
-                        && ord.ChiTietHoaDon.Any(a => a.MaSanPhamNavigation.MaCuaHang == ShopId)
                         select ord);
 
             return View(await item.SingleOrDefaultAsync());
@@ -104,33 +106,51 @@ namespace Lazarus.Controllers
 
         [HttpPost]
         [ActionName("Confirm")]
-        public async Task<IActionResult> ConfirmPost(string id)
+        public async Task<IActionResult> ConfirmPost(string id, string spid)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var items = await _context.ChiTietHoaDon.Where(a => a.MaHoaDon == id)
-                                        .Include(a => a.MaHoaDonNavigation)
-                                        .Include(a => a.MaSanPhamNavigation)
-                                        .Where(a => a.MaSanPhamNavigation.MaCuaHang == ShopId)
-                                        .ToListAsync();
+            var item = await (from cthd in _context.ChiTietHoaDon.Where(a => a.MaHoaDon == id)
+                                                    .Include(a => a.MaHoaDonNavigation)
+                                                    .Include(a => a.MaSanPhamNavigation)
+                              where cthd.MaHoaDon == id && cthd.MaSanPham == spid
+                              select cthd).SingleOrDefaultAsync();
 
-            foreach (var item in items)
+            if (item.TrangThai != "Đang chờ giao" && item.TrangThai != "Đã xóa")
             {
                 item.TrangThai = "Đang chờ giao";
             }
 
-            if (items.All(a => a.TrangThai == "Đang chờ giao"))
+            await TryUpdateModelAsync(item);
+
+            var items = await (from hd in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+                               where hd.HoaDonId == id
+                               select hd).SingleOrDefaultAsync();
+
+            if (items.ChiTietHoaDon.All(a => a.TrangThai == "Đang chờ giao"))
             {
-                items.SingleOrDefault().MaHoaDonNavigation.TrangThai = "Đang chờ giao";
+                items.TrangThai = "Đang chờ giao";
+                if(!_context.ThongTinGiaoHang.Any(a=>a.MaHoaDon == items.HoaDonId))
+                {
+                    var thongtingh = new ThongTinGiaoHang
+                    {
+                        MaHoaDon = items.HoaDonId,
+                        DiaChi = items.DiaChiGiao,
+                        ThongTinId = RandomString.GenerateRandomString(_context.ThongTinGiaoHang.Select(a => a.ThongTinId)),
+                        TongTien = items.TongTien,
+                        TrangThai = items.TrangThai
+                    };
+                    await _context.AddAsync(thongtingh);
+                }
+                await TryUpdateModelAsync(items);
             }
 
-            await TryUpdateModelAsync(items);
             await _context.SaveChangesAsync();
 
-            return RedirectToAction("Index");
+            return View(items);
         }
     }
 }

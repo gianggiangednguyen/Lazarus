@@ -28,10 +28,11 @@
                             IN+
                         </div>
                     </li>
-                    @{
-                        if (User.FindFirst(ClaimTypes.Role).Value == "Admin")
-                        {
-                            <li>
+                    <li>
+                        @{
+
+                            if (User.FindFirst(ClaimTypes.Role).Value == "Admin")
+                            {
                                 <a asp-action="Index" asp-controller="ManageAccounts">
                                     <i class="fa fa-user-circle"></i>
                                     <span class="nav-label">Quản lý tài khoản</span>
@@ -44,11 +45,11 @@
                                     <i class="fa fa-sitemap"></i>
                                     <span class="nav-label">Quản lý loại sản phẩm</span>
                                 </a>
-                            </li>
-                        }
-                        if (User.FindFirst(ClaimTypes.Role).Value == "ShopManager")
-                        {
-                            <li>
+
+                            }
+
+                            if (User.FindFirst(ClaimTypes.Role).Value == "ShopManager")
+                            {
                                 <a asp-action="Index" asp-controller="ShopManage">
                                     <i class="fa fa-shopping-cart"></i>
                                     <span class="nav-label">Quản lý cửa hàng</span>
@@ -57,9 +58,17 @@
                                     <i class="fa fa-cc-mastercard"></i>
                                     <span class="nav-label">Quản lý hóa đơn</span>
                                 </a>
-                            </li>
+                            }
                         }
-                    }
+                        <a asp-action="Index" asp-controller="AdminAccount">
+                            <i class="fa fa-user"></i>
+                            <span class="nav-label">Thông tin tài khoản</span>
+                        </a>
+                        <a asp-action="PasswordChange" asp-controller="AdminAccount">
+                            <i class="fa fa-user-secret"></i>
+                            <span class="nav-label">Đổi mật khẩu</span>
+                        </a>
+                    </li>
                 </ul>
             </div>
         </nav>
@@ -139,7 +148,7 @@
                     closeButton: true,
                     progressBar: true,
                     showMethod: 'slideDown',
-                    timeOut: 4000
+                    timeOut: 1
                 };
                 toastr.success('Responsive Admin Theme', 'Welcome to INSPINIA');
 

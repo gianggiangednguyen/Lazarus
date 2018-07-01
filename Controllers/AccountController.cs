@@ -76,7 +76,6 @@ namespace Lazarus.Controllers
                 await HttpContext.SignInAsync(claimsPrincipal);
 
                 return RedirectToAction("Index", "Home");
-
             }
 
             ViewData["error"] = "Tài khoản hoặc mật khẩu không đúng";
@@ -171,6 +170,11 @@ namespace Lazarus.Controllers
                 }
             }
             return RedirectToAction("Error", "Account");
+        }
+
+        public IActionResult PasswordChange()
+        {
+            return View();
         }
 
         public IActionResult Success()
