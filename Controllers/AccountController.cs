@@ -177,6 +177,35 @@ namespace Lazarus.Controllers
             return View();
         }
 
+        public async Task<IActionResult> PasswordChange(TaiKhoan model, string oldPass)
+        {
+            var userId = HttpContext.User.FindFirst(ClaimTypes.Sid).Value;
+
+            var userToUpdate = await _context.TaiKhoan.Where(a => a.TaiKhoanId == userId).SingleOrDefaultAsync();
+
+            if (userToUpdate != null)
+            {
+                if (userToUpdate.MatKhau == oldPass)
+                {
+                    ModelState.Remove("Ho");
+                    ModelState.Remove("Ten");
+                    ModelState.Remove("Email");
+                    if (ModelState.IsValid)
+                    {
+                        await TryUpdateModelAsync(userToUpdate, "",
+                                                    a => a.MatKhau);
+                        await _context.SaveChangesAsync();
+                        return RedirectToAction("Index");
+                    }
+
+                    return View();
+                }
+            }
+
+            ViewBag.OldPasswordError = "Mật khẩu không đúng";
+            return View();
+        }
+
         public IActionResult Success()
         {
             return View();

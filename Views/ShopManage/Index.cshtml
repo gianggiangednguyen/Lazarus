@@ -122,8 +122,8 @@ else
 
     <div class="row">
         <div class="col-lg-12">
-            <a asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @previousPage"></a>
-            <a asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @nextPage"></a>
+            <a asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @previousPage">Trước</a>
+            <a asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-searchString="@ViewBag.SearchString" class="btn btn-white @nextPage">Sau</a>
         </div>
     </div>
 }

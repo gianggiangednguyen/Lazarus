@@ -45,7 +45,10 @@
                                     <i class="fa fa-sitemap"></i>
                                     <span class="nav-label">Quản lý loại sản phẩm</span>
                                 </a>
-
+                                <a asp-action="Index" asp-controller="AdminProductManage">
+                                    <i class="fa fa-shopping-cart"></i>
+                                    <span class="nav-label">Quản lý sản phẩm</span>
+                                </a>
                             }
 
                             if (User.FindFirst(ClaimTypes.Role).Value == "ShopManager")
