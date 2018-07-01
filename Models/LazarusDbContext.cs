@@ -21,7 +21,6 @@ namespace Lazarus.Models
         public virtual DbSet<LoaiSanPham> LoaiSanPham { get; set; }
         public virtual DbSet<LoaiTaiKhoan> LoaiTaiKhoan { get; set; }
         public virtual DbSet<SanPham> SanPham { get; set; }
-        public virtual DbSet<SanPhamCuaHang> SanPhamCuaHang { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
         public virtual DbSet<TaiKhoanPremium> TaiKhoanPremium { get; set; }
         public virtual DbSet<ThongTinGiaoHang> ThongTinGiaoHang { get; set; }
@@ -94,32 +93,16 @@ namespace Lazarus.Models
 
                 entity.Property(e => e.MaLoaiSanPham).IsUnicode(false);
 
+                entity.HasOne(d => d.MaCuaHangNavigation)
+                    .WithMany(p => p.SanPham)
+                    .HasForeignKey(d => d.MaCuaHang)
+                    .HasConstraintName("FK_SanPham_CuaHang");
+
                 entity.HasOne(d => d.MaLoaiSanPhamNavigation)
                     .WithMany(p => p.SanPham)
                     .HasForeignKey(d => d.MaLoaiSanPham)
                     .OnDelete(DeleteBehavior.ClientSetNull)
                     .HasConstraintName("FK_SanPham_LoaiSanPham");
-            });
-
-            modelBuilder.Entity<SanPhamCuaHang>(entity =>
-            {
-                entity.HasKey(e => new { e.MaSanPham, e.MaCuaHang });
-
-                entity.Property(e => e.MaSanPham).IsUnicode(false);
-
-                entity.Property(e => e.MaCuaHang).IsUnicode(false);
-
-                entity.HasOne(d => d.MaCuaHangNavigation)
-                    .WithMany(p => p.SanPhamCuaHang)
-                    .HasForeignKey(d => d.MaCuaHang)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SanPhamCuaHang_CuaHang");
-
-                entity.HasOne(d => d.MaSanPhamNavigation)
-                    .WithMany(p => p.SanPhamCuaHang)
-                    .HasForeignKey(d => d.MaSanPham)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_SanPhamCuaHang_SanPham");
             });
 
             modelBuilder.Entity<TaiKhoan>(entity =>

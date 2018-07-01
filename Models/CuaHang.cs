@@ -9,7 +9,7 @@ namespace Lazarus.Models
     {
         public CuaHang()
         {
-            SanPhamCuaHang = new HashSet<SanPhamCuaHang>();
+            SanPham = new HashSet<SanPham>();
             TaiKhoan = new HashSet<TaiKhoan>();
         }
 
@@ -22,7 +22,7 @@ namespace Lazarus.Models
         public string TrangThai { get; set; }
 
         [InverseProperty("MaCuaHangNavigation")]
-        public ICollection<SanPhamCuaHang> SanPhamCuaHang { get; set; }
+        public ICollection<SanPham> SanPham { get; set; }
         [InverseProperty("MaCuaHangNavigation")]
         public ICollection<TaiKhoan> TaiKhoan { get; set; }
     }

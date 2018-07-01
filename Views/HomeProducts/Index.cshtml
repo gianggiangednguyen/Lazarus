@@ -1,0 +1,84 @@
+﻿@model IEnumerable<LoaiSanPham>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_ShopLayout.cshtml";
+}
+
+<div class="main-container col2-left-layout">
+    <div class="container">
+        <div class="row">
+            <div class="col-main col-sm-9 col-xs-12 col-sm-push-3">
+                @{
+                    foreach (var items in Model)
+                    {
+                        <div class="home-tab">
+                            <div class="tab-info">
+                                <h2 class="new-product-title pull-left">@items.TenLoaiSanPham</h2>
+                                <ul class="nav home-nav-tabs home-product-tabs">
+                                    <li>
+                                        <a asp-action="Catalogue" asp-route-id="@items.LoaiSanPhamId" class="btn btn-default" style="margin-top:10px;">Xem Thêm</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            @{
+                                foreach (var sp in items.SanPham)
+                                {
+                                    string img;
+                                    if (string.IsNullOrEmpty(sp.HinhAnh))
+                                    {
+                                        img = "/ProductImages/default-product.png";
+                                    }
+                                    else
+                                    {
+                                        img = "/ProductImages/" + sp.HinhAnh;
+                                    }
+                                    <div class="product-grid-area">
+                                        <ul class="products-grid">
+                                            <li class="item col-lg-4 col-md-4 col-sm-6 col-xs-12">
+                                                <div class="product-item">
+                                                    <div class="item-inner">
+                                                        <div class="product-thumbnail" style="height:350px; width:100%;">
+                                                            <div class="btn-quickview"><a asp-action="ProductDetail" asp-controller="Home" asp-route-id="@sp.SanPhamId"><span>Chi tiết</span></a></div>
+                                                            <a class="product-item-photo"> <img class="product-image-photo" src="@img" style="max-height:100%;max-width:100%;"></a>
+                                                        </div>
+                                                        <div class="pro-box-info">
+                                                            <div class="item-info">
+                                                                <div class="info-inner">
+                                                                    <div class="item-title"> <a asp-action="ProductDetail" asp-controller="Home" asp-route-id="@sp.SanPhamId">@sp.TenSanPham</a> </div>
+                                                                    <div class="item-content">
+                                                                        <div class="item-price">
+                                                                            <div class="price-box">
+                                                                                <span class="regular-price"> <span class="price">@sp.GiaBan.ToString("#,##0") VNĐ</span> </span>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="box-hover">
+                                                                <form method="post">
+                                                                    <div class="product-item-actions">
+                                                                        <div class="pro-actions">
+                                                                            <button asp-action="AddToCart" asp-controller="Home" asp-route-id="@sp.SanPhamId" asp-route-qty="1" class="action add-to-cart" type="submit"> <span>Thêm vào giỏ hàng</span> </button>
+                                                                        </div>
+                                                                    </div>
+                                                                </form>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                }
+                            }
+                        </div>
+                    }
+                }
+            </div>
+            <aside class="sidebar col-md-3 col-sm-4 col-xs-12 col-sm-pull-8 col-md-pull-9">
+                @await Component.InvokeAsync("HotProducts")
+            </aside>
+        </div>
+    </div>
+</div>

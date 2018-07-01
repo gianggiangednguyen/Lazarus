@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Lazarus.Models;
 using Lazarus.Data;
+using Microsoft.AspNetCore.Http;
+using System.IO;
 
 namespace Lazarus.Controllers
 {
@@ -27,10 +29,8 @@ namespace Lazarus.Controllers
             ViewBag.LoaiSanPham = LoaiSanPhamList();
             ViewBag.CuaHang = CuaHangList();
 
-            var list = from sp in _context.SanPham.Include(a => a.MaLoaiSanPhamNavigation).Include(a => a.SanPhamCuaHang).ThenInclude(b => b.MaCuaHangNavigation)
+            var list = from sp in _context.SanPham.Include(a => a.MaLoaiSanPhamNavigation).Include(b => b.MaCuaHangNavigation)
                        select sp;
-            var spid = "01rBnqj5mN";
-            var test = _context.SanPhamCuaHang.SingleOrDefault(a => a.MaSanPham == spid).MaCuaHangNavigation.TenCuaHang;
 
             ViewBag.CurrentSort = currentSort;
             ViewBag.SortByName = currentSort == "ByName" ? "ByName_desc" : "ByName";
@@ -53,13 +53,10 @@ namespace Lazarus.Controllers
             if (!string.IsNullOrEmpty(filterByShop))
             {
                 ViewBag.FilterByType = filterByType;
-                //list = list.Where(a => a.SanPhamCuaHang.Any(b => b.MaCuaHang == filterByShop));
-                list = from items in list
-                       where items.SanPhamCuaHang.Any(a => a.MaCuaHang == filterByShop)
-                       select items;
+                list = list.Where(a => a.MaCuaHang == filterByShop);
             }
-            
-            if(!string.IsNullOrEmpty(filterByStatus))
+
+            if (!string.IsNullOrEmpty(filterByStatus))
             {
                 ViewBag.FilterByStatus = filterByStatus;
                 list = list.Where(a => a.TrangThai == filterByStatus);
@@ -80,16 +77,10 @@ namespace Lazarus.Controllers
                     list = list.OrderByDescending(a => a.MaLoaiSanPham);
                     break;
                 case "ByShop":
-                    list = from items in list
-                           let shop = items.SanPhamCuaHang
-                           orderby shop.Select(a => a.MaCuaHangNavigation.TenCuaHang)
-                           select items;
+                    list = list.OrderBy(a => a.MaCuaHangNavigation.TenCuaHang);
                     break;
                 case "ByShop_desc":
-                    list = from items in list
-                           let shop = items.SanPhamCuaHang
-                           orderby shop.Select(a => a.MaCuaHangNavigation.TenCuaHang) descending
-                           select items;
+                    list = list.OrderByDescending(a => a.MaCuaHangNavigation.TenCuaHang);
                     break;
                 case "ByStatus":
                     list = list.OrderBy(a => a.TrangThai);
@@ -102,6 +93,68 @@ namespace Lazarus.Controllers
             }
 
             return View(await PagedList<SanPham>.CreateAsync(list, page ?? 1, 15));
+        }
+
+        public async Task<IActionResult> Edit(string id)
+        {
+            ViewBag.LoaiSanPham = LoaiSanPhamList();
+            ViewBag.CuaHang = CuaHangList();
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+
+            return View(sp);
+        }
+
+        [HttpPost]
+        [ActionName("Edit")]
+        public async Task<IActionResult> EditPost(string id)
+        {
+            if (id == null)
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+
+            if (HttpContext.Request.Form.Files.Count > 0)
+            {
+                IFormFile img = HttpContext.Request.Form.Files.First();
+                var ext = Path.GetExtension(img.FileName);
+                var path = Path.Combine(Directory.GetCurrentDirectory(), "wwwroot/ProductImages/", $"{sp.SanPhamId}{ext}");
+                sp.HinhAnh = $"{sp.SanPhamId}{ext}";
+                using (var steam = new FileStream(path, FileMode.Create))
+                {
+                    await img.CopyToAsync(steam);
+                }
+            }
+
+            if (sp == null)
+            {
+                return NotFound();
+            }
+
+            await TryUpdateModelAsync(sp,
+                                    "",
+                                    a => a.TenSanPham, a => a.GiaBan, a => a.MoTa, a => a.SoLuong, a => a.MaLoaiSanPham, a => a.MaCuaHang);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var sp = await _context.SanPham.Where(a => a.SanPhamId == id).SingleOrDefaultAsync();
+            sp.TrangThai = "Đã xóa";
+            _context.SanPham.Update(sp);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Index");
         }
 
         public List<SelectListItem> LoaiSanPhamList()

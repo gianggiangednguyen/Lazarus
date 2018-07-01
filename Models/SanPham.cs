@@ -10,7 +10,6 @@ namespace Lazarus.Models
         public SanPham()
         {
             ChiTietHoaDon = new HashSet<ChiTietHoaDon>();
-            SanPhamCuaHang = new HashSet<SanPhamCuaHang>();
         }
 
         [StringLength(10)]
@@ -35,12 +34,13 @@ namespace Lazarus.Models
         [StringLength(30)]
         public string TrangThai { get; set; }
 
+        [ForeignKey("MaCuaHang")]
+        [InverseProperty("SanPham")]
+        public CuaHang MaCuaHangNavigation { get; set; }
         [ForeignKey("MaLoaiSanPham")]
         [InverseProperty("SanPham")]
         public LoaiSanPham MaLoaiSanPhamNavigation { get; set; }
         [InverseProperty("MaSanPhamNavigation")]
         public ICollection<ChiTietHoaDon> ChiTietHoaDon { get; set; }
-        [InverseProperty("MaSanPhamNavigation")]
-        public ICollection<SanPhamCuaHang> SanPhamCuaHang { get; set; }
     }
 }

@@ -17,19 +17,23 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Loại sản phẩm</label>
-                    <select asp-items="@ViewBag.LoaiSanPham" name="filterByType" class="form-control"></select>
+                    <select asp-items="@ViewBag.LoaiSanPham" name="filterByType" class="form-control">
+                        <option value="" selected>--- Hãy chọn ---</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Cửa hàng</label>
-                    <select asp-items="@ViewBag.CuaHang" name="filterByShop" class="form-control"></select>
+                    <select asp-items="@ViewBag.CuaHang" name="filterByShop" class="form-control">
+                        <option value="" selected>--- Hãy chọn ---</option>
+                    </select>
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Trạng thái</label>
-                    <select name="filterByShopStatus" class="form-control">
+                    <select name="filterByStatus" class="form-control">
                         <option value="" selected>--- Hãy chọn ---</option>
                         <option value="Hoạt động">Hoạt động</option>
                         <option value="Đã xóa">Đã xóa</option>
@@ -50,11 +54,11 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString">Tên sản phẩm</a></th>
-                                <td><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByType" asp-route-searchString="@ViewBag.SearchString">Loại sản phẩm</a></td>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByShop" asp-route-searchString="@ViewBag.SearchString">Cửa hàng</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString">Trạng thái</a></th>
-                                <th><a class="btn-white btn btn-xs" asp-action="Create" asp-controller="AccountType">Tạo mới</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Tên sản phẩm</a></th>
+                                <td><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByType" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Loại sản phẩm</a></td>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByShop" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Cửa hàng</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Trạng thái</a></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -64,14 +68,13 @@
                                     <tr>
                                         <td>@Html.DisplayFor(i => item.TenSanPham)</td>
                                         <td>@Html.DisplayFor(i => item.MaLoaiSanPhamNavigation.TenLoaiSanPham)</td>
-                                        <td>@Html.DisplayFor(i => item.SanPhamCuaHang.SingleOrDefault(a => a.MaSanPham == item.SanPhamId).MaCuaHangNavigation.TenCuaHang)</td>
+                                        <td>@Html.DisplayFor(i => item.MaCuaHangNavigation.TenCuaHang)</td>
                                         <td>@Html.DisplayFor(i => item.TrangThai)</td>
                                         <td>
                                             <div class="btn-group">
-                                                <a asp-action="Details" asp-controller="AccountType" asp-route-id="@item.SanPhamId" class="btn-white btn btn-xs">Chi tiết</a>
-                                                <a asp-action="Edit" asp-controller="AccountType" asp-route-id="@item.SanPhamId" class="btn-white btn btn-xs">Chỉnh sửa</a>
+                                                <a asp-action="Edit" asp-route-id="@item.SanPhamId" class="btn-white btn btn-xs">Chỉnh sửa</a>
                                                 <form method="post" class="btn-group">
-                                                    <button type="submit" asp-action="Delete" asp-controller="AccountType" asp-route-id="@item.SanPhamId" class="btn-white btn btn-xs" onclick="return confirm('Có chắc xóa?')">Xóa</button>
+                                                    <button type="submit" asp-action="Delete" asp-route-id="@item.SanPhamId" class="btn-white btn btn-xs" onclick="return confirm('Có chắc xóa?')">Xóa</button>
                                                 </form>
                                             </div>
                                         </td>
@@ -84,8 +87,8 @@
                         var nextPage = Model.HasNextPage ? "" : "disabled";
                         var previousPage = Model.HasPreviousPage ? "" : "disabled";
                     }
-                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Trước</a>
-                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Sau</a>
+                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Trước</a>
+                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByType="@ViewBag.FilterByType" asp-route-filterByShop="@ViewBag.FilterByShop" asp-route-filterByStatus="@ViewBag.FilterByStatus">Sau</a>
                 </div>
             </div>
         </div>
