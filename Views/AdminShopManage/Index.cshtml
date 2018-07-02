@@ -1,0 +1,78 @@
+﻿@model Lazarus.Data.PagedList<CuaHang>
+
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="ibox-content m-b-sm border-bottom">
+    <div class="row">
+        <form asp-action="Index" method="get">
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label">Tên cửa hàng</label>
+                    <input type="text" name="searchString" value="" placeholder="Tên cửa hàng" class="form-control">
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
+                    <label class="control-label">Trạng thái</label>
+                    <select name="filterByStatus" class="form-control">
+                        <option value="" selected>--- Tất cả ---</option>
+                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Ngưng hoạt động">Ngưng hoạt động</option>
+                        <option value="Đã xóa">Đã xóa</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 pull-right">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-default" style="margin-top:24px;">Tìm kiếm</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <table class="footable table table-stripped toggle-arrow-tiny">
+                        <thead>
+                            <tr>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByStatus="@ViewBag.SortByStatus">Tên cửa hàng</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByStatus="@ViewBag.SortByStatus">Trạng thái</a></th>
+                                <th><a class="btn-white btn btn-xs" asp-action="Create" asp-controller="AccountType">Tạo mới</a></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @{
+                                foreach (var item in Model)
+                                {
+                                    <tr>
+                                        <td>@Html.DisplayFor(i => item.TenCuaHang)</td>
+                                        <td>@Html.DisplayFor(i => item.TrangThai)</td>
+                                        <td>
+                                            <div class="btn-group">
+                                                <a asp-action="Details" asp-route-id="@item.CuaHangId" class="btn-white btn btn-xs">Chi tiết</a>
+                                                <a asp-action="Edit" asp-route-id="@item.CuaHangId" class="btn-white btn btn-xs">Chỉnh sửa</a>
+                                                <form method="post" class="btn-group">
+                                                    <button type="submit" asp-action="Delete" asp-route-id="@item.CuaHangId" class="btn-white btn btn-xs" onclick="return confirm('Có chắc xóa?')">Xóa</button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                }
+                            }
+                        </tbody>
+                    </table>
+                    @{
+                        var nextPage = Model.HasNextPage ? "" : "disabled";
+                        var previousPage = Model.HasPreviousPage ? "" : "disabled";
+                    }
+                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByStatus="@ViewBag.SortByStatus">Trước</a>
+                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filterByStatus="@ViewBag.SortByStatus">Sau</a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

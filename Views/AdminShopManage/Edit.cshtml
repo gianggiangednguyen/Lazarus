@@ -1,4 +1,4 @@
-﻿@model LoaiTaiKhoan
+﻿@model CuaHang
 
 @{
     ViewData["Title"] = "Edit";
@@ -9,19 +9,20 @@
     <div class="col-lg-12">
         <div class="ibox float-e-margins">
             <div class="ibox-title">
-                <h5>Thông tin loại tài khoản</h5>
+                <h5>Thông tin cửa hàng</h5>
             </div>
             <div class="ibox-content">
                 <form method="post" class="form-horizontal">
                     <div class="form-group">
-                        <label class="col-sm-2 control-label">Tên loại tài khoản</label>
-                        <div class="col-sm-6"><input type="text" asp-for="TenLoaiTaiKhoan" value="@Model.TenLoaiTaiKhoan" class="form-control" /></div>
+                        <label class="col-sm-2 control-label">Tên cửa hàng</label>
+                        <div class="col-sm-6"><input type="text" asp-for="TenCuaHang" value="@Model.TenCuaHang" class="form-control" /></div>
                     </div>
                     <div class="form-group">
                         <label class="col-sm-2 control-label">Trạng thái</label>
                         <div class="col-sm-6">
                             <select class="form-control" asp-for="TrangThai">
-                                <option value="Hoạt động">Hoạt động</option>
+                                <option value="Hoạt động" selected>Hoạt động</option>
+                                <option value="Ngừng hoạt động">Ngừng hoạt động</option>
                                 <option value="Đã xóa">Đã xóa</option>
                             </select>
                         </div>
@@ -29,7 +30,7 @@
                     <div class="hr-line-dashed"></div>
                     <div class="form-group">
                         <div class="col-sm-4 col-sm-offset-2">
-                            <button asp-route-id="@Model.LoaiTaiKhoanId" class="btn btn-white" type="submit">Đồng ý</button>
+                            <button asp-route-id="@Model.CuaHangId" class="btn btn-white" type="submit">Đồng ý</button>
                             <button asp-action="Index" class="btn btn-primary" type="submit">Quay về</button>
                         </div>
                     </div>

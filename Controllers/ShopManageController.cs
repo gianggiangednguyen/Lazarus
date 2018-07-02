@@ -54,9 +54,9 @@ namespace Lazarus.Controllers
 
             ViewBag.ShopId = ShopId;
 
-            if (shop.TrangThai == "Ngưng họa động")
+            if (shop.TrangThai == "Ngưng hoạt động")
             {
-                ViewBag.ShopStatus = "Ngưng họa động";
+                ViewBag.ShopStatus = "Ngưng hoạt động";
             }
 
 
@@ -138,7 +138,7 @@ namespace Lazarus.Controllers
             }
             else
             {
-                ch.TrangThai = "Ngưng họa động";
+                ch.TrangThai = "Ngưng hoạt động";
             }
             _context.CuaHang.Update(ch);
             await _context.SaveChangesAsync();
