@@ -24,6 +24,7 @@ namespace Lazarus.Controllers
         public IActionResult Index()
         {
             var list = from items in _context.LoaiSanPham.Include(a => a.SanPham)
+                       where items.TrangThai != "Đã xóa"
                        select new LoaiSanPham
                        {
                            LoaiSanPhamId = items.LoaiSanPhamId,

@@ -1,4 +1,4 @@
-﻿@model Lazarus.Data.PagedList<LoaiTaiKhoan>
+﻿@model Lazarus.Data.PagedList<HoaDon>
 
 @{
     ViewData["Title"] = "Index";
@@ -10,16 +10,18 @@
         <form asp-action="Index" method="get">
             <div class="col-sm-4">
                 <div class="form-group">
-                    <label class="control-label">Tên loại tài khoản</label>
-                    <input type="text" name="searchString" value="" placeholder="Tên loại tài khoản" class="form-control">
+                    <label class="control-label">Mã hóa đơn</label>
+                    <input type="text" name="searchString" value="" placeholder="Mã hóa đơn" class="form-control">
                 </div>
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Trạng thái</label>
-                    <select name="status" class="form-control">
+                    <select name="filterByStatus" class="form-control">
                         <option value="" selected>--- Hãy chọn ---</option>
-                        <option value="Hoạt động">Hoạt động</option>
+                        <option value="Đang chờ">Đang chờ</option>
+                        <option value="Đang chờ giao">Đang chờ giao</option>
+                        <option value="Đã giao">Đã giao</option>
                         <option value="Đã xóa">Đã xóa</option>
                     </select>
                 </div>
@@ -38,9 +40,10 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString">Tên loại tài khoản</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString">Trạng thái</a></th>
-                                <th><a class="btn-white btn btn-xs" asp-action="Create" asp-controller="AccountType">Tạo mới</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortById" asp-route-searchString="@ViewBag.SearchString" asp-route-status="@ViewBag.Status">Mã hóa đơn</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByDate" asp-route-searchString="@ViewBag.SearchString" asp-route-status="@ViewBag.Status">Ngày lập</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString" asp-route-status="@ViewBag.Status">Trạng thái</a></th>
+                                <th></th>
                             </tr>
                         </thead>
                         <tbody>
@@ -48,15 +51,12 @@
                                 foreach (var item in Model)
                                 {
                                     <tr>
-                                        <td>@Html.DisplayFor(i => item.TenLoaiTaiKhoan)</td>
+                                        <td>@Html.DisplayFor(i => item.HoaDonId)</td>
+                                        <td>@Html.DisplayFor(i => item.NgayLap)</td>
                                         <td>@Html.DisplayFor(i => item.TrangThai)</td>
                                         <td>
                                             <div class="btn-group">
-                                                <a asp-action="Details" asp-controller="AccountType" asp-route-id="@item.LoaiTaiKhoanId" class="btn-white btn btn-xs">Chi tiết</a>
-                                                <a asp-action="Edit" asp-controller="AccountType" asp-route-id="@item.LoaiTaiKhoanId" class="btn-white btn btn-xs">Chỉnh sửa</a>
-                                                <form method="post" class="btn-group">
-                                                    <button type="submit" asp-action="Delete" asp-controller="AccountType" asp-route-id="@item.LoaiTaiKhoanId" class="btn-white btn btn-xs" onclick="return confirm('Có chắc xóa?')">Xóa</button>
-                                                </form>
+                                                <a asp-action="Edit" asp-controller="AdminOrderManage" asp-route-id="@item.HoaDonId" class="btn-white btn btn-xs">Chỉnh sửa chi tiết hóa đơn</a>
                                             </div>
                                         </td>
                                     </tr>
@@ -68,8 +68,8 @@
                         var nextPage = Model.HasNextPage ? "" : "disabled";
                         var previousPage = Model.HasPreviousPage ? "" : "disabled";
                     }
-                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Trước</a>
-                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Sau</a>
+                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-status="@ViewBag.Status">Trước</a>
+                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-status="@ViewBag.Status">Sau</a>
                 </div>
             </div>
         </div>

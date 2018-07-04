@@ -1,0 +1,37 @@
+﻿@model ChiTietHoaDon
+
+@{
+    ViewData["Title"] = "ChangeOrder";
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="ibox-content m-b-sm border-bottom">
+    <form method="post">
+        <div class="row">
+            <div class="col-sm-6 col-sm-offset-2">
+                <div class="form-group">
+                    <label class="control-label">Sản phẩm</label>
+                    <label class="form-control">@Model.MaSanPhamNavigation.TenSanPham Số lượng: @Model.SoLuong</label>
+                </div>
+            </div>
+            <div class="col-sm-6 col-sm-offset-2">
+                <div class="form-group">
+                    <label class="control-label">Hóa đơn</label>
+                    <select name="newOrder" class="form-control" asp-items="@ViewBag.HoaDonList">
+                        <option value="" selected>--- Hóa đơn mới ---</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2 col-sm-offset-2">
+                <div class="form-group">
+                    <button asp-action="ChangeOrder" asp-route-id="@ViewContext.ModelState["id"].RawValue" asp-route-idsp="@Context.Request.Query["idsp"]" class="btn btn-success" style="margin-top:23px;" onclick="return confirm('Xác nhận đổi?')">Xác nhận</button>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div class="row">
+        <div class="col-sm-2 col-sm-offset-2">
+            <a href="@Url.Action("Edit", new { @id = ViewContext.ModelState["id"].RawValue })" class="btn btn-default">Quay về</a>
+        </div>
+    </div>
+</div>

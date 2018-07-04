@@ -150,7 +150,7 @@ namespace Lazarus.Controllers
 
             await _context.SaveChangesAsync();
 
-            return View(items);
+            return RedirectToAction("Confirm", new { id });
         }
     }
 }
