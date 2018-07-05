@@ -216,6 +216,36 @@ namespace Lazarus.Controllers
             return RedirectToAction("Edit", new { id });
         }
 
+        [HttpPost]
+        public async Task<IActionResult> ChangeOrderStatus(string id)
+        {
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var item = await _context.HoaDon.Where(a => a.HoaDonId == id).SingleOrDefaultAsync();
+
+            if(item == null)
+            {
+                return NotFound();
+            }
+
+            if(item.TrangThai != "Đã xóa")
+            {
+                item.TrangThai = "Đã xóa";
+            }
+            else
+            {
+                item.TrangThai = "Đang chờ";
+            }
+
+            _context.Update(item);
+            await _context.SaveChangesAsync();
+
+            return RedirectToAction("Edit", new { id });
+        }
+
         public List<SelectListItem> SanPhamList()
         {
             var list = new List<SelectListItem>();

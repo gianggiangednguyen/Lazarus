@@ -55,9 +55,14 @@
                                         <td>@Html.DisplayFor(i => item.NgayLap)</td>
                                         <td>@Html.DisplayFor(i => item.TrangThai)</td>
                                         <td>
-                                            <div class="btn-group">
-                                                <a asp-action="Confirm" asp-controller="OrderManage" asp-route-id="@item.HoaDonId" class="btn-white btn btn-xs">Xác nhận</a>
-                                            </div>
+                                            @{
+                                                if (item.TrangThai != "Đã xóa" || item.TrangThai != "Đang chờ giao")
+                                                {
+                                                    <div class="btn-group">
+                                                        <a asp-action="Confirm" asp-controller="OrderManage" asp-route-id="@item.HoaDonId" class="btn-white btn btn-xs">Xác nhận</a>
+                                                    </div>
+                                                }
+                                            }
                                         </td>
                                     </tr>
                                 }
