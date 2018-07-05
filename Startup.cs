@@ -53,6 +53,7 @@ namespace Lazarus
                     options.AddPolicy("AdminPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
                     options.AddPolicy("ShopManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "ShopManager"));
                     options.AddPolicy("NormalUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "NormalUser"));
+                    options.AddPolicy("DeliverPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Deliver"));
                     options.AddPolicy("AllUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin", "ShopManager", "NormalUser"));
                     options.AddPolicy("UnverifiedUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "UnverifiedUser"));
                 });

@@ -9,13 +9,13 @@
 <div class="ibox-content m-b-sm border-bottom">
     <div class="row">
         <form asp-action="Index" method="get">
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label class="control-label">Email</label>
                     <input type="text" name="searchEmail" value="" placeholder="Email" class="form-control">
                 </div>
             </div>
-            <div class="col-sm-4">
+            <div class="col-sm-3">
                 <div class="form-group">
                     <label class="control-label">Họ tên</label>
                     <input type="text" name="searchName" value="" placeholder="Họ tên" class="form-control">
@@ -23,10 +23,21 @@
             </div>
             <div class="col-sm-2">
                 <div class="form-group">
+                    <label class="control-label">Loại tài khoản</label>
+                    <select name="filterByType" class="form-control" asp-items="ViewBag.LoaiTaiKhoanList">
+                        <option value="" selected>--- Tất cả ---</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-2">
+                <div class="form-group">
                     <label class="control-label">Trạng thái</label>
-                    <select name="status" id="status" class="form-control">
-                        <option value="Verified">Verified</option>
-                        <option value="Unverified">Unverified</option>
+                    <select name="filterByStatus" class="form-control">
+                        <option value="" selected>--- Tất cả ---</option>
+                        <option value="Đã xác minh">Đã xác minh</option>
+                        <option value="Chưa xác minh">Chưa xác minh</option>
+                        <option value="Cấm">Cấm</option>
+                        <option value="Đã xóa">Đã xóa</option>
                     </select>
                 </div>
             </div>
@@ -45,10 +56,10 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.EmailSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Email</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.NameSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Họ tên</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.TypeSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Loại tài khoản</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.StatusSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName">Trạng thái</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.EmailSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType">Email</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.NameSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType">Họ tên</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.TypeSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType">Loại tài khoản</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.StatusSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType">Trạng thái</a></th>
                                 <th><a asp-action="Create" asp-controller="ManageAccounts" class="btn-white btn btn-xs">Tạo mới</a></th>
                             </tr>
                         </thead>
@@ -85,8 +96,8 @@
                     var nextPage = Model.HasNextPage ? "" : "disabled";
                     var previousPage = Model.HasPreviousPage ? "" : "disabled";
                 }
-                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex - 1)" class="btn btn-default @previousPage">Trước</a>
-                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex + 1)" class="btn btn-default @nextPage">Sau</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex - 1)" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType" class="btn btn-default @previousPage">Trước</a>
+                <a asp-action="Index" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchEmail="@ViewBag.SearchEmail" asp-route-searchName="@ViewBag.SearchName" asp-route-page="@(Model.PageIndex + 1)" asp-route-filterByStatus="@ViewBag.FilterByStatus" asp-route-filterByType="@ViewBag.FilterByType" class="btn btn-default @nextPage">Sau</a>
             </div>
         </div>
     </div>

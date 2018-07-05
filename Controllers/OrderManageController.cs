@@ -117,7 +117,7 @@ namespace Lazarus.Controllers
                                                     .Include(a => a.MaHoaDonNavigation)
                                                     .Include(a => a.MaSanPhamNavigation)
                               where cthd.MaHoaDon == id && cthd.MaSanPham == spid
-                              select cthd).SingleOrDefaultAsync();
+                              select cthd).FirstOrDefaultAsync();
 
             if (item.TrangThai != "Đang chờ giao" && item.TrangThai != "Đã xóa")
             {

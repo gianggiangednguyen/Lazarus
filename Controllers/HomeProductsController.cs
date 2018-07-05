@@ -44,5 +44,31 @@ namespace Lazarus.Controllers
 
             return View(loaisp);
         }
+
+        public async Task<IActionResult> Search()
+        {
+            var item = await _context.SanPham.ToListAsync();
+
+            return View(item);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> Search(string searchName, string filterByType)
+        {
+            var list = from sp in _context.SanPham
+                       select sp;
+
+            if(!string.IsNullOrEmpty(searchName))
+            {
+                list = list.Where(a => a.TenSanPham.ToLower().Contains(searchName.ToLower()));
+            }
+
+            if (!string.IsNullOrEmpty(filterByType))
+            {
+                list = list.Where(a => a.MaLoaiSanPham == filterByType);
+            }
+
+            return View(await list.ToListAsync());
+        }
     }
 }

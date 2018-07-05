@@ -26,6 +26,14 @@
                         <div class="col-sm-6"><select asp-for="MaLoaiTaiKhoan" asp-items="@ViewBag.LoaiTaiKhoanList" class="form-control"></select></div>
                     </div>
                     <div class="form-group">
+                        <label class="col-sm-2 control-label">Cửa hàng</label>
+                        <div class="col-sm-6">
+                            <select asp-for="MaCuaHang" asp-items="@ViewBag.CuaHangList" class="form-control">
+                                <option value="" selected>--- Không có ---</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group">
                         <label class="col-sm-2 control-label">Trạng thái</label>
                         <div class="col-sm-6">
                             <select asp-for="TrangThai" class="form-control">

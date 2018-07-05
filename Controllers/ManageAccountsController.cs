@@ -25,7 +25,7 @@ namespace Lazarus.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? page, string currentSort, string searchEmail, string searchName)
+        public async Task<IActionResult> Index(int? page, string currentSort, string searchEmail, string searchName, string filterByStatus, string filterByType)
         {
             ViewBag.CurrentSort = currentSort;
             ViewBag.EmailSort = currentSort == "ByEmail" ? "ByEmail_desc" : "ByEmail";
@@ -39,13 +39,25 @@ namespace Lazarus.Controllers
             if (!string.IsNullOrEmpty(searchEmail))
             {
                 ViewBag.SearchEmail = searchEmail;
-                lstTk = lstTk.Where(a => a.Email.Contains(searchEmail));
+                lstTk = lstTk.Where(a => a.Email.ToLower().Contains(searchEmail.ToLower()));
             }
 
             if (!string.IsNullOrEmpty(searchName))
             {
                 ViewBag.SearchName = searchName;
-                lstTk = lstTk.Where(a => a.HoTen.Contains(searchName));
+                lstTk = lstTk.Where(a => a.HoTen.ToLower().Contains(searchName.ToLower()));
+            }
+
+            if(!string.IsNullOrEmpty(filterByStatus))
+            {
+                ViewBag.FilterByStatus = filterByStatus;
+                lstTk = lstTk.Where(a => a.TrangThai == filterByStatus);
+            }
+
+            if (!string.IsNullOrEmpty(filterByStatus))
+            {
+                ViewBag.FilterByType = filterByType;
+                lstTk = lstTk.Where(a => a.MaLoaiTaiKhoan == filterByType);
             }
 
             switch (currentSort)
@@ -114,6 +126,7 @@ namespace Lazarus.Controllers
             }
 
             ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
+            ViewBag.CuaHangList = CuaHangList();
 
             return View(tk);
         }
@@ -140,6 +153,7 @@ namespace Lazarus.Controllers
         public async Task<IActionResult> Create()
         {
             ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
+            ViewBag.CuaHangList = CuaHangList();
 
             return View();
         }
@@ -164,6 +178,7 @@ namespace Lazarus.Controllers
             sb.Append("Lỗi xảy ra");
 
             ViewBag.LoaiTaiKhoanList = await LoaiTaiKhoanList();
+            ViewBag.CuaHangList = CuaHangList();
             ViewBag.InsertError = sb.ToString();
 
             return View();
@@ -187,11 +202,28 @@ namespace Lazarus.Controllers
             var list = new List<SelectListItem>();
 
             var items = await(from loaitk in _context.LoaiTaiKhoan
+                              where loaitk.TrangThai != "Đã xóa"
                               select loaitk).ToListAsync();
 
             foreach (var item in items)
             {
                 list.Add(new SelectListItem(item.TenLoaiTaiKhoan, item.LoaiTaiKhoanId));
+            }
+
+            return list;
+        }
+
+        public List<SelectListItem> CuaHangList()
+        {
+            var list = new List<SelectListItem>();
+
+            var items = from ch in _context.CuaHang.Include(a => a.TaiKhoan)
+                        where ch.TaiKhoan.Count == 0
+                        select ch;
+
+            foreach(var item in items)
+            {
+                list.Add(new SelectListItem(item.TenCuaHang, item.CuaHangId));
             }
 
             return list;

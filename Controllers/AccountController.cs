@@ -70,6 +70,11 @@ namespace Lazarus.Controllers
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "ShopManager"));
                     }
+                    else if (tk.MaLoaiTaiKhoan == "DE")
+                    {
+                        claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
+                        claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Deliver"));
+                    }
                 }
 
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity); //claimprincipal
