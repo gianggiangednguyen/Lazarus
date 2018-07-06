@@ -243,14 +243,14 @@ namespace Lazarus.Controllers
                 list = new List<ChiTietHoaDon>();
             }
 
-            if (list.Exists(a => a.MaSanPham == id))
+            if (list.Any(a => a.MaSanPham == id))
             {
                 var sp = list.Find(a => a.MaSanPham == id);
-                var spnav = await _context.SanPham.SingleOrDefaultAsync(a => a.SanPhamId == id);
-                list.Remove(sp);
+                //var spnav = await _context.SanPham.SingleOrDefaultAsync(a => a.SanPhamId == id);
+                //list.Remove(sp);
                 sp.SoLuong += qty ?? 0;
                 sp.TongTien = sp.DonGia * (decimal?)qty ?? 0;
-                list.Add(new ChiTietHoaDon { MaSanPham = sp.MaSanPham, DonGia = sp.DonGia, SoLuong = qty ?? 0, TongTien = sp.TongTien, TrangThai = "Đang chờ", MaSanPhamNavigation = spnav });
+                //list.Add(new ChiTietHoaDon { MaSanPham = sp.MaSanPham, DonGia = sp.DonGia, SoLuong = qty ?? 0, TongTien = sp.TongTien, TrangThai = "Đang chờ", MaSanPhamNavigation = spnav });
             }
             else
             {
@@ -317,6 +317,10 @@ namespace Lazarus.Controllers
             {
                 item.MaHoaDon = hoadon.HoaDonId;
                 item.MaSanPhamNavigation = null;
+
+                var spToUpdate = await _context.SanPham.SingleOrDefaultAsync(a => a.SanPhamId == item.MaSanPham);
+                spToUpdate.SoLuong -= item.SoLuong;
+                _context.Update(spToUpdate);
             }
 
             await _context.AddAsync(hoadon);
