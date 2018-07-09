@@ -41,6 +41,7 @@ namespace Lazarus.Controllers
             var tk = await (from taiKhoan in _context.TaiKhoan.Include(a => a.MaLoaiTaiKhoanNavigation)
                             where taiKhoan.Email == model.Email
                                 && taiKhoan.MatKhau == model.MatKhau
+                                && taiKhoan.TrangThai != "Bị cấm"
                             select taiKhoan).FirstOrDefaultAsync();
 
             if (tk != null)
@@ -76,9 +77,19 @@ namespace Lazarus.Controllers
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Deliver"));
                     }
                 }
-
+                
                 var claimsPrincipal = new ClaimsPrincipal(claimsIdentity); //claimprincipal
                 await HttpContext.SignInAsync(claimsPrincipal);
+
+                if (claimsPrincipal.FindFirst(ClaimTypes.Role).Value == "Admin" || claimsPrincipal.FindFirst(ClaimTypes.Role).Value == "ShopManager")
+                {
+                    return RedirectToAction("Index", "Manager");
+                }
+
+                if(claimsPrincipal.FindFirst(ClaimTypes.Role).Value == "Deliver")
+                {
+                    return RedirectToAction("Index", "Deliver");
+                }
 
                 return RedirectToAction("Index", "Home");
             }

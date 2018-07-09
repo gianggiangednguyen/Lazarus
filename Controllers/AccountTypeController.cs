@@ -21,7 +21,7 @@ namespace Lazarus.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index(int? page, string currentSort, string searchString)
+        public async Task<IActionResult> Index(int? page, string currentSort, string searchString, string filter)
         {
             var lstLoaiTk = from tk in _context.LoaiTaiKhoan
                             select tk;
@@ -34,6 +34,12 @@ namespace Lazarus.Controllers
             {
                 ViewBag.SearchString = searchString;
                 lstLoaiTk = lstLoaiTk.Where(o => o.TenLoaiTaiKhoan.Contains(searchString));
+            }
+
+            if (!string.IsNullOrEmpty(filter))
+            {
+                ViewBag.Filter = filter;
+                lstLoaiTk = lstLoaiTk.Where(a => a.TrangThai == filter);
             }
 
             switch (currentSort)
@@ -143,7 +149,7 @@ namespace Lazarus.Controllers
             }
             else
             {
-                if(loaitk.TrangThai != "System")
+                if (loaitk.TrangThai != "System")
                 {
                     loaitk.TrangThai = "Đã xóa";
                     _context.LoaiTaiKhoan.Update(loaitk);

@@ -70,6 +70,14 @@
                                     <span class="nav-label">Quản lý hóa đơn</span>
                                 </a>
                             }
+
+                            if (User.FindFirst(ClaimTypes.Role).Value == "Deliver")
+                            {
+                                <a asp-action="Index" asp-controller="Deliver">
+                                    <i class="fa fa-bus"></i>
+                                    <span class="nav-label">Quản lý giao hàng</span>
+                                </a>
+                            }
                         }
                         <a asp-action="Index" asp-controller="AdminAccount">
                             <i class="fa fa-user"></i>

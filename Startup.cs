@@ -49,7 +49,7 @@ namespace Lazarus
             //Claim-based policy
             services.AddAuthorization(options =>
                 {
-                    options.AddPolicy("ManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Admin", "ShopManager" }));
+                    options.AddPolicy("ManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, new string[] { "Admin", "ShopManager", "Deliver" }));
                     options.AddPolicy("AdminPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "Admin"));
                     options.AddPolicy("ShopManagerPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "ShopManager"));
                     options.AddPolicy("NormalUserPolicy", policy => policy.RequireClaim(ClaimTypes.Role, "NormalUser"));

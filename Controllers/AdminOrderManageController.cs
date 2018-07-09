@@ -16,6 +16,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Lazarus.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")]
     public class AdminOrderManageController : Controller
     {
         private readonly LazarusDbContext _context;
@@ -96,9 +97,9 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            var cthd = await (from item in _context.ChiTietHoaDon.Include(a=>a.MaSanPhamNavigation)
-                                 where item.MaHoaDon == id && item.MaSanPham == idsp
-                                 select item).SingleOrDefaultAsync();
+            var cthd = await (from item in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                              where item.MaHoaDon == id && item.MaSanPham == idsp
+                              select item).SingleOrDefaultAsync();
 
             return View(cthd);
         }
@@ -177,7 +178,7 @@ namespace Lazarus.Controllers
                             _context.Remove(oldcthd);
 
                             oldhd.TongTien = 0;
-                            foreach(var item in oldhd.ChiTietHoaDon)
+                            foreach (var item in oldhd.ChiTietHoaDon)
                             {
                                 oldhd.TongTien += (item.TongTien ?? 0);
                             }
@@ -225,12 +226,12 @@ namespace Lazarus.Controllers
 
             var item = await _context.HoaDon.Where(a => a.HoaDonId == id).SingleOrDefaultAsync();
 
-            if(item == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            if(item.TrangThai != "Đã xóa")
+            if (item.TrangThai != "Đã xóa")
             {
                 item.TrangThai = "Đã xóa";
             }

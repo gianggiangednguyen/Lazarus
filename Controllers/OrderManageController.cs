@@ -176,6 +176,7 @@ namespace Lazarus.Controllers
                 ThongTinId = RandomString.GenerateRandomString(_context.ThongTinGiaoHang.Select(a => a.ThongTinId)),
                 DiaChi = address,
                 MaHoaDon = id,
+                MaCuaHang = ShopId,
                 PhiVanChuyen = fee ?? 0,
                 SoTienPhaiThu = tt,
                 TrangThai = "Đang chờ giao",

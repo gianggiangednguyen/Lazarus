@@ -76,6 +76,10 @@
                                                         {
                                                             <li><a asp-action="Index" asp-controller="Manager">Quản lý</a></li>
                                                         }
+                                                        if (User.FindFirst(ClaimTypes.Role).Value == "Deliver")
+                                                        {
+                                                            <li><a asp-action="Index" asp-controller="Deliver">Giao hàng</a></li>
+                                                        }
                                                         <li><a asp-action="AccountDetails" asp-controller="Home" asp-route-id="@User.FindFirst(ClaimTypes.Sid).Value">Thông tin tài khoản</a></li>
                                                         if (User.FindFirst(ClaimTypes.Role).Value == "NormalUser")
                                                         {

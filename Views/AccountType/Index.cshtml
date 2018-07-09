@@ -17,7 +17,7 @@
             <div class="col-sm-2">
                 <div class="form-group">
                     <label class="control-label">Trạng thái</label>
-                    <select name="status" class="form-control">
+                    <select name="filter" class="form-control">
                         <option value="" selected>--- Hãy chọn ---</option>
                         <option value="Hoạt động">Hoạt động</option>
                         <option value="Đã xóa">Đã xóa</option>
@@ -38,8 +38,8 @@
                     <table class="footable table table-stripped toggle-arrow-tiny">
                         <thead>
                             <tr>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString">Tên loại tài khoản</a></th>
-                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString">Trạng thái</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByName" asp-route-searchString="@ViewBag.SearchString" asp-route-filter="@ViewBag.Filter">Tên loại tài khoản</a></th>
+                                <th><a asp-action="Index" asp-route-currentSort="@ViewBag.SortByStatus" asp-route-searchString="@ViewBag.SearchString" asp-route-filter="@ViewBag.Filter">Trạng thái</a></th>
                                 <th><a class="btn-white btn btn-xs" asp-action="Create" asp-controller="AccountType">Tạo mới</a></th>
                             </tr>
                         </thead>
@@ -68,8 +68,8 @@
                         var nextPage = Model.HasNextPage ? "" : "disabled";
                         var previousPage = Model.HasPreviousPage ? "" : "disabled";
                     }
-                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Trước</a>
-                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString">Sau</a>
+                    <a class="btn btn-default @previousPage" asp-action="Index" asp-route-page="@(Model.PageIndex - 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filter="@ViewBag.Filter">Trước</a>
+                    <a class="btn btn-default @nextPage" asp-action="Index" asp-route-page="@(Model.PageIndex + 1)" asp-route-currentSort="@ViewBag.CurrentSort" asp-route-searchString="@ViewBag.SearchString" asp-route-filter="@ViewBag.Filter">Sau</a>
                 </div>
             </div>
         </div>

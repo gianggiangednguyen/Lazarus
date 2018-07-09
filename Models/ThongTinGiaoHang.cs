@@ -13,6 +13,8 @@ namespace Lazarus.Models
         [Required]
         [StringLength(10)]
         public string MaHoaDon { get; set; }
+        [StringLength(10)]
+        public string MaCuaHang { get; set; }
         [StringLength(200)]
         public string DiaChi { get; set; }
         [Column(TypeName = "decimal(18, 0)")]

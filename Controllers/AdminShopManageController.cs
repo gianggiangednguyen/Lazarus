@@ -11,6 +11,7 @@ using Lazarus.Data;
 
 namespace Lazarus.Controllers
 {
+    [Authorize(Policy = "AdminPolicy")]
     public class AdminShopManageController : Controller
     {
         private readonly LazarusDbContext _context;

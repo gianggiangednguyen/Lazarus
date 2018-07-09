@@ -131,6 +131,8 @@ namespace Lazarus.Models
                     .IsUnicode(false)
                     .ValueGeneratedNever();
 
+                entity.Property(e => e.MaCuaHang).IsUnicode(false);
+
                 entity.Property(e => e.MaHoaDon).IsUnicode(false);
 
                 entity.HasOne(d => d.MaHoaDonNavigation)

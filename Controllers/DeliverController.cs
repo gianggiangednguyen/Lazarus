@@ -42,22 +42,60 @@ namespace Lazarus.Controllers
         [HttpPost]
         public async Task<IActionResult> Confirm(string id)
         {
-            if(string.IsNullOrEmpty(id))
+            if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
             var item = await _context.ThongTinGiaoHang.Where(a => a.ThongTinId == id).SingleOrDefaultAsync();
 
-            if(item == null)
+            if (item == null)
             {
                 return NotFound();
             }
 
-            item.TrangThai = "Đã giao";
-            _context.Update(item);
-            await _context.SaveChangesAsync();
+            if(item.TrangThai != "Đã giao")
+            {
+                item.TrangThai = "Đã giao";
+                _context.Update(item);
 
+                var shopid = item.MaCuaHang;
+
+                var cthd = await (from items in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                                  where items.MaHoaDon == item.MaHoaDon
+                                  && items.MaSanPhamNavigation.MaCuaHang == shopid
+                                  select items).ToListAsync();
+
+                var hd = await (from items in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+                                where items.HoaDonId == item.MaHoaDon
+                                select new HoaDon
+                                {
+                                    HoaDonId = items.HoaDonId,
+                                    MaTaiKhoan = items.MaTaiKhoan,
+                                    NgayLap = items.NgayLap,
+                                    TongTien = items.TongTien,
+                                    TrangThai = items.TrangThai,
+                                    ChiTietHoaDon = cthd
+                                }).SingleOrDefaultAsync();
+
+                if (hd != null)
+                {
+                    foreach (var i in hd.ChiTietHoaDon)
+                    {
+                        i.TrangThai = "Đã giao";
+                        _context.Update(i);
+                    }
+
+                    if (hd.ChiTietHoaDon.All(a => a.TrangThai == "Đã giao"))
+                    {
+                        hd.TrangThai = "Đã giao";
+                        _context.Update(hd);
+                    }
+                }
+
+                await _context.SaveChangesAsync();
+            }
+         
             return RedirectToAction("Index");
         }
     }
