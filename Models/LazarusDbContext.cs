@@ -22,7 +22,6 @@ namespace Lazarus.Models
         public virtual DbSet<LoaiTaiKhoan> LoaiTaiKhoan { get; set; }
         public virtual DbSet<SanPham> SanPham { get; set; }
         public virtual DbSet<TaiKhoan> TaiKhoan { get; set; }
-        public virtual DbSet<TaiKhoanPremium> TaiKhoanPremium { get; set; }
         public virtual DbSet<ThongTinGiaoHang> ThongTinGiaoHang { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
@@ -126,24 +125,11 @@ namespace Lazarus.Models
                     .HasConstraintName("FK_TaiKhoan_LoaiTaiKhoan");
             });
 
-            modelBuilder.Entity<TaiKhoanPremium>(entity =>
-            {
-                entity.Property(e => e.MaTaiKhoan)
-                    .IsUnicode(false)
-                    .ValueGeneratedNever();
-
-                entity.HasOne(d => d.MaTaiKhoanNavigation)
-                    .WithOne(p => p.TaiKhoanPremium)
-                    .HasForeignKey<TaiKhoanPremium>(d => d.MaTaiKhoan)
-                    .OnDelete(DeleteBehavior.ClientSetNull)
-                    .HasConstraintName("FK_TaiKhoanPremium_TaiKhoan");
-            });
-
             modelBuilder.Entity<ThongTinGiaoHang>(entity =>
             {
-                entity.HasKey(e => new { e.ThongTinId, e.MaHoaDon });
-
-                entity.Property(e => e.ThongTinId).IsUnicode(false);
+                entity.Property(e => e.ThongTinId)
+                    .IsUnicode(false)
+                    .ValueGeneratedNever();
 
                 entity.Property(e => e.MaHoaDon).IsUnicode(false);
 

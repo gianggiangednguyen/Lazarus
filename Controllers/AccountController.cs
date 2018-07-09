@@ -38,7 +38,7 @@ namespace Lazarus.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(TaiKhoan model)
         {
-            var tk = await (from taiKhoan in _context.TaiKhoan.Include(a => a.MaLoaiTaiKhoanNavigation).Include(b => b.TaiKhoanPremium.MaTaiKhoanNavigation)
+            var tk = await (from taiKhoan in _context.TaiKhoan.Include(a => a.MaLoaiTaiKhoanNavigation)
                             where taiKhoan.Email == model.Email
                                 && taiKhoan.MatKhau == model.MatKhau
                             select taiKhoan).FirstOrDefaultAsync();
@@ -65,7 +65,7 @@ namespace Lazarus.Controllers
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "Admin"));
                     }
-                    else if (tk.MaLoaiTaiKhoan == "SM" && tk.TaiKhoanPremium.NgayKetThuc > DateTime.Now)
+                    else if (tk.MaLoaiTaiKhoan == "SM" && tk.NgayGiaHan > DateTime.Now)
                     {
                         claimsIdentity.RemoveClaim(claimsIdentity.FindFirst(ClaimTypes.Role));
                         claimsIdentity.AddClaim(new Claim(ClaimTypes.Role, "ShopManager"));
@@ -106,13 +106,15 @@ namespace Lazarus.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(TaiKhoan model)
         {
+            model.TaiKhoanId = RandomString.GenerateRandomString(_context.TaiKhoan.Select(o => o.TaiKhoanId));
+            model.TrangThai = "Chưa xác minh";
+            model.MaLoaiTaiKhoan = "NU";
+            model.NgayTao = DateTime.Now;
+            model.NgayGiaHan = DateTime.Now;
             if (ModelState.IsValid)
             {
                 try
                 {
-                    model.TaiKhoanId = RandomString.GenerateRandomString(_context.TaiKhoan.Select(o => o.TaiKhoanId));
-                    model.TrangThai = "Chưa xác minh";
-                    model.MaLoaiTaiKhoan = "NU";
                     await _context.AddAsync(model);
                     await _context.SaveChangesAsync();
 

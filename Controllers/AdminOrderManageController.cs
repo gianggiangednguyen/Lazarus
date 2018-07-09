@@ -129,7 +129,6 @@ namespace Lazarus.Controllers
                     {
                         HoaDonId = RandomString.GenerateRandomString(_context.HoaDon.Select(a => a.HoaDonId)),
                         MaTaiKhoan = oldhd.MaTaiKhoan,
-                        DiaChiGiao = oldhd.DiaChiGiao,
                         NgayLap = oldhd.NgayLap,
                         TrangThai = oldhd.TrangThai,
                     };

@@ -15,7 +15,8 @@
                             <tr>
                                 <th>Mã hóa đơn</th>
                                 <th>Địa chỉ</th>
-                                <th>Tổng tiền</th>
+                                <th>Phí giao</th>
+                                <th>Số tiền phải thu</th>
                                 <th>Trạng thái</th>
                                 <th></th>
                             </tr>
@@ -27,7 +28,8 @@
                                     <tr>
                                         <td>@Html.DisplayFor(i => item.MaHoaDon)</td>
                                         <td>@Html.DisplayFor(i => item.DiaChi)</td>
-                                        <td>@Html.DisplayFor(i => item.TongTien)</td>
+                                        <td>@Html.DisplayFor(i => item.PhiVanChuyen)</td>
+                                        <td>@Html.DisplayFor(i => item.SoTienPhaiThu)</td>
                                         <td>@Html.DisplayFor(i => item.TrangThai)</td>
                                         <td>
                                             <div class="btn-group">

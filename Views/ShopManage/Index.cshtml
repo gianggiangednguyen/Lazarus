@@ -34,11 +34,24 @@ else
                 <div class="form-inline">
                     <form method="get">
                         <a asp-action="ProductCreate" class="btn btn-success">Thêm sản phẩm</a>
-                        <div class="form-group">
-                            <label class="sr-only">Tên sản phẩm</label>
-                            <input name="searchString" type="text" placeholder="Tên sản phẩm" class="form-control" />
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="sr-only">Tên sản phẩm</label>
+                                <input name="searchString" type="text" placeholder="Tên sản phẩm" class="form-control" />
+                            </div>
                         </div>
-                        <button asp-action="Index" asp-route-searchString="@ViewBag.SearchString" type="submit" class="btn btn-white">Tìm kiếm</button>
+                        <div class="col-sm-2">
+                            <div class="form-group">
+                                <label class="control-label">Loại sản phẩm</label>
+                                <select name="filterByType" class="form-control" asp-items="@ViewBag.LoaiSanPhamList">
+                                    <option value="" selected>--- Tất cả ---</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="col-sm-2">
+                            <button asp-action="Index" asp-route-searchString="@ViewBag.SearchString" type="submit" class="btn btn-white">Tìm kiếm</button>
+                        </div>
+
 
                         <div class="pull-right">
                             <a class="btn btn-white" asp-action="ShopEdit" asp-route-id="@ViewBag.ShopId">Chỉnh sửa cửa hàng</a>

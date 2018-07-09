@@ -31,7 +31,7 @@
                                         hinhanh = "/ProductImages/" + item.MaSanPhamNavigation.HinhAnh;
                                     }
 
-                                    string button = item.MaSanPhamNavigation.MaCuaHang == ViewBag.ShopId ? "" : "disabled";
+                                    string spCheck = item.MaSanPhamNavigation.MaCuaHang == ViewBag.ShopId ? "Sản phẩm của cửa hàng" : "";
                                     <tr>
                                         <td>
                                             <div style="width:100px;height:100px"><img src="@hinhanh" style="max-height:100%;max-width:100%;" /></div>
@@ -40,12 +40,13 @@
                                         <td>@Html.DisplayFor(a => item.DonGia)</td>
                                         <td>@Html.DisplayFor(a => item.TongTien)</td>
                                         <td>@Html.DisplayFor(a => item.TrangThai)</td>
-                                        <td><form method="post"><button asp-action="Confirm" asp-controller="OrderManage" asp-route-id="@item.MaHoaDon" asp-route-spid="@item.MaSanPham" class="btn-white btn btn-xs @button">Xác nhận</button></form></td>
+                                        <td><label>@spCheck</label></td>
                                     </tr>
                                 }
                             }
                         </tbody>
                     </table>
+                    <a asp-action="SendToDeliver" asp-controller="OrderManage" asp-route-id="@Model.HoaDonId" class="btn btn-success">Xác nhận giao hàng</a>
                 </div>
             </div>
         </div>

@@ -31,6 +31,10 @@ namespace Lazarus.Models
         public string MaLoaiTaiKhoan { get; set; }
         [StringLength(10)]
         public string MaCuaHang { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? NgayTao { get; set; }
+        [Column(TypeName = "datetime")]
+        public DateTime? NgayGiaHan { get; set; }
         [StringLength(30)]
         public string TrangThai { get; set; }
 
@@ -40,8 +44,6 @@ namespace Lazarus.Models
         [ForeignKey("MaLoaiTaiKhoan")]
         [InverseProperty("TaiKhoan")]
         public LoaiTaiKhoan MaLoaiTaiKhoanNavigation { get; set; }
-        [InverseProperty("MaTaiKhoanNavigation")]
-        public TaiKhoanPremium TaiKhoanPremium { get; set; }
 
         [NotMapped]
         public string HoTen { get { return $"{Ho} {Ten}"; } }

@@ -77,70 +77,34 @@ namespace Lazarus.Controllers
         [HttpPost]
         public async Task<IActionResult> ConfirmSubscription(string id, string value)
         {
-            var tk = await _context.TaiKhoan.Include(n => n.TaiKhoanPremium.MaTaiKhoanNavigation).Where(p => p.TaiKhoanId == id).FirstOrDefaultAsync();
+            var tk = await _context.TaiKhoan.Where(p => p.TaiKhoanId == id).SingleOrDefaultAsync();
 
             if (tk != null)
             {
-                if (tk.TaiKhoanPremium == null)
+                if (tk.NgayGiaHan > DateTime.Now)
                 {
-                    TaiKhoanPremium newobj = new TaiKhoanPremium
-                    {
-                        MaTaiKhoan = id,
-                        NgayBatDau = DateTime.Now
-                    };
+                    ViewData["view"] = "Thời gian Premium còn thời hạn.";
 
-                    if (value == "100")
-                    {
-                        newobj.NgayKetThuc = DateTime.Now.AddMonths(1);
-                    }
-                    else if (value == "500")
-                    {
-                        newobj.NgayKetThuc = DateTime.Now.AddMonths(6);
-                    }
-                    else
-                    {
-                        newobj.NgayKetThuc = DateTime.Now.AddYears(1);
-                    }
-
-                    tk.MaLoaiTaiKhoan = "SM";
-                    await _context.AddAsync(newobj);
-                    _context.TaiKhoan.Update(tk);
-                    await _context.SaveChangesAsync();
+                    return View();
                 }
                 else
                 {
-                    if (tk.TaiKhoanPremium.NgayKetThuc > DateTime.Now)
+                    if (value == "100")
                     {
-                        ViewData["view"] = "Thời gian Premium còn thời hạn.";
-
-                        return View();
+                        tk.NgayGiaHan = DateTime.Now.AddMonths(1);
                     }
-                    else
+                    else if (value == "500")
                     {
-                        TaiKhoanPremium obj = new TaiKhoanPremium
-                        {
-                            MaTaiKhoan = id,
-                            NgayBatDau = DateTime.Now
-                        };
-
-                        if (value == "100")
-                        {
-                            obj.NgayKetThuc = DateTime.Now.AddMonths(1);
-                        }
-                        else if (value == "500")
-                        {
-                            obj.NgayKetThuc = DateTime.Now.AddMonths(6);
-                        }
-                        else
-                        {
-                            obj.NgayKetThuc = DateTime.Now.AddYears(1);
-                        }
-
-                        tk.MaLoaiTaiKhoan = "SM";
-                        _context.TaiKhoanPremium.Update(obj);
-                        _context.TaiKhoan.Update(tk);
-                        await _context.SaveChangesAsync();
+                        tk.NgayGiaHan = DateTime.Now.AddMonths(6);
                     }
+                    else if (value == "1000")
+                    {
+                        tk.NgayGiaHan = DateTime.Now.AddYears(1);
+                    }
+
+                    tk.MaLoaiTaiKhoan = "SM";
+                    _context.TaiKhoan.Update(tk);
+                    await _context.SaveChangesAsync();
                 }
 
                 ViewData["view"] = "Thành công!";
@@ -285,7 +249,7 @@ namespace Lazarus.Controllers
 
         [HttpPost]
         [ActionName("Checkout")]
-        public async Task<IActionResult> CheckoutPost(string address)
+        public async Task<IActionResult> CheckoutPost()
         {
             if (!HttpContext.User.Identity.IsAuthenticated)
             {
@@ -309,7 +273,6 @@ namespace Lazarus.Controllers
                 ChiTietHoaDon = list,
                 MaTaiKhoan = HttpContext.User.FindFirst(ClaimTypes.Sid).Value,
                 NgayLap = DateTime.Now,
-                DiaChiGiao = address,
                 TongTien = tt,
                 TrangThai = "Đang chờ",
             };

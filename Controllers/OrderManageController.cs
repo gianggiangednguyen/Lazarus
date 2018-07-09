@@ -104,53 +104,204 @@ namespace Lazarus.Controllers
             return View(await item.SingleOrDefaultAsync());
         }
 
+        public async Task<IActionResult> SendToDeliver(string id)
+        {
+            ViewBag.ShopId = ShopId;
+
+            if (string.IsNullOrEmpty(id))
+            {
+                return NotFound();
+            }
+
+            var cthd = await (from items in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                              where items.MaHoaDon == id
+                              && items.MaSanPhamNavigation.MaCuaHang == ShopId
+                              select items).ToListAsync();
+
+            var hd = await (from item in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+                            where item.HoaDonId == id
+                            select new HoaDon
+                            {
+                                HoaDonId = item.HoaDonId,
+                                MaTaiKhoan = item.MaTaiKhoan,
+                                NgayLap = item.NgayLap,
+                                TongTien = item.TongTien,
+                                TrangThai = item.TrangThai,
+                                ChiTietHoaDon = cthd
+                            }).SingleOrDefaultAsync();
+
+            var tk = _context.TaiKhoan.Where(a => a.TaiKhoanId == hd.MaTaiKhoan).SingleOrDefault();
+
+            ViewBag.Email = tk.Email;
+
+
+            if (hd == null)
+            {
+                return NotFound();
+            }
+
+            return View(hd);
+        }
+
         [HttpPost]
-        [ActionName("Confirm")]
-        public async Task<IActionResult> ConfirmPost(string id, string spid)
+        public async Task<IActionResult> SendToDeliver(string id, string address, decimal? fee)
+        {
+            var hd = await (from item in _context.HoaDon
+                            where item.HoaDonId == id
+                            select item).SingleOrDefaultAsync();
+
+            var cthd = await (from items in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                              where items.MaHoaDon == id
+                              && items.MaSanPhamNavigation.MaCuaHang == ShopId
+                              select items).ToListAsync();
+
+            decimal? tt = 0;
+
+            if (cthd.Any(a => a.TrangThai == "Đã xóa" && a.TrangThai == "Đang chờ giao" && a.TrangThai == "Đã giao"))
+            {
+                return View(hd);
+            }
+
+            foreach (var item in cthd)
+            {
+                tt += item.TongTien ?? 0;
+                item.TrangThai = "Đang chờ giao";
+
+                _context.Update(item);
+            }
+
+            tt += fee ?? 0;
+            var gh = new ThongTinGiaoHang
+            {
+                ThongTinId = RandomString.GenerateRandomString(_context.ThongTinGiaoHang.Select(a => a.ThongTinId)),
+                DiaChi = address,
+                MaHoaDon = id,
+                PhiVanChuyen = fee ?? 0,
+                SoTienPhaiThu = tt,
+                TrangThai = "Đang chờ giao",
+            };
+
+            await _context.AddAsync(gh);
+
+            var cthdToCheck = await (from items in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                                     where items.MaHoaDon == id
+                                     select items).ToListAsync();
+
+            if (cthdToCheck.All(a => a.TrangThai == "Đang chờ giao"))
+            {
+                hd.TrangThai = "Đang chờ giao";
+
+                _context.Update(hd);
+            }
+
+            await _context.SaveChangesAsync();
+
+            return View(hd);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> CancelOrderDetails(string id)
         {
             if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            var item = await (from cthd in _context.ChiTietHoaDon.Where(a => a.MaHoaDon == id)
-                                                    .Include(a => a.MaHoaDonNavigation)
-                                                    .Include(a => a.MaSanPhamNavigation)
-                              where cthd.MaHoaDon == id && cthd.MaSanPham == spid
-                              select cthd).FirstOrDefaultAsync();
+            var cthd = await (from items in _context.ChiTietHoaDon.Include(a => a.MaSanPhamNavigation)
+                              where items.MaHoaDon == id
+                              && items.MaSanPhamNavigation.MaCuaHang == ShopId
+                              select items).ToListAsync();
 
-            if (item.TrangThai != "Đang chờ giao" && item.TrangThai != "Đã xóa")
+            var oldhd = await (from item in _context.HoaDon
+                               where item.HoaDonId == id
+                               select item).SingleOrDefaultAsync();
+
+            if (cthd.Any(a => a.TrangThai == "Đã xóa" && a.TrangThai == "Đang chờ giao" && a.TrangThai == "Đã giao"))
             {
-                item.TrangThai = "Đang chờ giao";
+                return RedirectToAction("Confirm", new { id });
             }
 
-            await TryUpdateModelAsync(item);
+            var newcthd = new List<ChiTietHoaDon>();
+            decimal? tt = 0;
 
-            var items = await (from hd in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
-                               where hd.HoaDonId == id
-                               select hd).SingleOrDefaultAsync();
-
-            if (items.ChiTietHoaDon.All(a => a.TrangThai == "Đang chờ giao"))
+            if (cthd != null)
             {
-                items.TrangThai = "Đang chờ giao";
-                if(!_context.ThongTinGiaoHang.Any(a=>a.MaHoaDon == items.HoaDonId))
+                foreach (var item in cthd)
                 {
-                    var thongtingh = new ThongTinGiaoHang
-                    {
-                        MaHoaDon = items.HoaDonId,
-                        DiaChi = items.DiaChiGiao,
-                        ThongTinId = RandomString.GenerateRandomString(_context.ThongTinGiaoHang.Select(a => a.ThongTinId)),
-                        TongTien = items.TongTien,
-                        TrangThai = items.TrangThai
-                    };
-                    await _context.AddAsync(thongtingh);
+                    newcthd.Add(item);
+                    tt += item.TongTien;
+                    _context.Remove(item);
                 }
-                await TryUpdateModelAsync(items);
-            }
 
-            await _context.SaveChangesAsync();
+                var newhd = new HoaDon
+                {
+                    HoaDonId = RandomString.GenerateRandomString(_context.HoaDon.Select(a => a.HoaDonId)),
+                    MaTaiKhoan = oldhd.MaTaiKhoan,
+                    NgayLap = DateTime.Now,
+                    TrangThai = "Đã xóa",
+                    TongTien = tt ?? 0,
+                };
+
+                foreach (var item in newcthd)
+                {
+                    item.MaHoaDon = newhd.HoaDonId;
+                    item.TrangThai = "Đã xóa";
+                }
+
+                newhd.ChiTietHoaDon = newcthd;
+
+                await _context.AddAsync(newhd);
+                await _context.SaveChangesAsync();
+            }
 
             return RedirectToAction("Confirm", new { id });
         }
+
+        //[HttpPost]
+        //[ActionName("Confirm")]
+        //public async Task<IActionResult> ConfirmPost(string id, string spid)
+        //{
+        //    if (string.IsNullOrEmpty(id))
+        //    {
+        //        return NotFound();
+        //    }
+
+        //    var item = await (from cthd in _context.ChiTietHoaDon.Where(a => a.MaHoaDon == id)
+        //                                            .Include(a => a.MaHoaDonNavigation)
+        //                                            .Include(a => a.MaSanPhamNavigation)
+        //                      where cthd.MaHoaDon == id && cthd.MaSanPham == spid
+        //                      select cthd).FirstOrDefaultAsync();
+
+        //    if (item.TrangThai != "Đang chờ giao" && item.TrangThai != "Đã xóa")
+        //    {
+        //        item.TrangThai = "Đang chờ giao";
+        //    }
+
+        //    await TryUpdateModelAsync(item);
+
+        //    var items = await (from hd in _context.HoaDon.Include(a => a.ChiTietHoaDon).ThenInclude(b => b.MaSanPhamNavigation)
+        //                       where hd.HoaDonId == id
+        //                       select hd).SingleOrDefaultAsync();
+
+        //    if (items.ChiTietHoaDon.All(a => a.TrangThai == "Đang chờ giao"))
+        //    {
+        //        items.TrangThai = "Đang chờ giao";
+        //        if(!_context.ThongTinGiaoHang.Any(a=>a.MaHoaDon == items.HoaDonId))
+        //        {
+        //            var thongtingh = new ThongTinGiaoHang
+        //            {
+        //                MaHoaDon = items.HoaDonId,
+        //                ThongTinId = RandomString.GenerateRandomString(_context.ThongTinGiaoHang.Select(a => a.ThongTinId)),
+        //                TrangThai = items.TrangThai
+        //            };
+        //            await _context.AddAsync(thongtingh);
+        //        }
+        //        await TryUpdateModelAsync(items);
+        //    }
+
+        //    await _context.SaveChangesAsync();
+
+        //    return RedirectToAction("Confirm", new { id });
+        //}
     }
 }

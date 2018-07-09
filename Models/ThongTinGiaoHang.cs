@@ -7,14 +7,18 @@ namespace Lazarus.Models
 {
     public partial class ThongTinGiaoHang
     {
+        [Key]
         [StringLength(10)]
         public string ThongTinId { get; set; }
+        [Required]
         [StringLength(10)]
         public string MaHoaDon { get; set; }
         [StringLength(200)]
         public string DiaChi { get; set; }
         [Column(TypeName = "decimal(18, 0)")]
-        public decimal? TongTien { get; set; }
+        public decimal? PhiVanChuyen { get; set; }
+        [Column(TypeName = "decimal(18, 0)")]
+        public decimal? SoTienPhaiThu { get; set; }
         [StringLength(30)]
         public string TrangThai { get; set; }
 

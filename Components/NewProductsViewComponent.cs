@@ -21,10 +21,11 @@ namespace Lazarus.Components
 
         public async Task<IViewComponentResult> InvokeAsync()
         {
-            var list = (from sp in _context.SanPham
-                       where sp.TrangThai != "Đã xóa"
-                       orderby sp.NgayThem descending
-                       select sp).Take(12);
+            var list = (from sp in _context.SanPham.Include(a => a.MaCuaHangNavigation)
+                        where sp.TrangThai != "Đã xóa"
+                        && (sp.MaCuaHangNavigation.TrangThai != "Đã xóa" || sp.MaCuaHangNavigation.TrangThai != "Ngưng hoạt động")
+                        orderby sp.NgayThem descending
+                        select sp).Take(12);
 
             return await Task.FromResult<IViewComponentResult>(View(list));
         }

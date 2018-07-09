@@ -34,9 +34,10 @@ namespace Lazarus.Controllers
                 return shopid;
             }
         }
-        //TODO: search stirng review
-        public async Task<IActionResult> Index(int? page, string searchString)
+        public async Task<IActionResult> Index(int? page, string searchString, string filterByType)
         {
+            ViewBag.LoaiSanPhamList = await LoaiSanPhamList();
+
             if (string.IsNullOrEmpty(ShopId))
             {
                 ViewBag.Mes = "Click vào đây để tạo ra một shop mới!";
@@ -49,7 +50,13 @@ namespace Lazarus.Controllers
             if (!string.IsNullOrEmpty(searchString))
             {
                 ViewBag.SearchString = searchString;
-                products = products.Where(a => a.TenSanPham.Contains(searchString));
+                products = products.Where(a => a.TenSanPham.ToLower().Contains(searchString.ToLower()));
+            }
+
+            if(!string.IsNullOrEmpty(filterByType))
+            {
+                ViewBag.FilterByType = filterByType;
+                products = products.Where(a => a.MaLoaiSanPham == filterByType);
             }
 
             ViewBag.ShopId = ShopId;
@@ -148,7 +155,7 @@ namespace Lazarus.Controllers
 
         public async Task<IActionResult> ProductCreate()
         {
-            ViewBag.ItemList = await LoaiSanPham();
+            ViewBag.ItemList = await LoaiSanPhamList();
 
             return View();
         }
@@ -200,7 +207,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            ViewBag.ItemList = await LoaiSanPham();
+            ViewBag.ItemList = await LoaiSanPhamList();
             return View(sp);
         }
 
@@ -257,7 +264,7 @@ namespace Lazarus.Controllers
             return View("Index", await PagedList<SanPham>.CreateAsync(_context.SanPham.Where(a => a.MaCuaHang == ShopId), 1, 10));
         }
 
-        public async Task<List<SelectListItem>> LoaiSanPham()
+        public async Task<List<SelectListItem>> LoaiSanPhamList()
         {
             var list = new List<SelectListItem>();
 

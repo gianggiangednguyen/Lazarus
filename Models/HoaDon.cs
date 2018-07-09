@@ -21,8 +21,6 @@ namespace Lazarus.Models
         public decimal? TongTien { get; set; }
         [Column(TypeName = "datetime")]
         public DateTime? NgayLap { get; set; }
-        [StringLength(200)]
-        public string DiaChiGiao { get; set; }
         [StringLength(30)]
         public string TrangThai { get; set; }
 
