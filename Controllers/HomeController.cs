@@ -242,6 +242,7 @@ namespace Lazarus.Controllers
             return RedirectToAction("Index");
         }
 
+        [Authorize(Policy = "NormalUserPolicy")]
         public IActionResult Checkout()
         {
             return View();
@@ -249,6 +250,7 @@ namespace Lazarus.Controllers
 
         [HttpPost]
         [ActionName("Checkout")]
+        [Authorize(Policy = "NormalUserPolicy")]
         public async Task<IActionResult> CheckoutPost()
         {
             if (!HttpContext.User.Identity.IsAuthenticated)

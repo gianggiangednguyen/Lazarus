@@ -19,19 +19,16 @@
                                 </div>
                             }
                         }
-                        <h4>Login</h4>
+                        <h4>Đăng nhập</h4>
                         <p class="before-login-text">@Html.ActionLink("Chưa có tài khoản?", "Register", "Account")</p>
                         <div class="panel-group">
-                            <label asp-for="Email">Email address<span class="required">*</span></label>
-                            <input asp-for="Email" id="emmail_login" type="text" class="form-control">
+                            <label asp-for="Email">Email<span class="required">*</span></label>
+                            <input asp-for="Email" type="text" class="form-control">
                         </div>
                         <div class="panel-group">
-                            <label asp-for="MatKhau">Password<span class="required">*</span></label>
-                            <input asp-for="MatKhau" id="password_login" type="password" class="form-control">
+                            <label asp-for="MatKhau">Mật khẩu<span class="required">*</span></label>
+                            <input asp-for="MatKhau" type="password" class="form-control">
                         </div>
-                        <p class="forgot-pass">
-                            <a href="#">Lost your password?</a>
-                        </p>
                         <button type="submit" class="button"><i class="fa fa-lock"></i>&nbsp; <span>Login</span></button>
                     </div>
                 </form>

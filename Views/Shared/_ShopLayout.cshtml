@@ -77,10 +77,10 @@
                                                             <li><a asp-action="Index" asp-controller="Manager">Quản lý</a></li>
                                                         }
                                                         <li><a asp-action="AccountDetails" asp-controller="Home" asp-route-id="@User.FindFirst(ClaimTypes.Sid).Value">Thông tin tài khoản</a></li>
-                                                        <li><a asp-action="OrderReview" asp-controller="Home">Xem hóa đơn</a></li>
                                                         if (User.FindFirst(ClaimTypes.Role).Value == "NormalUser")
                                                         {
-                                                            <li><a asp-action="Subscription" asp-controller="Home">Subscription</a></li>
+                                                            <li><a asp-action="OrderReview" asp-controller="Home">Xem hóa đơn</a></li>
+                                                            <li><a asp-action="Subscription" asp-controller="Home">Gia hạn</a></li>
                                                         }
                                                         <li class="divider"></li>
                                                         <li><a asp-controller="Account" asp-action="Logout">Đăng xuất</a></li>
