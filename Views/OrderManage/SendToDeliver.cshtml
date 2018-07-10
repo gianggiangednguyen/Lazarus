@@ -41,7 +41,7 @@
                                     if (Model.TrangThai != "Đã xóa" && Model.TrangThai != "Đang chờ giao" && Model.TrangThai != "Đã giao")
                                     {
                                         <button asp-action="SendToDeliver" asp-route-id="@Model.HoaDonId" class="btn btn-success" type="submit">Xác nhận</button>
-                                        <button asp-action="CancelOrderDetails" asp-route-id="@Model.HoaDonId" class="btn btn-danger">Hủy bỏ</button>
+                                        <button asp-action="CancelOrderDetails" asp-route-id="@Model.HoaDonId" onclick="return confirm('Tiến trình này ko thể hoàn tác')" class="btn btn-danger">Hủy bỏ</button>
                                     }
                                 }
                                 <a asp-action="Confirm" asp-route-id="@Model.HoaDonId" class="btn btn-default">Quay về</a>

@@ -15,7 +15,7 @@ namespace Lazarus.Models
         [EmailCheckValidation]
         [StringLength(200)]
         public string Email { get; set; }
-        [Required]
+        [Required(ErrorMessage = "Không thể trống")]
         [StringLength(200, ErrorMessage = "Mật khẩu có ít nhất là 8 kí tự, tối đa là 200", MinimumLength = 8)]
         [RegularExpression("^(?=.*\\d)(?=.*[a-z])(?=.*[A-Z]).{8,200}$", ErrorMessage = "Mật khẩu phải có ít nhất 1 kí tự chữ hoa và thường, và 1 kí tự số")]
         public string MatKhau { get; set; }
