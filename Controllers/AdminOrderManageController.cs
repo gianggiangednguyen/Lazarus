@@ -224,7 +224,7 @@ namespace Lazarus.Controllers
                 return NotFound();
             }
 
-            var item = await _context.HoaDon.Where(a => a.HoaDonId == id).SingleOrDefaultAsync();
+            var item = await _context.HoaDon.Include(b => b.ChiTietHoaDon).Where(a => a.HoaDonId == id).SingleOrDefaultAsync();
 
             if (item == null)
             {
@@ -238,6 +238,21 @@ namespace Lazarus.Controllers
             else
             {
                 item.TrangThai = "Đang chờ";
+            }
+
+            if(item.ChiTietHoaDon.Count > 0)
+            {
+                foreach(var i in item.ChiTietHoaDon)
+                {
+                    if(i.TrangThai != "Đã xóa")
+                    {
+                        i.TrangThai = "Đã xóa";
+                    }
+                    else
+                    {
+                        i.TrangThai = "Đang chờ";
+                    }
+                }
             }
 
             _context.Update(item);

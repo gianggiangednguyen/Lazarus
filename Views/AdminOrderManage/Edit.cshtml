@@ -45,13 +45,16 @@
                 <form method="post">
                     <div class="btn-group">
                         @{
-                            if (Model.TrangThai == "Đã xóa")
+                            if (Model.TrangThai != "Đã giao" && Model.TrangThai != "Đang chờ giao")
                             {
-                                <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-success" type="submit">Mở lại</button>
-                            }
-                            else
-                            {
-                                <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-danger" type="submit">Hủy hóa đơn</button>
+                                if (Model.TrangThai == "Đã xóa")
+                                {
+                                    <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-success" type="submit">Mở lại</button>
+                                }
+                                else
+                                {
+                                    <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-danger" type="submit">Hủy hóa đơn</button>
+                                }
                             }
                         }
                     </div>
