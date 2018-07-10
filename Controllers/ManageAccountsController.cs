@@ -54,7 +54,7 @@ namespace Lazarus.Controllers
                 lstTk = lstTk.Where(a => a.TrangThai == filterByStatus);
             }
 
-            if (!string.IsNullOrEmpty(filterByStatus))
+            if (!string.IsNullOrEmpty(filterByType))
             {
                 ViewBag.FilterByType = filterByType;
                 lstTk = lstTk.Where(a => a.MaLoaiTaiKhoan == filterByType);
