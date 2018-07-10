@@ -42,18 +42,20 @@
                     </tbody>
                 </table>
                 <div class="hr-line-dashed"></div>
+
                 <form method="post">
                     <div class="btn-group">
+
                         @{
                             if (Model.TrangThai != "Đã giao" && Model.TrangThai != "Đang chờ giao")
                             {
-                                if (Model.TrangThai == "Đã xóa")
+                                if (Model.TrangThai != "Đã xóa")
                                 {
-                                    <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-success" type="submit">Mở lại</button>
+                                    <button asp-action="ChangeOrderStatus" asp-controller="AdminOrderManage" asp-route-id="@Model.HoaDonId" class="btn btn-danger" type="submit">Hủy hóa đơn</button>
                                 }
                                 else
                                 {
-                                    <button asp-action="ChangeOrderStatus" asp-route="@Model.HoaDonId" class="btn btn-danger" type="submit">Hủy hóa đơn</button>
+                                    <button asp-action="ChangeOrderStatus" asp-controller="AdminOrderManage" asp-route-id="@Model.HoaDonId" class="btn btn-success" type="submit">Mở lại</button>
                                 }
                             }
                         }
